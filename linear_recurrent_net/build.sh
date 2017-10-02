@@ -2,6 +2,7 @@
 rm -rf lib/
 
 mkdir lib
+nvcc -O3 test.c -o lib/test
 nvcc -c linear_recurrence.cu -o lib/linear_recurrence.o -O3 --compiler-options '-fPIC'
 nvcc lib/linear_recurrence.o -shared -o lib/liblinear_recurrence.so --compiler-options '-fPIC'
 
