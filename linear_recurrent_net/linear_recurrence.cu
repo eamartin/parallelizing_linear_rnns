@@ -213,7 +213,11 @@ __global__ void serial_linear_recurrence(float *decays, float *impulses,
   for (int dim_idx = threadIdx.x + blockIdx.x * blockDim.x;
        dim_idx < n_dims;
        dim_idx += blockDim.x * gridDim.x) {
-    float val = initial_state[dim_idx];
+
+    float val = 0.0f;
+    if (initial_state != NULL) {
+      val = initial_state[dim_idx];
+    }
 
     for (int step = 0; step < n_steps; step++) {
       int idx = dim_idx + step * n_dims;

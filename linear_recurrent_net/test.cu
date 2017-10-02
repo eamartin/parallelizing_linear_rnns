@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
   compute_serial_linear_recurrence(d_decays, d_impulses, NULL, d_out, n_dims, n_steps);
   gpuErrChk(cudaDeviceSynchronize());
   uint64_t slr_ns = nanotime() - slr_start;
-  printf("PLR: %lu ns\n", plr_ns);
+  printf("SLR: %lu ns\n", slr_ns);
 
   gpuErrChk(cudaMemcpy(out, d_out, n_elements * sizeof(float),
 		       cudaMemcpyDeviceToHost));
