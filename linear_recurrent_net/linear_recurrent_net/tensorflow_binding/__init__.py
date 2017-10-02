@@ -5,7 +5,7 @@ from tensorflow.python.framework import ops
 dir = os.path.dirname(os.path.abspath(__file__))
 _lr_module = tf.load_op_library('%s/../../lib/tf_linear_recurrence.so' % dir)
 
-def linear_recurrence(decays, impulses, initial_state=None):
+def linear_recurrence(decays, impulses, initial_state=None, serial=False):
     '''
     Compute r[i] = decays[i] * r[i - 1] + impulses[i] with r[0] = initial_state.
 
