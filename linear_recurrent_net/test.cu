@@ -3,6 +3,13 @@
 #include <time.h>
 #include "linear_recurrence.h"
 
+#define gpuErrChk(ans) { gpuAssert2((ans), __FILE__, __LINE__); }
+void gpuAssert2(cudaError_t code, const char *file, int line) {
+  if (code != cudaSuccess) {
+    fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+  }
+}
+
 uint64_t nanotime(void) {
   uint64_t billion = 1000 * 1000 * 1000;
   struct timespec t;
