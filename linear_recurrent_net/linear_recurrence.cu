@@ -308,6 +308,10 @@ void test() {
   gpuErrChk(cudaMemset(d_out, 0, n_elements * sizeof(float)));
 
   compute_linear_recurrence(d_decays, d_impulses, NULL, d_out, n_dims, n_steps);
+
+
+  printf("ran linear recurrence\n");
+
   gpuErrChk(cudaMemcpy(out, d_out, n_elements * sizeof(float),
 		       cudaMemcpyDeviceToHost));
 
