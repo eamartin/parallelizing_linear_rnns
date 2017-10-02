@@ -71,3 +71,16 @@ def linear_surrogate_lstm(X, hidden_size, name='lin_sur_lstm'):
         c = linear_recurrence(f, i * z)
         h = o * c
         return h
+
+def SRU(X, name='SRU'):
+    size = X.get_shape()[-1].value
+    with vscope(name):
+        preact = fc_layer(X, 3 * size, nonlin=tf.identity)
+        x_tilde, f_pre, r_pre = tf.split(preact, 3, len(preact.shape) - 1)
+
+        f = tf.sigmoid(f_pre)
+        r = tf.sigmoid(r_pre)
+
+        c = linear_recurrence(f, (1 - f) * x_tilde)
+        h = r * c + (1 - r) * X
+        return h
