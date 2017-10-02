@@ -205,6 +205,24 @@ __global__ void warp_scan_kernel(float *decays, float *impulses,
   }
 }
 
+__global__ void serial_linear_recurrence(float *decays, float *impulses,
+                                         float *initial_state, float *out,
+                                         int n_dims, int n_steps) {
+  // computes h_t = lambda_t h{t-1} + x_t
+
+  for (int dim_idx = threadIdx.x + blockIdx.x * blockDim.x;
+       dim_idx < n_dims;
+       dim_idx += blockDim.x * gridDim.x) {
+    float val = initial_state[dim_idx];
+
+    for (int step = 0; step < n_steps; step++) {
+      int idx = dim_idx + step * n_dims;
+      val = decays[idx] * val + impulses[idx];
+      out[idx] = val;
+    }
+  }
+}
+
 extern "C" {
 /*
  * This is the main method for the prefix sum kernels.
@@ -246,6 +264,18 @@ void compute_linear_recurrence(float *decays, float *impulses, float *initial_st
 				       n_dims, n_steps);
 
   gpuErrChk(cudaFree(d_reduction_mem));
+}
+
+void compute_serial_linear_recurrence(float *decays, float *impulses,
+                                      float *initial_state, float *out,
+                                      int n_dims, int n_steps) {
+  // TODO: query
+  int n_SMs = 15;
+  int n_blocks_per_sm = 2;
+
+  int n_blocks = n_SMs * n_blocks_per_sm;
+  serial_linear_recurrence<<<n_blocks, 1024>>>(decays, impulses, initial_state,
+                                               out, n_dims, n_steps);
 }
 }
 
