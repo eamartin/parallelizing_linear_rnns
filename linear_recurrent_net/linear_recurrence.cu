@@ -59,32 +59,6 @@ __global__ void reduction_kernel(float *decays, float *impulses,
   int warp = threadIdx.x / 32;
   int lane = threadIdx.x % 32;
 
-  /*
-  if (blockIdx.x == 0 && threadIdx.x == 0) {
-    printf("decays\n");
-    for (int i = 0; i < n_dims; i++) {
-      for (int j = 0; j < n_steps; j++) {
-	printf("%f, ", decays[i + n_dims * j]);
-      }
-      printf("\n");
-    }
-
-    printf("\nimpulses\n");
-    for (int i = 0; i < n_dims; i++) {
-      for (int j = 0; j < n_steps; j++) {
-	printf("%f, ", impulses[i + n_dims * j]);
-      }
-      printf("\n");
-    }
-
-    printf("\ninit\n");
-    for (int i = 0; i < n_dims; i++) {
-      printf("%f, ", initial_state[i]);
-    }
-    printf("\n");
-  }
-  */
-
   float *decay_storage = &_decay_storage[blockIdx.x * 33 * n_dims];
   float *h_storage = &_h_storage[blockIdx.x * 33 * n_dims];
 
@@ -190,9 +164,9 @@ __global__ void warp_scan_kernel(float *decays, float *impulses,
   for (int i = lane + 32 * warp; i < n_dims; i += blockDim.x) {
     for (int t = 0; t < 32; t++) {
       if (t == 0 && blockIdx.x == 0) {
-	// the reduction over warp 0 (including initial condition) is correct val
-	// for scan, so there's no work to do
-	continue;
+        // the reduction over warp 0 (including initial condition) is correct val
+        // for scan, so there's no work to do
+        continue;
       }
 
       int cur_idx = i + t * n_dims + blockIdx.x * 33 * n_dims;
