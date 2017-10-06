@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
+The style file: abbrvnat.bst
+Database file #1: references.bib
+Warning--empty journal in blelloch1990prefix
+Warning--empty journal in keskar2017large
+You've used 19 entries,
+            2773 wiz_defined-function locations,
+            685 strings with 8219 characters,
+and the built_in function-call counts, 10703 in all, are:
+= -- 880
+> -- 863
+< -- 12
++ -- 289
+- -- 270
+* -- 892
+:= -- 1667
+add.period$ -- 56
+call.type$ -- 19
+change.case$ -- 145
+chr.to.int$ -- 19
+cite$ -- 40
+duplicate$ -- 437
+empty$ -- 728
+format.name$ -- 301
+if$ -- 2213
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 18
+newline$ -- 102
+num.names$ -- 76
+pop$ -- 314
+preamble$ -- 1
+purify$ -- 126
+quote$ -- 0
+skip$ -- 394
+stack$ -- 0
+substring$ -- 246
+swap$ -- 66
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 209
+warning$ -- 2
+while$ -- 73
+width$ -- 0
+write$ -- 238
+(There were 2 warnings)

@@ -1,0 +1,129 @@
+\begin{thebibliography}{19}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Abadi et~al.(2016)Abadi, Agarwal, Barham, Brevdo, Chen, Citro,
+  Corrado, Davis, Dean, Devin, et~al.]{abadi2016tensorflow}
+M.~Abadi, A.~Agarwal, P.~Barham, E.~Brevdo, Z.~Chen, C.~Citro, G.~S. Corrado,
+  A.~Davis, J.~Dean, M.~Devin, et~al.
+\newblock Tensorflow: Large-scale machine learning on heterogeneous distributed
+  systems.
+\newblock \emph{arXiv preprint arXiv:1603.04467}, 2016.
+
+\bibitem[Amodei et~al.(2015)Amodei, Anubhai, Battenberg, Case, Casper,
+  Catanzaro, Chen, Chrzanowski, Coates, Diamos, et~al.]{amodei2015deep}
+D.~Amodei, R.~Anubhai, E.~Battenberg, C.~Case, J.~Casper, B.~Catanzaro,
+  J.~Chen, M.~Chrzanowski, A.~Coates, G.~Diamos, et~al.
+\newblock Deep speech 2: End-to-end speech recognition in english and mandarin.
+\newblock \emph{arXiv preprint arXiv:1512.02595}, 2015.
+
+\bibitem[Balduzzi and Ghifary(2016)]{balduzzi2016strongly}
+D.~Balduzzi and M.~Ghifary.
+\newblock Strongly-typed recurrent neural networks.
+\newblock In \emph{Proceedings of The 33rd International Conference on Machine
+  Learning}, pages 1292--1300, 2016.
+
+\bibitem[Blelloch(1990)]{blelloch1990prefix}
+G.~E. Blelloch.
+\newblock Prefix sums and their applications.
+\newblock 1990.
+
+\bibitem[Bradbury et~al.(2017)Bradbury, Merity, Xiong, and
+  Socher]{bradbury2017quasi}
+J.~Bradbury, S.~Merity, C.~Xiong, and R.~Socher.
+\newblock Quasi-recurrent neural networks.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2017.
+
+\bibitem[Cho et~al.(2014)Cho, Van~Merri{\"e}nboer, Gulcehre, Bahdanau,
+  Bougares, Schwenk, and Bengio]{cho2014learning}
+K.~Cho, B.~Van~Merri{\"e}nboer, C.~Gulcehre, D.~Bahdanau, F.~Bougares,
+  H.~Schwenk, and Y.~Bengio.
+\newblock Learning phrase representations using rnn encoder-decoder for
+  statistical machine translation.
+\newblock \emph{arXiv preprint arXiv:1406.1078}, 2014.
+
+\bibitem[Diamos et~al.(2016)Diamos, Sengupta, Catanzaro, Chrzanowski, Coates,
+  Elsen, Engel, Hannun, and Satheesh]{diamos2016persistent}
+G.~Diamos, S.~Sengupta, B.~Catanzaro, M.~Chrzanowski, A.~Coates, E.~Elsen,
+  J.~Engel, A.~Hannun, and S.~Satheesh.
+\newblock Persistent rnns: Stashing recurrent weights on-chip.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  2024--2033, 2016.
+
+\bibitem[Gehring et~al.(2017)Gehring, Auli, Grangier, Yarats, and
+  Dauphin]{gehring2017convolutional}
+J.~Gehring, M.~Auli, D.~Grangier, D.~Yarats, and Y.~N. Dauphin.
+\newblock Convolutional sequence to sequence learning.
+\newblock \emph{arXiv preprint arXiv:1705.03122}, 2017.
+
+\bibitem[Glorot and Bengio(2010)]{glorot2010understanding}
+X.~Glorot and Y.~Bengio.
+\newblock Understanding the difficulty of training deep feedforward neural
+  networks.
+\newblock In \emph{Aistats}, volume~9, pages 249--256, 2010.
+
+\bibitem[Hausknecht and Stone(2015)]{hausknecht2015deep}
+M.~Hausknecht and P.~Stone.
+\newblock Deep recurrent q-learning for partially observable mdps.
+\newblock In \emph{2015 AAAI Fall Symposium Series}, 2015.
+
+\bibitem[Hochreiter and Schmidhuber(1997)]{hochreiter1997long}
+S.~Hochreiter and J.~Schmidhuber.
+\newblock Long short-term memory.
+\newblock \emph{Neural computation}, 9\penalty0 (8):\penalty0 1735--1780, 1997.
+
+\bibitem[Kalchbrenner et~al.(2016)Kalchbrenner, Espeholt, Simonyan, Oord,
+  Graves, and Kavukcuoglu]{kalchbrenner2016neural}
+N.~Kalchbrenner, L.~Espeholt, K.~Simonyan, A.~v.~d. Oord, A.~Graves, and
+  K.~Kavukcuoglu.
+\newblock Neural machine translation in linear time.
+\newblock \emph{arXiv preprint arXiv:1610.10099}, 2016.
+
+\bibitem[Keskar et~al.(2017)Keskar, Mudigere, Nocedal, Smelyanskiy, and
+  Tang]{keskar2017large}
+N.~S. Keskar, D.~Mudigere, J.~Nocedal, M.~Smelyanskiy, and P.~T.~P. Tang.
+\newblock On large-batch training for deep learning: Generalization gap and
+  sharp minima.
+\newblock 2017.
+
+\bibitem[Kingma and Ba(2014)]{kingma2014adam}
+D.~Kingma and J.~Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem[Ladner and Fischer(1980)]{ladner1980parallel}
+R.~E. Ladner and M.~J. Fischer.
+\newblock Parallel prefix computation.
+\newblock \emph{Journal of the ACM (JACM)}, 27\penalty0 (4):\penalty0 831--838,
+  1980.
+
+\bibitem[LeCun et~al.(1998)LeCun, Cortes, and Burges]{lecun1998mnist}
+Y.~LeCun, C.~Cortes, and C.~J. Burges.
+\newblock The mnist database of handwritten digits, 1998.
+
+\bibitem[Orchard et~al.(2015)Orchard, Jayawant, Cohen, and
+  Thakor]{orchard2015converting}
+G.~Orchard, A.~Jayawant, G.~Cohen, and N.~Thakor.
+\newblock Converting static image datasets to spiking neuromorphic datasets
+  using saccades.
+\newblock \emph{arXiv preprint arXiv:1507.07629}, 2015.
+
+\bibitem[Sutskever et~al.(2014)Sutskever, Vinyals, and
+  Le]{sutskever2014sequence}
+I.~Sutskever, O.~Vinyals, and Q.~V. Le.
+\newblock Sequence to sequence learning with neural networks.
+\newblock In \emph{Advances in neural information processing systems}, pages
+  3104--3112, 2014.
+
+\bibitem[van~den Oord et~al.(2016)van~den Oord, Dieleman, Zen, Simonyan,
+  Vinyals, Graves, Kalchbrenner, Senior, and Kavukcuoglu]{van2016wavenet}
+A.~van~den Oord, S.~Dieleman, H.~Zen, K.~Simonyan, O.~Vinyals, A.~Graves,
+  N.~Kalchbrenner, A.~Senior, and K.~Kavukcuoglu.
+\newblock Wavenet: A generative model for raw audio.
+\newblock \emph{CoRR abs/1609.03499}, 2016.
+
+\end{thebibliography}
