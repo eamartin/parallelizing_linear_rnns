@@ -1,0 +1,157 @@
+% Created 2017-10-23 Mon 00:20
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\author{Christopher Cundy}
+\date{\today}
+\title{to\_do}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs 25.1.1 (Org mode 8.2.10)}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{To do for paper}
+\label{sec-1}
+\subsection{Edit all}
+\label{sec-1-1}
+\subsection{Look up templates etc, double-check there's not one out there}
+\label{sec-1-2}
+\subsection{Do and write up the experiments}
+\label{sec-1-3}
+\subsubsection{Synthetic Task}
+\label{sec-1-3-1}
+\begin{enumerate}
+\item Already done, written up. Need to review
+\label{sec-1-3-1-1}
+\end{enumerate}
+\subsubsection{Medical Task}
+\label{sec-1-3-2}
+\begin{enumerate}
+\item Being done, need to check on testing set
+\label{sec-1-3-2-1}
+\item Need to write up
+\label{sec-1-3-2-2}
+\end{enumerate}
+\subsubsection{Throughput Task}
+\label{sec-1-3-3}
+\begin{enumerate}
+\item Chat to Eric about this
+\label{sec-1-3-3-1}
+\item Just generate random data
+\label{sec-1-3-3-2}
+\end{enumerate}
+\subsubsection{PLR/SLR comparison}
+\label{sec-1-3-4}
+\begin{enumerate}
+\item Have the pure kernel data
+\label{sec-1-3-4-1}
+
+\item Do that for random data
+\label{sec-1-3-4-2}
+\item Do a 2-layer network, with varying seq$_{\text{len}}$
+\label{sec-1-3-4-3}
+\item Report the throughput
+\label{sec-1-3-4-4}
+
+\begin{center}
+\begin{tabular}{lrrrr}
+Sequence Length & LS-LSTM & SRU & QRNN(2) & QRNN(10\\
+\hline
+16 & 0.61 & 0.28 & 0.38 & 0.78\\
+256 & 0.91 & 0.84 & 0.86 & 0.99\\
+4,096 & 0.98 & 1.38 & 1.18 & 1.05\\
+65,536 & 1.41 & 9.21 & 6.68 & 2.05\\
+\end{tabular}
+\end{center}
+For an input$_{\text{size}}$ of 24, output 2, hidden$_{\text{size}}$ 256, 
+batch$_{\text{size}}$ 65536 / seq$_{\text{len}}$
+\end{enumerate}
+
+\subsection{Collate the experiments and smooth}
+\label{sec-1-4}
+\subsection{Think about the overall message of the piece and rewrite as necessary}
+\label{sec-1-5}
+\subsection{Send to Adam, Andy to check}
+\label{sec-1-6}
+\subsection{Submit}
+\label{sec-1-7}
+\subsubsection{Then go to party and relax the fuck out}
+\label{sec-1-7-1}
+
+
+\section{Timeline}
+\label{sec-2}
+\subsection{Saturday evening:}
+\label{sec-2-1}
+\subsubsection{Done interesting medical results, tested on testing set}
+\label{sec-2-1-1}
+\subsubsection{Looked at throughput task}
+\label{sec-2-1-2}
+\subsubsection{Done PLR / SLR throughput task}
+\label{sec-2-1-3}
+\subsection{Sunday evening:}
+\label{sec-2-2}
+\subsubsection{Fully written up medical task}
+\label{sec-2-2-1}
+\subsubsection{Written up throuput and PLR/SLR task}
+\label{sec-2-2-2}
+\subsubsection{Start editing the paper, smoothing into a cohesive whole}
+\label{sec-2-2-3}
+\subsection{Monday evening:}
+\label{sec-2-3}
+\subsubsection{Finish editing, send off to everyone else}
+\label{sec-2-3-1}
+
+
+\section{Paper structure}
+\label{sec-3}
+\subsection{Introduction, abstract, background}
+\label{sec-3-1}
+\subsubsection{Describe}
+\label{sec-3-1-1}
+We can apply the PLR method to any architecture that satisfies the 
+constraints. E.g. SRU, QRNN, etc. Introduce LS-LSTM as good substitute.
+Describe how previous papers have shown that linear LSTMs work well, this
+approach allows us to speed it up.
+\subsection{Experiments}
+\label{sec-3-2}
+\subsubsection{Benchmarks}
+\label{sec-3-2-1}
+\begin{enumerate}
+\item Throughput of pure PLR kernel vs SLR kernel
+\label{sec-3-2-1-1}
+\item Show how it speeds up the SRU, QRNN, and LS-LSTM
+\label{sec-3-2-1-2}
+\item Show how the LS-LSTM has much better throughput than the CudnnLSTM
+\label{sec-3-2-1-3}
+\end{enumerate}
+\subsubsection{Synthetic task to show that linear LSTMs can still work well}
+\label{sec-3-2-2}
+\subsubsection{Medical task}
+\label{sec-3-2-3}
+
+
+
+31.4 * (4.3 * 6) = 
+\textasciitilde{}50 * \textasciitilde{}74
+135 * 190
+% Emacs 25.1.1 (Org mode 8.2.10)
+\end{document}

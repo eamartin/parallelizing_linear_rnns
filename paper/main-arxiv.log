@@ -1,10 +1,11 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.9.19)  25 OCT 2017 19:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.9.19)  24 OCT 2017 00:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**\input main.tex
-(./main.tex (/usr/local/texlive/2015/texmf-dist/tex/latex/base/article.cls
+**\input main-arxiv.tex
+(./main-arxiv.tex
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
@@ -572,8 +573,8 @@ File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 \Gin@req@height=\dimen138
 \Gin@req@width=\dimen139
 )
-(./main.aux)
-\openout1 = `main.aux'.
+No file main-arxiv.aux.
+\openout1 = `main-arxiv.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 84.
 LaTeX Font Info:    ... okay on input line 84.
@@ -590,7 +591,7 @@ LaTeX Font Info:    ... okay on input line 84.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 84.
 LaTeX Font Info:    ... okay on input line 84.
 LaTeX Font Info:    Try loading font information for T1+ptm on input line 84.
- (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
 *geometry* driver: auto-detecting
@@ -672,10 +673,8 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 84.
 LaTeX Info: Redefining \pageref on input line 84.
 LaTeX Info: Redefining \nameref on input line 84.
-
-(./main.out) (./main.out)
 \@outlinefile=\write3
-\openout3 = `main.out'.
+\openout3 = `main-arxiv.out'.
 
 LaTeX Info: Redefining \microtypecontext on input line 84.
 Package microtype Info: Generating PDF output.
@@ -755,163 +754,218 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 89.
- [1
+
+
+Package natbib Warning: Citation `sutskever2014sequence' on page 1 undefined on
+ input line 109.
+
+
+Package natbib Warning: Citation `amodei2015deep' on page 1 undefined on input 
+line 110.
+
+
+Package natbib Warning: Citation `hausknecht2015deep' on page 1 undefined on in
+put line 111.
+
+
+Package natbib Warning: Citation `hochreiter1997long' on page 1 undefined on in
+put line 111.
+
+
+Package natbib Warning: Citation `cho2014learning' on page 1 undefined on input
+ line 111.
+
+
+Package natbib Warning: Citation `keskar2017large' on page 1 undefined on input
+ line 124.
+
+
+Package natbib Warning: Citation `diamos2016persistent' on page 1 undefined on 
+input line 124.
+
+
+Package natbib Warning: Citation `balduzzi2016strongly' on page 1 undefined on 
+input line 129.
+
+
+Package natbib Warning: Citation `bradbury2017quasi' on page 1 undefined on inp
+ut line 132.
+
+
+Package natbib Warning: Citation `kalchbrenner2016neural' on page 1 undefined o
+n input line 132.
+
+
+Package natbib Warning: Citation `gehring2017convolutional' on page 1 undefined
+ on input line 132.
+
+
+Package natbib Warning: Citation `van2016wavenet' on page 1 undefined on input 
+line 132.
+
+[1
 
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 169.
+
+Package natbib Warning: Citation `ladner1980parallel' on page 2 undefined on in
+put line 156.
 
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 169.
+Package natbib Warning: Citation `blelloch1990prefix' on page 2 undefined on in
+put line 158.
+
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 195.
- [2] [3]
-[4]
+put line 180.
 
-LaTeX Warning: Reference `table:kernel-throughput' on page 5 undefined on input
- line 373.
+Package natbib Warning: Citation `blelloch1990prefix' on page 2 undefined on in
+put line 208.
 
+[2]
 
-LaTeX Warning: Reference `table:rnn-throughput' on page 5 undefined on input li
-ne 393.
+Package natbib Warning: Citation `abadi2016tensorflow' on page 3 undefined on i
+nput line 252.
 
-[5]
+[3]
 
-LaTeX Warning: Reference `fig:tp_perf' on page 6 undefined on input line 433.
-
-<cudnn_heatmap.png, id=126, 604.1772pt x 500.8311pt>
-File: cudnn_heatmap.png Graphic file (type png)
- <use cudnn_heatmap.png>
-Package pdftex.def Info: cudnn_heatmap.png used on input line 455.
-(pdftex.def)             Requested size: 341.43306pt x 283.03888pt.
+Package natbib Warning: Citation `bradbury2017quasi' on page 4 undefined on inp
+ut line 276.
 
 
-LaTeX Warning: Reference `fig:synthetic_training' on page 6 undefined on input 
-line 548.
+Package natbib Warning: Citation `balduzzi2016strongly' on page 4 undefined on 
+input line 277.
 
-<./1k_synthetic.png, id=128, 579.6054pt x 355.5684pt>
-File: ./1k_synthetic.png Graphic file (type png)
- <use ./1k_synthetic.png>
-Package pdftex.def Info: ./1k_synthetic.png used on input line 552.
-(pdftex.def)             Requested size: 198.7425pt x 121.9225pt.
 
-<./8k_synthetic.png, id=129, 578.16pt x 397.485pt>
-File: ./8k_synthetic.png Graphic file (type png)
- <use ./8k_synthetic.png>
-Package pdftex.def Info: ./8k_synthetic.png used on input line 555.
-(pdftex.def)             Requested size: 198.7425pt x 136.63513pt.
+Underfull \vbox (badness 6316) has occurred while \output is active []
 
-<./1M_synthetic.png, id=130, 578.16pt x 397.485pt>
-File: ./1M_synthetic.png Graphic file (type png)
- <use ./1M_synthetic.png>
-Package pdftex.def Info: ./1M_synthetic.png used on input line 558.
-(pdftex.def)             Requested size: 238.49341pt x 163.96458pt.
+ [4]
+
+Package natbib Warning: Citation `orchard2015converting' on page 5 undefined on
+ input line 300.
+
+
+Package natbib Warning: Citation `lecun1998mnist' on page 5 undefined on input 
+line 300.
+
+
+Package natbib Warning: Citation `kingma2014adam' on page 5 undefined on input 
+line 304.
+
+
+Package natbib Warning: Citation `glorot2010understanding' on page 5 undefined 
+on input line 304.
+
+
+Package natbib Warning: Citation `abadi2016tensorflow' on page 5 undefined on i
+nput line 306.
+
+
+LaTeX Warning: Reference `fig:tp_perf' on page 5 undefined on input line 311.
+
+<heatmap.png, id=46, 578.16pt x 397.485pt>
+File: heatmap.png Graphic file (type png)
+ <use heatmap.png>
+Package pdftex.def Info: heatmap.png used on input line 315.
+(pdftex.def)             Requested size: 341.43306pt x 234.73245pt.
+ [5]
+
+LaTeX Warning: Reference `fig:learning_curves' on page 6 undefined on input lin
+e 323.
+
+<lc2.png, id=54, 578.16pt x 397.485pt>
+File: lc2.png Graphic file (type png)
+ <use lc2.png>
+Package pdftex.def Info: lc2.png used on input line 329.
+(pdftex.def)             Requested size: 341.43306pt x 234.73245pt.
+
+Overfull \hbox (36.60258pt too wide) in paragraph at lines 343--354
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 [6pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.564 
-      pdfTeX warning (ext4): destination with the same identifier (name{figure.
-2}) has been already used, duplicate ignored
+l.358 N
+       o regularization was attempted and all of the models overfit, as indi...
+ <./heatmap.png>]
+
+LaTeX Warning: Reference `test-results' on page 7 undefined on input line 358.
+
+
+Underfull \vbox (badness 1442) has occurred while \output is active []
+
+ [7pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
+ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.564 
-      ]
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 565.
-
-
-Overfull \hbox (92.88652pt too wide) in paragraph at lines 573--587
- [][] 
- []
-
-[7pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
-has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.603 \item{
-            Allows us to get state-of-the-art results, even when performing ...
+l.364 W
+       e intend to expand upon the experiments section and open-source the p...
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has
  been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.603 \item{
-            Allows us to get state-of-the-art results, even when performing ...
- <./cudnn_heatmap.png>] [8pdfTeX warning (ext4): destination with the same iden
-tifier (name{figure.4}) has been already used, duplicate ignored
+l.364 W
+       e intend to expand upon the experiments section and open-source the p...
+ <./lc2.png>]
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.634 
-       <./1k_synthetic.png> <./8k_synthetic.png> <./1M_synthetic.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 751.
- [9]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 751.
+Package natbib Warning: There were undefined citations.
 
-(./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 751.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 751.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 370.
+[8]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 370.
+ (./main-arxiv.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 370.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 370.
 
 
-Package rerunfilecheck Warning: File `main.out' has changed.
+Package rerunfilecheck Warning: File `main-arxiv.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
 (rerunfilecheck)                or use package `bookmark'.
 
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: BE739C90A35AFC22BE308AFAC8FF90D8;594
-(rerunfilecheck)             After:  F952FB05DFF05D6869D8950197C7E18E;890.
+Package rerunfilecheck Info: Checksums for `main-arxiv.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  639A58C0C9EFD80EB30F8AF6B2E2DDE9;898.
 
 LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 751.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 370.
  ) 
 Here is how much of TeX's memory you used:
- 9529 strings out of 493089
- 142089 string characters out of 6134842
- 273405 words of memory out of 5000000
- 12642 multiletter control sequences out of 15000+600000
- 46298 words of font info for 162 fonts, out of 8000000 for 9000
+ 9330 strings out of 493089
+ 138547 string characters out of 6134842
+ 268763 words of memory out of 5000000
+ 12525 multiletter control sequences out of 15000+600000
+ 34049 words of font info for 122 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 31i,15n,35p,1343b,434s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{Hfootnote.4} has been referenced but does not exi
-st, replaced by a fixed one
-
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/tex
-live/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texli
-ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/
-2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/20
-15/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2015
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2015/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2015/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2015/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2015/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2015/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2015/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2015/texmf-dist/font
-s/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2015/texmf-dist/fonts/t
-ype1/public/cm-super/sftt1000.pfb></usr/local/texlive/2015/texmf-dist/fonts/typ
-e1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/tim
-es/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a
-.pfb>
-Output written on main.pdf (9 pages, 528729 bytes).
+ 31i,10n,35p,1373b,353s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/t
+exlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/tex
+live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texl
+ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texli
+ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive
+/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2
+015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/201
+5/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2015/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2015/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2015/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2015/texmf-d
+ist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2015/texmf-dis
+t/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/ty
+pe1/urw/times/utmr8a.pfb>
+Output written on main-arxiv.pdf (8 pages, 280497 bytes).
 PDF statistics:
- 241 PDF objects out of 1000 (max. 8388607)
- 201 compressed objects within 3 object streams
- 58 named destinations out of 1000 (max. 500000)
- 22621 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 126 PDF objects out of 1000 (max. 8388607)
+ 99 compressed objects within 1 object stream
+ 31 named destinations out of 1000 (max. 500000)
+ 16907 words of extra memory for PDF output out of 17280 (max. 10000000)
 

@@ -1,0 +1,68 @@
+* To do for paper
+** Edit all
+** Look up templates etc, double-check there's not one out there
+** Do and write up the experiments
+*** Synthetic Task
+**** Already done, written up. Need to review
+*** Medical Task
+**** Being done, need to check on testing set
+**** Need to write up
+*** Throughput Task
+**** Chat to Eric about this
+**** Just generate random data
+*** PLR/SLR comparison
+**** Have the pure kernel data
+
+**** Do that for random data
+**** Do a 2-layer network, with varying seq_len
+**** Report the throughput
+
+| Sequence Length | LS-LSTM |  SRU | QRNN(2) | QRNN(10 |
+|-----------------+---------+------+---------+---------|
+| 16              |    0.61 | 0.28 |    0.38 |    0.78 |
+| 256             |    0.91 | 0.84 |    0.86 |    0.99 |
+| 4,096           |    0.98 | 1.38 |    1.18 |    1.05 |
+| 65,536          |    1.41 | 9.21 |    6.68 |    2.05 |
+For an input_size of 24, output 2, hidden_size 256, 
+batch_size 65536 / seq_len
+
+** Collate the experiments and smooth
+** Think about the overall message of the piece and rewrite as necessary
+** Send to Adam, Andy to check
+** Submit
+*** Then go to party and relax the fuck out
+
+
+* Timeline
+** Saturday evening:
+*** Done interesting medical results, tested on testing set
+*** Looked at throughput task
+*** Done PLR / SLR throughput task
+** Sunday evening:
+*** Fully written up medical task
+*** Written up throuput and PLR/SLR task
+*** Start editing the paper, smoothing into a cohesive whole
+** Monday evening:
+*** Finish editing, send off to everyone else
+
+
+* Paper structure
+** Introduction, abstract, background
+*** Describe 
+We can apply the PLR method to any architecture that satisfies the 
+constraints. E.g. SRU, QRNN, etc. Introduce LS-LSTM as good substitute.
+Describe how previous papers have shown that linear LSTMs work well, this
+approach allows us to speed it up.
+** Experiments
+*** Benchmarks 
+**** Throughput of pure PLR kernel vs SLR kernel
+**** Show how it speeds up the SRU, QRNN, and LS-LSTM
+**** Show how the LS-LSTM has much better throughput than the CudnnLSTM
+*** Synthetic task to show that linear LSTMs can still work well
+*** Medical task
+
+
+
+31.4 * (4.3 * 6) = 
+~50 * ~74
+135 * 190

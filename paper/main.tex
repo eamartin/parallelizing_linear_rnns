@@ -87,20 +87,18 @@
 \maketitle
 
 \begin{abstract}
-Recurrent neural networks (RNNs) are widely used to model sequential data 
-but their non-linear dependencies between sequence elements prevent parallelizing
-training over sequence length. We show the training of RNNs with only 
-linear sequential dependencies can be parallelized over the
-sequence length using the parallel scan algorithm, leading to rapid training
-on long sequences with small minibatch size. We abstract prior linear sequence models
-into a new framework of linear surrogate RNNs and develop
-a linear surrogate long short-term memory (LS-LSTM) powered by a parallel linear recurrence
-CUDA kernel we implemented.
-We evaluate the LS-LSTM on a long sequence noisy autoregressive task and find
-the LS-LSTM achieves slightly superior train and test performance to a similar 
-sized LSTM in 4x less training time. We analyze latency and throughput of
-the LS-LSTM and find the LS-LSTM reaches up to 
-175x the throughput of the LSTM in the small minibatch long sequence regime.
+Recurrent neural networks (RNNs) are widely used to model sequential data but
+their non-linear dependencies between sequence elements prevent parallelizing
+training over sequence length. We show the training of RNNs with only linear
+sequential dependencies can be parallelized over the sequence length using the
+parallel scan algorithm, leading to rapid training on long sequences with small
+minibatch size. We develop a parallel linear recurrence CUDA kernel and show
+that it can be applied to immediately speed up several RNN architectures by up
+to 9x. We abstract prior linear sequence models into a new framework of linear
+surrogate RNNs and develop a linear surrogate for the long short-term memory 
+unit, the LS-LSTM, which is able to achieve throughput 30x greater than the
+currently fastest-available LSTM implementation. We show that the LS-LSTM is
+able to perform well in the 
 \end{abstract}
 
 \section{Introduction}
@@ -166,17 +164,34 @@ $\odot$ such that $a \otimes (b \otimes c) = (a \odot b) \otimes c$
 \item $\otimes$ distributes over $\oplus$: $a\otimes(b\oplus c) = (a\otimes b) \oplus (a \otimes c)$ 
 \end{enumerate}
 
-Our primary contribution is the application of the parallel linear recurrence algorithm to RNNs.
+Our contributions are as follows:
+\begin{itemize}
+\item{We describe the class of RNNs which satisfy the conditions above, and
+    show that many of the RNNs used in practice such as the Quasi-RNN are
+    contained in this class}
+\item{We provide an implementation of the parallel linear recurrence
+    algorithm as a CUDA kernel, and show that it speeds up training of
+    the SRU and QRNN architectures by factors of up to 9x}
+\item{We describe how several recent linear RNNs can be described as
+    linear surrogates for nonlinear architectures. We introduce a linear
+    surrogate for the LSTM and show that we are able to train it
+    with a speedup of 5-10x compared to the CuDNN-LSTM when we use the plr
+    algorithm.}
+\end{itemize}
 
 \section{Parallel linear recurrence}
-
-Using elementwise vector addition as $x \oplus y= x+y$, matrix-vector multiplication as $A \otimes x=Ax$,
-and matrix-matrix multiplication as $A \odot B=AB$ satisfies Blelloch's three conditions, thus allowing linear
-recurrence $h_t = \Lambda_t h_{t-1} + x_t$ to be evaluated in parallel over $t$ for
-vectors $x_t$ and square matrices $\Lambda_t$. As the method is
-essential to this work, Algorithm 1 presents the parallel linear recurrence algorithm
-for the interested reader.
+Considering the familiar operations in linear algebra, we see that the
+associative operation of vector addition ($\boldsymbol{x} \oplus \boldsymbol{y}
+= \boldsymbol{x} + \boldsymbol{y}$), the semiassociative operation of
+matrix-vector multiplication ($A \otimes \boldsymbol{x} = A\boldsymbol{x}$) and
+the associative operation of matrix-matrix multiplication ($A \odot B=AB$) form
+recurrences which satisfy Blelloch's three conditions, thus allowing the linear
+recurrence $h_t = \Lambda_t h_{t-1} + x_t$ to be evaluated in parallel over $t$
+for vectors $x_t$ and square matrices $\Lambda_t$. As the method is essential to
+this work, Algorithm 1 presents the parallel linear recurrence algorithm for the
+interested reader.
 \begin{algorithm}
+  \label{alg:plr}
 \caption{Parallel linear recurrence on $p$ processors}
 \begin{algorithmic}[1]
   \State Let $y = [(\Lambda_1, x_1), (\Lambda_2, x_2), ..., (\Lambda_T, x_T)]$
@@ -205,31 +220,37 @@ for the interested reader.
 \subsection{Theoretical performance}
 The cost of a serial scan over a sequence of length $T$ is 
 $C_\text{sscan} = (C_\otimes + C_\oplus)T$, compared to the parallel scan cost
-$C_\text{pscan} = 2(C_\odot + C_\otimes + C_\oplus)(T/p + \lg p)$ \cite{blelloch1990prefix}.
+$C_\text{pscan} = 2(C_\odot + C_\otimes + C_\oplus)(T/p + \lg p)$ \cite{blelloch1990prefix},
+where \(p\) is the number of available parallel cores. 
 If $h_t$ is a vector of dimension $n$ then 
-$C_\odot=n^3, C_\otimes=n^2, C_\oplus=n$ giving
-$C_\text{pscan} = 2(n^3 + n^2 + n)(T/p + \lg p)$ and 
-$C_\text{sscan} = (n^2 + n)T$. The $n^3$ cost of the matrix
-multiplication in the parallel algorithm can destroy any parallel speedups for
+$C_\odot\propto n^3, C_\otimes\propto n^2, C_\oplus\propto n$ giving
+$C_\text{pscan} \propto 2(n^3 + n^2 + n)(T/p + \lg p)$ and 
+$C_\text{sscan} \propto (n^2 + n)T$. The $n^3$ cost of the matrix
+multiplication in the parallel algorithm can counter-act any parallel speedups for
 sufficiently large hidden states and lead to a slower algorithm overall.
 
-To avoid this problem, we will only consider diagonal matrices $\Lambda_t$, in which
-case matrix-matrix and matrix-vector have cost $n$ and 
-$C_\text{pscan}=6n(T/p + \lg p)$ and $C_\text{sscan}=2nT$. Assuming $p \ll T$, then 
-$C_\text{pscan} \le C_\text{sscan}$ when $p \ge 3$.
-As we are only considering diagonal matrices, the
-linear recurrence will be written $h_t = \lambda_t \odot h_{t-1} + x_t$ where
-$\odot$ indicates elementwise multiplication.
+To avoid this problem, we will only consider diagonal matrices $\Lambda_t$, in
+which case both matrix-matrix and matrix-vector multiplication have cost
+proportional to $n$ and $C_\text{pscan}\propto 6n(T/p + \lg p)$ and
+$C_\text{sscan}=2nT$. Assuming $p \ll T$, then $C_\text{pscan} \le
+C_\text{sscan}$ when $p \ge 3$.\footnote{Can include the actual speedup
+  factor, \(\alpha = \frac{PT}{3(T + \lg(p))}\).}
+As we are only considering diagonal matrices,
+we write the linear recurrence as $h_t = \lambda_t \odot h_{t-1} + x_t$
+where $\odot$ indicates elementwise multiplication.
 
 Limiting $\Lambda_t$ to be diagonal may seem like a severe constraint but there are
 several reasons to do so beyond the unfavorable parallelization performance. Relatively few neural
 network models use separate recurrent matrices for each sequence element and using these
-separate matrices would require potentially prohibitive $n^2T$ memory. Applying
+separate matrices would require potentially prohibitive $n^2T$ memory.\footnote{Ideally we can
+  find a citation for someone thinking these points before}
+Applying
 the same matrix $\Lambda$ to each sequence element is also unappealing considering that a matrix
 multiplication can be thought of as a rotation and a scaling. The same rotation at every
 element seems unlikely to be useful, and the scaling is exactly what's captured in diagonal
 vectors $\lambda_t$. Recurrent coefficient vectors $\lambda_t$ provide enough flexibility
 to implement schemes such as exponential moving averages or a gating mechanism.
+
 
 \subsection{Backpropagation}
 \begin{align*}
@@ -244,16 +265,17 @@ to implement schemes such as exponential moving averages or a gating mechanism.
 The backpropagation equations center around a linear recurrence over $\frac{\partial L}{\partial h_t}$ in the reverse order of the original sequence. This allows for parallelizing both the forwards and backwards pass of a linear RNN over the sequence length.
 
 \subsection{Implementation}
-A modern high-end NVIDIA GPU consists of between 640 and 3200 concurrently
-executing warps. Each warp operates on 32 single precision floating point numbers
-in parallel.
+In 2017, GPUs commonly used in deep learning consist of between 640 and 3200
+concurrently executing warps. Each warp operates on 32 single precision floating
+point numbers in parallel.
 
-This work implemented parallel linear recurrence as a CUDA kernel with
-bindings into the TensorFlow \cite{abadi2016tensorflow} framework. Each warp acts as a processor, which means algorithmic $p$ is up to 3200 and the theoretical parallelization speedup factor is up to several hundred.
-The 32 lanes of each warp work on different
-elements of the recurrence vector in parallel. These implementation details mean that
-peak performance is only obtained on sequences of at least several thousand
-steps on at least a 32 element vector.
+This work implemented parallel linear recurrence as a CUDA kernel with bindings
+into the TensorFlow \cite{abadi2016tensorflow} framework. Each warp acts as a
+processor, which means the algorithmic parallelizability $p$ is up to 3200 and the theoretical
+parallelization speedup factor is up to several hundred.  The 32 lanes of each
+warp work on different elements of the recurrence vector in parallel. These
+implementation details mean that peak performance is only obtained on sequences
+of at least several thousand steps on at least a 32 element vector.
 
 \section{Models}
 Parallel linear recurrence can be used to construct a wide variety of differentiable modules that can be evaluated in parallel. Common applications of linear recurrence include gating schemes and exponential moving averages. Although linear recurrence values can depend only linearly on previous elements, the stacking of linear recurrent layers separated by non-linearities allows for a non-linear dependence on the past. In this sense the non-linear depth of a linear recurrent network is the number of layers and not the sequence length. 
@@ -268,23 +290,53 @@ h_t &= g_t \odot h_{t-1} + (1-g_t)\odot i_t
 A GILR layer applies the same non-linear transform to each sequence element and then accumulates the sequence elements with a non-linear gating mechanism. Gate $g_t$ uses the sigmoid activation function to have values in [0,1] for reasonable gating semantics, while impulse $i_t$ can use any activation function $\tau$. Stacking GILR layers allows for rich non-linear dependence on previous events while still taking advantage of fast parallel sequence evaluation.
 
 \subsubsection{Impact on effective "batch size"}
-Consider evaluating a vanilla RNN $h_t = \sigma(Uh_{t-1} + Vx_t + b)$ from $m$ inputs to $n$ hidden units on a sequence of length $T$ with minibatch size $b$ using a  serial evaluation strategy. At each of $T$ iterations, the naive approach performs two $(b, m) \mathbf{x} (m, n)$ matrix multiplications. Larger matrix multiplications achieve higher throughput due to less IO overhead, so the better approach computes $Vx_t$ for all $t$ ahead of time in a single $(bT, m) \mathbf{x} (m, n)$ matrix multiply. The non-linear recurrence forces even the better approach to perform $T$ potentially small $(b, m) \mathbf{x} (m, n)$ matrix multiplications in serial which makes performance heavily dependent on minibatch size.
+Consider evaluating an RNN with recurrence $h_t = \sigma(Uh_{t-1} + Vx_t + b)$,
+from $m$ inputs to $n$ hidden units on a sequence of length $T$ with minibatch
+size $b$ using a serial evaluation strategy. At each of $T$ iterations, the
+naive approach performs two $(b, m) \times (m, n)$ matrix
+multiplications. Larger matrix multiplications achieve higher throughput due to
+less IO overhead, so the better approach computes $Vx_t$ for all $t$ ahead of
+time in a single $(bT, m) \times (m, n)$ matrix multiply. The non-linear
+recurrence forces even the better approach to perform $T$ potentially small $(b,
+m) \times (m, n)$ matrix multiplications in serial which makes performance
+heavily dependent on minibatch size.
 
-Now consider the GILR, noting that it has the same two matrix-vector multiplications per iteration as the vanilla RNN. $g$ and $i$ can each be evaluated for all $t$ with a single $(bT, m) \mathbf{x} (m, n)$ matrix multiplication each. Given $g$ and $i$, $h$ can be computed using a parallel linear recurrence over $T$ vectors each of $bn$ elements. Rather than $T$ small operations, the GILR can be evaluated over all sequence elements with two large matrix multiplies and a parallel linear recurrence. GILR performance is much less dependent on batch size as the matrix multiplies see an "effective batch size" of $bT$ and $T$ is typically large.
+Now consider the GILR, noting that it has the same two matrix-vector
+multiplications per iteration as the above RNN. $g$ and $i$ can each be
+evaluated for all $t$ with a single $(bT, m) \times (m, n)$ matrix
+multiplication each. Given $g$ and $i$, $h$ can be computed using a parallel
+linear recurrence over $T$ vectors each of $bn$ elements. Rather than $T$ small
+operations, the GILR can be evaluated over all sequence elements with two large
+matrix multiplies and a parallel linear recurrence. GILR performance is much
+less dependent on batch size as the matrix multiplies see an "effective batch
+size" of $bT$ and $T$ is typically large.
 
 \subsection{Linear surrogate RNNs}
-RNNs learn a transition function $s_t = f(s_{t-1}, x_t)$ which combines previous state $s_{t-1}$ with input $x_t$ to compute current state $s_t$. Non-linear $f$ prevents application of the parallel linear recurrence algorithm and forces slow serial evaluation. To work around this inefficiency, note that $s_t$ serves a dual purpose. In $s_t = f(s_{t-1}, x_t)$, $s_{t-1}$ serves as an input to $f$ summarizing the previous inputs while $s_t$ serves as the output of $f$ to be passed to other layers of the network. If we decouple these uses, we can instead compute $s_t = f(\tilde{s}_{t-1}, x_t)$ with $\tilde{s}_t$ as a linearly computable surrogate for $s_t$. With this linear surrogate, non-linear $f$ can still be evaluated. We refer to this class of model as a linear surrogate RNN (LS-RNN). Quasi-RNNs \cite{bradbury2017quasi} are LS-RNNs using $\tilde{h}_{t-1} = W_k x_{t-k} + ... W_1 x_{t-1}$
-and strongly typed RNNs\cite{balduzzi2016strongly} are LS-RNNs with $\tilde{h}_t=x_{t-1}$. Although not a rule, LS-RNNs can often be parallelized over sequence length with either
+\label{sec:ls-rnns}
+RNNs learn a transition function $s_t = f(s_{t-1}, x_t)$ which combines previous
+state $s_{t-1}$ with input $x_t$ to compute current state $s_t$. Non-linear $f$
+prevents application of the parallel linear recurrence algorithm and forces slow
+serial evaluation. To work around this inefficiency, note that $s_t$ serves a
+dual purpose. In $s_t = f(s_{t-1}, x_t)$, $s_{t-1}$ serves as an input to $f$
+summarizing the previous inputs while $s_t$ serves as the output of $f$ to be
+passed to other layers of the network. If we decouple these uses, we can instead
+compute $s_t = f(\tilde{s}_{t-1}, x_t)$ with $\tilde{s}_t$ as a linearly
+computable surrogate for $s_t$. With this linear surrogate, non-linear $f$ can
+still be evaluated. We refer to this class of model as a linear surrogate RNN
+(LS-RNN). Quasi-RNNs \cite{bradbury2017quasi} are LS-RNNs using $\tilde{h}_{t-1}
+= W_k x_{t-k} + ... W_1 x_{t-1}$ and strongly typed
+RNNs\cite{balduzzi2016strongly} are LS-RNNs with $\tilde{h}_t=x_{t-1}$. Although
+not a rule, LS-RNNs can often be parallelized over sequence length with either
 convolution or linear recurrence.
 
-As an example LS-RNN, consider an LSTM:
+As an example LS-RNN, consider an LSTM\footnote{Want a citation here I guess}:
 \begin{align*}
 f_t, i_t, o_t &= \sigma(U_{f,i,o} h_{t-1} + V_{f,i,o} x_t + b_{f,i,o}) \\
 z_t &= \tau(U_z h_{t-1} + V_z x_t + b_z) \\
 c_t &= f_t \odot c_{t-1} + i_t \odot z_t \\
 h_t &= o_t \odot c_t
 \end{align*}
-An LSTM has state $s_t = (h_t, c_t)$. $c_t$ depends only linearly on $c_{t-1}$, so no surrogate is needed for $c_t$. $h_t$ has a non-linear dependence on $h_{t-1}$, so $h_t$ needs a linear surrogate. With a GILR layer as surrogate, the linear surrogate LSTM (LS-LSTM) is
+An LSTM has state $s_t = (h_t, c_t)$. Since $c_t$ depends only linearly on $c_{t-1}$, no surrogate is needed for $c_t$. $h_t$ has a non-linear dependence on $h_{t-1}$, so $h_t$ needs a linear surrogate. With a GILR layer as surrogate, the linear surrogate LSTM (LS-LSTM) is
 \begin{align*}
 f_t, i_t, o_t &= \sigma(U_{f,i,o} \tilde{h}_{t-1} + V_{f,i,o} x_t + b_{f,i,o}) \\
 z_t &= \tau(U_z \tilde{h}_{t-1} + V_z x_t + b_z) \\
@@ -297,65 +349,167 @@ g_t &= \sigma(V_g x_t + b_g) \\
 For $m$ inputs and hidden size $n$, the LS-LSTM contains $2n(n+m)$ more parameters than the equivalently sized LSTM to handle the mapping from $x$ to $\tilde{h}$. More generally, a LS-RNN contains all of the same parameters as the underlying RNN as well as some additional parameters to compute the linear surrogate.
 
 \section{Experiments}
-Experiments were performed on the N-MNIST \cite{orchard2015converting} dataset. N-MNIST captures the MNIST digit dataset \cite{lecun1998mnist} by panning
-an event driven camera over each digit. Each example in N-MNIST is a sequence of single pixel events (x, y, polarity, timestamp) where
-x and y each indicate a pixel position in [0, 33], polarity indicates whether the pixel was switching on or off, and timestamp is the time of the event in microseconds. Videos produced from the event data show that positive polarity events are often located on the leading edge of the digit motion and negative polarity events on the trailing edge. Between the 60,000 digits in the training set, N-MNIST contains approximately 250 million pixel events with sequence lengths ranging from 500 to 8000 and averaging 4000 events.
+We perform several experiments, first confirming that our implementation of the
+parallel linear recurrence algorithm is able to achieve higher throughput than a
+similarly implemented serial version of the algorithm. We then show that the
+LS-LSTM architecture, trained with the PLR algorithm, is able to outperform the
+optimized CuDNN LSTM implementation on a pathological example from the original
+LSTM paper. Finally we show that our LS-LSTM is able to quickly achieve state of
+the art results on an existing medical data set.
 
-We attempt to forecast 50 events ahead in N-MNIST using a two layer LSTM with 256 units per layer and a two layer LS-LSTM with 234 units per layer. The LS-LSTM layer size was selected so that it had slightly fewer parameters than the LSTM. Each model transformed the incoming event position into a 40-dimensional embedding vector which was then combined with the polarity to produce a 41 dimensional input. Both models output a $2 \mathbf{x} 34^2$ matrix containing two future event location probability distributions conditioned on the polarity of the future event. The training algorithm only considers the probability distribution of the true future polarity and uses the cross entropy loss function. The Adam \cite{kingma2014adam} optimization algorithm and Glorot \cite{glorot2010understanding} initialization scheme were used. Training on a minibatch of size $b$ with sequence length $T$ consisted of uniformly sampling $b$ N-MNIST sequences and then extracting a single random $T$ element subsequence (and its 50 element ahead forecast) from the sequence. Sequences less than $T$ elements were padded out to length $T$, and there was a "burn-in" of 30 events at the start of each sequence where no predictions were made. An epoch was defined as a pass over as many pixel events as there are in the full training set.
+\subsection{Throughput Benchmarks}
+**** Throughput of pure PLR kernel vs SLR kernel
+**** Show how it speeds up the SRU, QRNN, and LS-LSTM
+**** Show how the LS-LSTM has much better throughput than the CudnnLSTM
 
-All experiments were performed using TensorFlow 1.0 \cite{abadi2016tensorflow} on a single Nvidia K80 GPU running for up to 18 hours. The LSTM model was computed using TensorFlow's dynamic\_rnn and BasicLSTMCell routines which are slower than but algorithmically similar to the cuDNN LSTM implementation.
+We first illustrate the throughput advantage of the parallel scan algorithm for
+evaluating the linear recurrence. We define throughput as events/s and a
+minibatch of size $b$ and length $T$ to be $bT$ events. We implement two CUDA
+kernels, one which evaluates the parallel linear recurrence described in
+algorithm \ref{alg:plr}, and one which evaluates the linear recurrence using the
+straightforward serial approach. This comparison is performed directly at the
+kernel level, avoiding any overhead due to calling Tensorflow. We find that at
+long sequence lengths, the PLR kernel has a distinct
+advantage, as shown in table \ref{table:kernel-throughput}.
 
-\subsection{Computational performance}
-The computational performance of the LSTM and LS-LSTM models were compared across a wide range of minibatch sizes and sequence lengths. Although the 234 unit LS-LSTM has a similar number of parameters to the 256 unit LSTM, we measured the computational performance of a 256 unit LS-LSTM to observe any impact of the linear surrogate calculation. We define throughput as events/s and a minibatch of size $b$ and length $T$ to be $bT$ events. The serial evaluation of the LSTM causes its throughput to be independent of the sequence length as a doubling of sequence length causes a doubling of runtime.
+\begin{figure}
+\begin{center}
+  \begin{tabular}{lrrr}
+    \label{table:rnn-throughput}
+Sequence Length\footnote{What's the batch size etc here??} & 4 Dimensions & 32 Dimensions & 128 Dimensions \\
+\hline
+16 & 0.06 & 0.06 & 0.05\\ 
+256 & 0.22 & 0.22 & 0.86\\ 
+4,096 & 1.02 & 2.94 & 3.36\\ 
+65,536 & 38.5 & 41.8 & 17.5\\
+  \end{tabular}  
+    \end{center}
+    \caption{Speedup of the PLR kernel compared to the SLR kernel, without any
+    overhead from Tensorflow.}    
+  \end{figure}
+  
+Many RNN architectures that have been recently introduced are amenable to
+implementing through parallel linear recurrence. Table
+\ref{table:rnn-throughput} shows the throughput advantage by using a parallel
+linear recurrence when compared to a serial linear recurrence. Since PLR and SLR
+are simply different methods for computing the same output, there is no penalty
+incurred for this speedup: it is a pure speed gain. Typically experiments will aim
+to maximize the memory utilisation of the GPU, so we simulate this by choosing the
+product of the batch size and the sequence length to be constant. We see that the
+architectures which have fewer terms (for which the linear recurrence is a higher
+proportion of the computational burden) are more effected by the switch to PLR.
+This is particularly clear in the case of the QRNN, where including a wider
+convolutional window results in less time spent on the recurrence and less to gain
+from the parallelization. 
+\begin{figure}
+\begin{center}
+  \begin{tabular}{lrrrr}
+    \label{table:rnn-throughput}
+Sequence Length & LS-LSTM & SRU & QRNN(2) & QRNN(10)\\
+\hline
+16 & 0.61 & 0.28 & 0.38 & 0.78\\
+256 & 0.91 & 0.84 & 0.86 & 0.99\\
+4,096 & 0.98 & 1.38 & 1.18 & 1.05\\
+65,536 & 1.41 & 9.21 & 6.68 & 2.05\\
+  \end{tabular}  
+\end{center}
+\caption{Speedup obtained when using parallel linear recurrence compared
+    to serial linear recurrence. We analyse this for several recent architectures:
+    the Simple Recurrent Unit from [cite], the Quasi-RNN from [cite], with a
+    convolutional filter of size 2 and 10, and the Linear Surrogate LSTM that
+    we introduce in section \ref{sec:ls-rnns}. To give a fair model of a
+    typical use-case, we set batch size \(b\) such that \(Tb = 65536\)
+    for a sequence length \(T\).}
+\end{figure}
 
-Figure \ref{fig:tp_perf} shows the LS-LSTM model achieves a throughput between 1.17x and 175x that of the LSTM, with the greatest relative advantages occurring at small minibatch sizes and long sequences. Notably, the LS-LSTM can achieve a higher throughput by running on one 8192 event sequence at a time than an LSTM running with 256 sequence minibatches. Similar speedups were found for inference. These speedups indicate the use of parallel linear recurrence through a linear surrogate can massively accelerate RNN training.
+Finally, we compare the throughput of the linear surrogate LSTM to the current
+fastest available implementation of the LSTM, the CuDNN-LSTM. We observe that our
+LS-LSTM has higher throughput for most of the low-batch-size regime, with a 30x
+speedup at a sequence length of 65,536. Recent work (cite https://arxiv.org/pdf/1609.04836.pdf)
+has suggested that small mini-batches may aid generalization by encouraging
+the discovery of shallow minima. The LS-LSTM allows us to achieve high throughput
+for all choices of minibatch size and sequence length.
+
+\ref{fig:tp_perf}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The computational performance of the LSTM and LS-LSTM models were compared       %
+% across a wide range of minibatch sizes and sequence lengths. Although the 234    %
+% unit LS-LSTM has a similar number of parameters to the 256 unit LSTM, we         %
+% measured the computational performance of a 256 unit LS-LSTM to observe any      %
+% impact of the linear surrogate calculation. The serial evaluation of the LSTM    %
+% causes its throughput to be independent of the sequence length as a doubling of  %
+% sequence length causes a doubling of runtime. Notably, the LS-LSTM can achieve a %
+% higher throughput by running on one 8192 event sequence at a time than an LSTM   %
+% running with 256 sequence minibatches. Similar speedups were found for           %
+% inference.                                                                       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Unlike the previous case, these speedups do come at a cost. The LS-LSTM
+architecture is different to the canonical LSTM, and it's possible that the loss
+of model capacity outweighs the speedup in training. The following experiment
+shows that the LS-LSTM is able to outperform the LSTM on an example originally
+designed to illustrate the advantages of the LSTM.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=12cm]{heatmap.png}
-\caption{Throughput comparison between LSTM-256-256 with LS-LSTM-256-256. The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the LS-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences.}
+\includegraphics[width=12cm]{cudnn_heatmap.png}
+\caption{Throughput comparison between LSTM-256-256 with LS-LSTM-256-256, with a
+  32-dimensional input and a 2-dimensional output, for various batch sizes and
+  sequence lengths.The LSTM only has a single row of data because its throughput
+  is independent of sequence length. Entries are missing from the LS-LSTM table
+  because there was not enough memory on the GPU to handle such large batch
+  sizes and sequences.}
 \label{fig:tp_perf}
 \end{figure}
 
-\subsection{Training performance}
-The speed of neural net training is not solely determined by the training throughput but also by the frequency of optimization steps. As an example, a batch method may process inputs at the same rate as a minibatch method, but the minibatch method will generally converge much faster on large datasets. On an infinite dataset, the batch method never takes a single optimization step regardless of its throughput. With this example in mind, it is clear that achieving fast training is a balancing act between training data throughput and optimization step latency and that training performance should be evaluated with training curves and not just throughput numbers such as time per epoch.
 
-The LSTM and LS-LSTM offer differ latency and throughput tradeoffs. LSTM throughput depends only on minibatch size but LSTM latency depends on both minibatch size and sequence length. Experiments were conducted training the LSTM models with minibatch size 256 and sequence lengths 128, 256, 512, and 1024. Figure \ref{fig:learning_curves} shows the smaller sequence lengths led to faster initial learning but inferior final performance. 
+% Experiments were performed on the N-MNIST \cite{orchard2015converting} dataset. N-MNIST captures the MNIST digit dataset \cite{lecun1998mnist} by panning
+% an event driven camera over each digit. Each example in N-MNIST is a sequence of single pixel events (x, y, polarity, timestamp) where
+% x and y each indicate a pixel position in [0, 33], polarity indicates whether the pixel was switching on or off, and timestamp is the time of the event in microseconds. Videos produced from the event data show that positive polarity events are often located on the leading edge of the digit motion and negative polarity events on the trailing edge. Between the 60,000 digits in the training set, N-MNIST contains approximately 250 million pixel events with sequence lengths ranging from 500 to 8000 and averaging 4000 events.
 
-The throughput and latency of the LS-LSTM are both influenced by batch size and sequence length. Several LS-LSTMs were trained with batch size 16 and sequence length 1024. This combination was chosen because of the nearly maximum throughput, the low latency, and the ease of building a minibatch given the distribution of sequence lengths in the data set. The 234 unit LS-LSTM reaches a better training loss in roughly 4.5 hours than any of the LSTMs could reach in 18 hours. This experimental evidence indicates the LS-LSTM is as powerful of a model as the LSTM and can be trained in a fraction of the time.
+% We attempt to forecast 50 events ahead in N-MNIST using a two layer LSTM with 256 units per layer and a two layer LS-LSTM with 234 units per layer. The LS-LSTM layer size was selected so that it had slightly fewer parameters than the LSTM. Each model transformed the incoming event position into a 40-dimensional embedding vector which was then combined with the polarity to produce a 41 dimensional input. Both models output a $2 \mathbf{x} 34^2$ matrix containing two future event location probability distributions conditioned on the polarity of the future event. The training algorithm only considers the probability distribution of the true future polarity and uses the cross entropy loss function. The Adam \cite{kingma2014adam} optimization algorithm and Glorot \cite{glorot2010understanding} initialization scheme were used. Training on a minibatch of size $b$ with sequence length $T$ consisted of uniformly sampling $b$ N-MNIST sequences and then extracting a single random $T$ element subsequence (and its 50 element ahead forecast) from the sequence. Sequences less than $T$ elements were padded out to length $T$, and there was a "burn-in" of 30 events at the start of each sequence where no predictions were made. An epoch was defined as a pass over as many pixel events as there are in the full training set.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=12cm]{lc2.png}
-\caption{The LSTM models had a direct relationship between sequence length and training curve: the shorter the sequence length, the faster the initial learning and
-the higher the final loss. The faster initial learning is explained by the decreased
-latency of optimization steps and the higher final loss is explained by the
-inability to learn long dependencies. The LS-LSTM has 234 units per hidden
-layer to have the same number of parameters as the 256 unit LSTMs.}
-\label{fig:learning_curves}
-\end{figure}
+% All experiments were performed using TensorFlow 1.0 \cite{abadi2016tensorflow} on a single Nvidia K80 GPU running for up to 18 hours. The LSTM model was computed using TensorFlow's dynamic\_rnn and BasicLSTMCell routines which are slower than but algorithmically similar to the cuDNN LSTM implementation.
 
-\subsection{Test performance}
-\begin{table}[h]
-  \caption{N-MNIST test results}
-  \label{test-results}
-  \centering
-  \begin{tabular}{lllll}
-    \toprule
-    & Train Cross Entropy     & Test Cross Entropy     & Top-5 Accuracy & Top-20 Accuracy \\
-    \midrule
-    LS-LSTM 			&  \textbf{4.567} & 4.856           & 10.51\% & 36.70\%   \\
-    LSTM, seqlen=128    & 4.664 & \textbf{4.846}  & \textbf{10.62\%} & \textbf{37.08\%}   \\
-    LSTM, seqlen=256    & 4.620                & 4.906           & 10.11\% & 35.40\%   \\
-    LSTM, seqlen=512    & 4.602                & 4.883           & 10.45\% & 36.32\%   \\
-    LSTM, seqlen=1024   & 4.611                & 4.880           & 10.32\% & 35.92\%   \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-Beyond cross entropy on train and test, we also evaluated top-$k$ accuracy for $k=5, 20$. A probability distribution is top-$k$ correct if it assigns the realized location one of the
-$k$ largest probabilities. N-MNIST contains 1156 pixel positions, so top-5 and top-20 accuracy are equivalent to localizing the future to 0.43\% and 1.7\% of pixels. 
+% \subsection{Training performance}
+% The speed of neural net training is not solely determined by the training throughput but also by the frequency of optimization steps. As an example, a batch method may process inputs at the same rate as a minibatch method, but the minibatch method will generally converge much faster on large datasets. On an infinite dataset, the batch method never takes a single optimization step regardless of its throughput. With this example in mind, it is clear that achieving fast training is a balancing act between training data throughput and optimization step latency and that training performance should be evaluated with training curves and not just throughput numbers such as time per epoch.
 
-No regularization was attempted and all of the models overfit, as indicated by the best test performance from the model with the worst train performance. Table \ref{test-results} contains the full test results. Our focus was the fast training of powerful models, and we leave regularizing parallel linear recurrences and LS-RNNs to future work. Although not tested, it is possible that the LS-LSTM generalized better than the LSTMs trained on long sequences due to the much smaller minibatch size of LS-LSTM leading to a wider minima.
+% The LSTM and LS-LSTM offer differ latency and throughput tradeoffs. LSTM throughput depends only on minibatch size but LSTM latency depends on both minibatch size and sequence length. Experiments were conducted training the LSTM models with minibatch size 256 and sequence lengths 128, 256, 512, and 1024. Figure \ref{fig:learning_curves} shows the smaller sequence lengths led to faster initial learning but inferior final performance. 
+
+% The throughput and latency of the LS-LSTM are both influenced by batch size and sequence length. Several LS-LSTMs were trained with batch size 16 and sequence length 1024. This combination was chosen because of the nearly maximum throughput, the low latency, and the ease of building a minibatch given the distribution of sequence lengths in the data set. The 234 unit LS-LSTM reaches a better training loss in roughly 4.5 hours than any of the LSTMs could reach in 18 hours. This experimental evidence indicates the LS-LSTM is as powerful of a model as the LSTM and can be trained in a fraction of the time.
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=12cm]{lc2.png}
+% \caption{The LSTM models had a direct relationship between sequence length and training curve: the shorter the sequence length, the faster the initial learning and
+% the higher the final loss. The faster initial learning is explained by the decreased
+% latency of optimization steps and the higher final loss is explained by the
+% inability to learn long dependencies. The LS-LSTM has 234 units per hidden
+% layer to have the same number of parameters as the 256 unit LSTMs.}
+% \label{fig:learning_curves}
+% \end{figure}
+
+% \subsection{Test performance}
+% \begin{table}[h]
+%   \caption{N-MNIST test results}
+%   \label{test-results}
+%   \centering
+%   \begin{tabular}{lllll}
+%     \toprule
+%     & Train Cross Entropy     & Test Cross Entropy     & Top-5 Accuracy & Top-20 Accuracy \\
+%     \midrule
+%     LS-LSTM 			&  \textbf{4.567} & 4.856           & 10.51\% & 36.70\%   \\
+%     LSTM, seqlen=128    & 4.664 & \textbf{4.846}  & \textbf{10.62\%} & \textbf{37.08\%}   \\
+%     LSTM, seqlen=256    & 4.620                & 4.906           & 10.11\% & 35.40\%   \\
+%     LSTM, seqlen=512    & 4.602                & 4.883           & 10.45\% & 36.32\%   \\
+%     LSTM, seqlen=1024   & 4.611                & 4.880           & 10.32\% & 35.92\%   \\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
+% Beyond cross entropy on train and test, we also evaluated top-$k$ accuracy for $k=5, 20$. A probability distribution is top-$k$ correct if it assigns the realized location one of the
+% $k$ largest probabilities. N-MNIST contains 1156 pixel positions, so top-5 and top-20 accuracy are equivalent to localizing the future to 0.43\% and 1.7\% of pixels. 
+
+% No regularization was attempted and all of the models overfit, as indicated by the best test performance from the model with the worst train performance. Table \ref{test-results} contains the full test results. Our focus was the fast training of powerful models, and we leave regularizing parallel linear recurrences and LS-RNNs to future work. Although not tested, it is possible that the LS-LSTM generalized better than the LSTMs trained on long sequences due to the much smaller minibatch size of LS-LSTM leading to a wider minima.
 
 \subsection{Synthetic Example}
 In order to demonstrate how PLR may be used to speed up tasks that the LSTM is
@@ -393,13 +547,15 @@ converge most rapidly. The criterion for convergence was five consecutive
 minibatches giving 100\% accuracy. As can be seen from the learning curves
 in figure \ref{fig:synthetic_training}, this was a reasonable criterion.
 \begin{figure}
-  \begin{minipage}{0.33\textwidth}
+  \centering
+  \begin{minipage}{0.5\textwidth}
     \includegraphics[width=1.0\textwidth]{./1k_synthetic.png}
   \end{minipage}%
-    \begin{minipage}{0.33\textwidth}
+    \begin{minipage}{0.5\textwidth}
     \includegraphics[width=1.0\textwidth]{./8k_synthetic.png}      
-  \end{minipage}%
-  \begin{minipage}{0.33\textwidth}
+  \end{minipage}
+  \begin{minipage}{0.6\textwidth}
+    \includegraphics[width=1.0\textwidth]{./1M_synthetic.png}      
   \end{minipage}
   \caption{Training curves for LS-LSTM and CUDNNLSTM architectures for various
   sequence lengths.}
@@ -430,6 +586,25 @@ CudnnLSTM & LS-LSTM & CudnnLSTM & LS-LSTM \\ \cmidrule(l){2-7} Iterations (1000s
 \end{tabular}
 \end{table}
 
+\subsection{Medical Example}
+A common application of RNNs is in medicine. In order to illustrate the increased
+performance that the plr algorithm allows, we implement an LS-LSTM on the problem
+presented in \texttt{CITE}, the 2016 PhysioNet/Computing in Cardiology Challenge 2016.
+The aim of the Classification of Normal/Abnormal Heart Sound Recordings challenge
+is to determine which of a set of EEGs are produced by people with abnormal hearts.
+
+The training set of data is unbalanced, with 75\% of the data corresponding to abnormal
+hearts. 
+
+Key points are:
+\begin{itemize}
+\item{With the fast training of the LS-LSTM / PLR, we can train quickly on very
+    long sequence-lengths}
+\item{Allows us to get state-of-the-art results, even when performing very quickly
+    and with little hyperparameter tuning}
+\end{itemize}
+
+NEED TO GET THOSE RESULTS!
 
   
 \section{Conclusion}
@@ -439,7 +614,8 @@ of many possible models that can be built with it. Future applications of parall
 We intend to expand upon the experiments section and open-source the parallel linear recurrence kernel in the near future.
 
 \subsubsection*{Acknowledgments}
-We would like to acknowledge Kevin Bowers, Alex Meiburg, JD Co-Reyes, Carson McNeil, and several others for fruitful conversations and guidance.
+We would like to acknowledge Kevin Bowers, Alex Meiburg, JD Co-Reyes, Carson
+McNeil, Andy Palan, and several others for fruitful conversations and guidance.
 
 \begin{thebibliography}{19}
 \providecommand{\natexlab}[1]{#1}

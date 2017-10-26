@@ -8,7 +8,7 @@
 \BOOKMARK [3][-]{subsubsection.3.1.1}{Impact on effective "batch size"}{subsection.3.1}% 8
 \BOOKMARK [2][-]{subsection.3.2}{Linear surrogate RNNs}{section.3}% 9
 \BOOKMARK [1][-]{section.4}{Experiments}{}% 10
-\BOOKMARK [2][-]{subsection.4.1}{Throughput Benchmarks}{section.4}% 11
-\BOOKMARK [2][-]{subsection.4.2}{Synthetic Example}{section.4}% 12
-\BOOKMARK [2][-]{subsection.4.3}{Medical Example}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.1}{Computational performance}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Training performance}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.3}{Test performance}{section.4}% 13
 \BOOKMARK [1][-]{section.5}{Conclusion}{}% 14

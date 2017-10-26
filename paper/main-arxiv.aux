@@ -1,0 +1,63 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\bibstyle{abbrvnat}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{sutskever2014sequence}
+\citation{amodei2015deep}
+\citation{hausknecht2015deep}
+\citation{hochreiter1997long}
+\citation{cho2014learning}
+\citation{keskar2017large}
+\citation{diamos2016persistent}
+\citation{balduzzi2016strongly}
+\citation{bradbury2017quasi}
+\citation{kalchbrenner2016neural}
+\citation{gehring2017convolutional}
+\citation{van2016wavenet}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\citation{ladner1980parallel}
+\citation{blelloch1990prefix}
+\citation{blelloch1990prefix}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Parallel linear recurrence}{2}{section.2}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Parallel linear recurrence on $p$ processors}}{2}{algorithm.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Theoretical performance}{2}{subsection.2.1}}
+\citation{abadi2016tensorflow}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Backpropagation}{3}{subsection.2.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Implementation}{3}{subsection.2.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Models}{3}{section.3}}
+\citation{bradbury2017quasi}
+\citation{balduzzi2016strongly}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Gated impulse linear recurrent layer}{4}{subsection.3.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Impact on effective "batch size"}{4}{subsubsection.3.1.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Linear surrogate RNNs}{4}{subsection.3.2}}
+\citation{orchard2015converting}
+\citation{lecun1998mnist}
+\citation{kingma2014adam}
+\citation{glorot2010understanding}
+\citation{abadi2016tensorflow}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{5}{section.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Computational performance}{5}{subsection.4.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Throughput comparison between LSTM-256-256 with LS-LSTM-256-256. The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the LS-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences.}}{6}{figure.1}}
+\newlabel{fig:tp_perf}{{1}{6}{Throughput comparison between LSTM-256-256 with LS-LSTM-256-256. The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the LS-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Training performance}{6}{subsection.4.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Test performance}{6}{subsection.4.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The LSTM models had a direct relationship between sequence length and training curve: the shorter the sequence length, the faster the initial learning and the higher the final loss. The faster initial learning is explained by the decreased latency of optimization steps and the higher final loss is explained by the inability to learn long dependencies. The LS-LSTM has 234 units per hidden layer to have the same number of parameters as the 256 unit LSTMs.}}{7}{figure.2}}
+\newlabel{fig:learning_curves}{{2}{7}{The LSTM models had a direct relationship between sequence length and training curve: the shorter the sequence length, the faster the initial learning and the higher the final loss. The faster initial learning is explained by the decreased latency of optimization steps and the higher final loss is explained by the inability to learn long dependencies. The LS-LSTM has 234 units per hidden layer to have the same number of parameters as the 256 unit LSTMs}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces N-MNIST test results}}{7}{table.1}}
+\newlabel{test-results}{{1}{7}{N-MNIST test results}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{7}{section.5}}
