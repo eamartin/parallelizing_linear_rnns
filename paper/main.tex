@@ -57,16 +57,17 @@ Recurrent neural networks (RNNs) are widely used to model sequential data but
 their non-linear dependencies between sequence elements prevent parallelizing
 training over sequence length. We show the training of RNNs with only linear
 sequential dependencies can be parallelized over the sequence length using the
-parallel scan algorithm, leading to rapid training on long sequences with small
-minibatch size.\Chris{Thought: we could rephrase this as allowing us to break
-the necessity of using large batches to train fast} We develop a
-parallel linear recurrence CUDA kernel and show that it can be applied to
-immediately speed up several RNN architectures by up to a factor of 9. We abstract
-recent work on linear RNNs into a new framework of linear surrogate RNNs and develop
-a linear surrogate for the long short-term memory unit, the GILR-LSTM, which is
-able to achieve throughput 30 times greater than the currently fastest-available LSTM
-implementation. We show that the GILR-LSTM is able to perform well on real-world
-problems,
+parallel scan algorithm, leading to rapid training on long sequences even with small
+minibatch size. We develop a parallel linear recurrence CUDA kernel and show that
+it can be applied to immediately speed up training and inference of
+several RNN architectures by up to 9x.
+We abstract recent work on linear RNNs into a new framework of linear surrogate RNNs
+and develop
+a linear surrogate model for the long short-term memory unit, the GILR-LSTM, that
+utilizies parallel linear recurrence.
+We push the limits of sequence learning by successfully training a GILR-LSTM
+on a synthetic sequence classification task with a one million timestep dependency.
+SOMETHING MEDICAL?
 \end{abstract}
 
 \section{Introduction}
@@ -306,7 +307,7 @@ passed to other layers of the network. We can decouple these uses and introduce
 independent variables for each purpose: \(s_t\) is passed onto other layers of the network
 and we introduce the linear surrogate \(\tilde{s}_t\) which is passed onto the
 next state, with \(s_t = f(\tilde{s}_{t-1}, x_t)\). We are still able to choose a
-nonlinear \(f\), our only limitation being that \(\tilde{s}_t\) must be linearly
+non-linear \(f\), our only limitation being that \(\tilde{s}_t\) must be linearly
 computable.  We refer to this class of model as a linear surrogate RNN
 (LS-RNN). QRNNs \cite{bradbury2017quasi} are LS-RNNs using $\tilde{h}_{t-1}
 = W_k x_{t-k} + ... W_1 x_{t-1}$ and strongly typed
@@ -342,19 +343,17 @@ underlying RNN as well as some additional parameters to compute the linear
 surrogate.
 
 \section{Experiments}
-We perform several experiments, first confirming that our implementation of the
-parallel linear recurrence algorithm is able to achieve higher throughput than a
-similarly implemented serial version of the algorithm. We show that the parallel kernel
-is up to 40 times faster than the serial equivalent for long sequence lengths and
-that this speedup translates to implementations of LS-RNNs such as QRNN (where
-we can get a speedup of up to 9x).
+We perform several experiments. First we find that our parallel linear recurrence
+kernel is able to able to achieve up to 40x higher throughput than a serial implementation
+when applied to long sequences. Secondly, we confirm that this kernel speedup
+translates to up to a 9x speedup to LS-RNNs such as QRNNs.
 
 In order to illustrate that the linearization does not necessarily come at the
 cost of expressibility, we show that the GILR-LSTM architecture computed with
-the parallel linear recurrence algorithm, is able to outperform the optimized CuDNN LSTM
-implementation
-on a pathological example from the original LSTM paper
-\cite{hochreiter1997long}. Finally we show that our GILR-LSTM is able to
+the parallel linear recurrence algorithm is able to train significantly faster
+than an optimized LSTM implementation on a pathological long-term dependency
+problem on a pathological example from the original LSTM paper \cite{hochreiter1997long}.
+Finally we show that the GILR-LSTM is able to
 quickly achieve state of the art results on an existing medical data
 set. \Chris{I hope so\ldots}
 
@@ -364,18 +363,19 @@ set. \Chris{I hope so\ldots}
 We first illustrate the throughput advantage of the parallel scan algorithm for
 evaluating the linear recurrence. For a minibatch comprised of \(b\) sequences
 of length \(T\), we define the number of events as \(bT\) and the throughput as
-the number of events per second. We implement two CUDA kernels, one which
+the number of events processed per second. We implement two CUDA kernels, one which
 evaluates the parallel linear recurrence described in algorithm \ref{alg:plr},
-and one which evaluates the linear recurrence on GPU using the standard serial
-approach (with parallelization over features but not sequence length).
-This comparison is performed directly at the kernel level, avoiding
-any overhead from TensorFlow. We find that the parallel kernel has
+and one which evaluates the same linear recurrence on GPU in serial over sequence length
+and in parallel over features and minibatch. The performance of each kernel depends on
+two factors: the sequence length and the product of number of features and minibatch size.
+The performance measurements for this experiment are made directly at the kernel level,
+avoiding any overhead from TensorFlow. We find that the parallel kernel has
 a distinct advantage at long sequence lengths with a speedup factor of up to 40x,
 as shown in table \ref{table:kernel-throughput}.
-At short sequence lengths, the parallel kernel does not perform well due to the
+The parallel kernel does not perform well at short sequence lengths due to the
 overhead of multiple passes over data and communication between processors.
 \begin{table}[t]
-\caption{Parallel kernel speedup on $m$ features}
+\caption{Parallel kernel speedup on $m$ features (minibatch size $= 1$)}
 \begin{center}
 \begin{tabular}{@{}llll@{}}
 \label{table:kernel-throughput}
@@ -389,40 +389,44 @@ Sequence Length & \(m=4\)  & \(m=32\) & \(m=128\) \\ \midrule
 \end{table}
 
 \subsubsection{Accelerating existing RNN architectures}
+Several recently introduced LS-RNNs can be accelerated with the parallel linear recurrence
+algorithm. We implemented SRUs, QRNNs (with filter width 2 and 10), and GILR-LSTMs
+that can be computed with either the standard
+serial linear recurrence algorithm or parallel linear recurrence. Both methods compute
+an identical recurrence, so switching from a serial to parallel implementation
+does not cause any numerical changes and takes only a single line of code changes.
+Notably, both SRUs and QRNNs
+claim an order of magnitude speedup compared to CuDNN LSTM when implemented with serial linear
+recurrence. Any further speedup from parallel linear recurrence applies on top of the existing
+speedup.
+We timed train throughput (forwards and backwards propagation), but the linear time
+of each pass also makes the results applicable to forwards (inference) performance. However,
+parallel linear recurrence can only accelerate inference in scenarios where the entire
+input sequence is known at the start of the inference phase.
+We controlled for GPU memory usage within these experiments by fixing $bT = 65536$ for
+minibatch size $b$ and sequence length $T$.
 
-Many recently introduced RNNs can be accelerated with the parallel linear recurrence
-algorithm.
-Table \ref{table:rnn-throughput} shows the
+Table \ref{table:rnn-throughput} shows that
 throughput advantage from using parallel linear recurrence compared to
-serial linear recurrence. Both methods compute an identical recurrence,
-so using parallel rather than serial causes no numerical changes.
-
-We controlled for GPU memory usage by choosing minibatch size such that the product
-of minibatch size and sequence length is constant. We see that the simpler architectures
+serial linear recurrence reaches up to 9x. Simpler architectures
 (for which the linear recurrence is a higher proportion of the
-computational burden) are more affected by the switch to the parallel kernel.  This is
-particularly clear in the case of the QRNN, where including a wider
-convolutional window results in more time spent outside of the linear recurrence and
-therefore less to gain from the parallelization.
-\begin{table}
+total computational load) are more affected by the switch to the parallel kernel.
+This is
+particularly clear in the case of the QRNN, where including wider
+convolutional filters results in more time spent outside of the linear recurrence and
+therefore speedup from linear recurrence parallelization.
+\begin{table}[t]
+\caption{Parallel kernel speedup for a variety of LS-RNNs}
 \begin{center}
-  \begin{tabular}{@{}lrrrr@{}}
-    \label{table:rnn-throughput}
-Sequence Length & GILR-LSTM & SRU & QRNN(2) & QRNN(10)\\ \midrule
-16 & 0.61 & 0.28 & 0.38 & 0.78\\
-256 & 0.91 & 0.84 & 0.86 & 0.99\\
-4,096 & 0.98 & 1.38 & 1.18 & 1.05\\
-65,536 & 1.41 & 9.21 & 6.68 & 2.05\\ \bottomrule
-  \end{tabular}
+\begin{tabular}{@{}lrrrr@{}}
+\label{table:rnn-throughput}
+Sequence Length & SRU & QRNN (filter size 2) & QRNN (filter size 10) & GILR-LSTM\\ \midrule
+16 & 0.28 & 0.38 & 0.78 & 0.61\\
+256 & 0.84 & 0.86 & 0.99 & 0.91\\
+4,096 & 1.38 & 1.18 & 1.05 & 0.98\\
+65,536 & 9.21 & 6.68 & 2.05 & 1.41\\ \bottomrule
+\end{tabular}
 \end{center}
-\caption{
-  Speedup obtained from using parallel linear recurrence rather than
-  serial linear recurrence. We analyse this for
-  SRUs \cite{lei2017} and QRNNs \cite{bradbury2017quasi} with a convolutional
-  filters of size 2 and 10, and GILR-LSTM which we introduce in section \ref{sec:ls-rnns}.
-  We controlled for GPU memory by setting minibatch size $b$ such that
-  $bT = 65536$ for sequence length $T$.
-}
 \end{table}
 
 \Eric{For table \ref{table:rnn-throughput} how many layers and what was hidden size?}
@@ -431,6 +435,8 @@ Sequence Length & GILR-LSTM & SRU & QRNN(2) & QRNN(10)\\ \midrule
 
 \Eric{I think we should delete this section. Already over length limit, doesn't show
 anything great}
+
+Eric: I think we should delete this. We're over length, results aren't great.
 
 Finally, we compare the throughput of the GILR-LSTM to the current fastest
 LSTM implementation (which comes from the CuDNN library). Figure
@@ -584,23 +590,28 @@ On the unseen test data we obtained a score of PLACEHOLDER.
   this section}
 
 \section{Conclusion}
-Parallel linear recurrence can accelerate existing RNNs and be used in the design
-of new architectures such as the GILR-LSTM. Parallel linear recurrence enables
-rapid training with small minibatches, which further enables training models on
-extremely long sequence lengths.
-The impressive results in
-\cite{lei2017} and other recent work comprehensively show that
-linear RNNs can often be used in place of traditional non-linear RNNs.
-Our results on the synthetic example continue this trend, showing that
-the GILR-LSTM is able to handle sequence length regimes that are longer than any
-we have seen seriously suggested in the literature. We feel that the framework
-of describing linear RNNs as linear surrogates for nonlinear RNNs is a fruitful
-approach, and that this, paired with the PLR algorithm, will substantially
-advance the ability to train RNNs, and to understand timeseries data.
+A significant portion of the success of deep learning can be attributed to massive
+amounts of computation. Most of this computation is accessed through two
+building blocks with highly efficient parallel implementations:
+matrix multiplication and convolution. Recent research has demonstrated that
+linear RNNs can achieve similar prediction accuracy to non-linear RNNs on a wide
+variety of tasks in a fraction of the training time. We propose the framework of
+LS-RNNs as a way to tame the growing zoo of sequential neural nets. We identify linear
+recurrence as another parallelizable building block for current and future sequential models
+and we use it to obtain significant speedups on already fast models.
+With the power of parallel
+linear recurrence we are able to solve a sequential dependency problem multiple
+orders of magnitude larger than anything done prior.
+Future applications of parallel linear recurrence within neural nets could include
+parallel training of memory augmented models or providing a new sort of image filter
+on very high resolution images.
+We hope that parallel linear recurrence can be to large scale sequence
+modelling what fast convolution algorithms are to image recognition.
 
 \subsubsection*{Acknowledgments}
-We would like to acknowledge Kevin Bowers, Alex Meiburg, JD Co-Reyes, Carson
-McNeil, Andy Palan, and several others for fruitful conversations and guidance.
+Acknowledgements removed for anonymous submission.
+%We would like to acknowledge Kevin Bowers, Alex Meiburg, JD Co-Reyes, Carson
+%McNeil, Andy Palan, and several others for fruitful conversations and guidance.
 
 \begin{thebibliography}{19}
 \providecommand{\natexlab}[1]{#1}

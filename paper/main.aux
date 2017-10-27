@@ -29,10 +29,6 @@
 \citation{kalchbrenner2016neural}
 \citation{gehring2017convolutional}
 \citation{van2016wavenet}
-\@writefile{tdo}{\contentsline {todo}{Thought: we could rephrase this as allowing us to break the necessity of using large batches to train fast}{1}{section*.1}}
-\pgfsyspdfmark {pgfid1}{13351167}{34062540}
-\pgfsyspdfmark {pgfid4}{34093331}{34054672}
-\pgfsyspdfmark {pgfid5}{34311761}{33841357}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
 \citation{ladner1980parallel}
 \citation{blelloch1990prefix}
@@ -55,38 +51,34 @@
 \newlabel{sec:ls-rnns}{{3.2}{4}{Linear surrogate RNNs}{subsection.3.2}{}}
 \citation{hochreiter1997long}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{5}{section.4}}
-\@writefile{tdo}{\contentsline {todo}{I hope so\ldots  }{5}{section*.2}}
-\pgfsyspdfmark {pgfid6}{27493090}{15190065}
-\pgfsyspdfmark {pgfid9}{34093331}{15182197}
-\pgfsyspdfmark {pgfid10}{34311761}{14968882}
+\@writefile{tdo}{\contentsline {todo}{I hope so\ldots  }{5}{section*.1}}
+\pgfsyspdfmark {pgfid1}{17400003}{14316694}
+\pgfsyspdfmark {pgfid4}{34093331}{14308826}
+\pgfsyspdfmark {pgfid5}{34311761}{14095511}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Throughput benchmarks}{5}{subsection.4.1}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Kernel performance}{5}{subsubsection.4.1.1}}
-\citation{lei2017}
-\citation{bradbury2017quasi}
-\citation{lei2017}
-\citation{bradbury2017quasi}
 \citation{hochreiter1997long}
-\newlabel{table:kernel-throughput}{{4.1.1}{6}{Kernel performance}{subsubsection.4.1.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces  Speedup of the parallel kernel compared to the serial kernel at various values of $(\text  {minibatch size } \mathbf  {x} \text  { features}) = m$. Performance was directly measured without any overhead from TensorFlow. }}{6}{table.1}}
-\newlabel{table:rnn-throughput}{{4.1.2}{6}{Accelerating existing RNN architectures}{subsubsection.4.1.2}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces  Speedup obtained from using parallel linear recurrence rather than serial linear recurrence. We analyse this for SRUs \cite  {lei2017} and QRNNs \cite  {bradbury2017quasi} with a convolutional filters of size 2 and 10, and GILR-LSTM which we introduce in section \ref  {sec:ls-rnns}. We controlled for GPU memory by setting minibatch size $b$ such that $bT = 65536$ for sequence length $T$. }}{6}{table.2}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Parallel kernel speedup on $m$ features (minibatch size $= 1$)}}{6}{table.1}}
+\newlabel{table:kernel-throughput}{{1}{6}{Parallel kernel speedup on $m$ features (minibatch size $= 1$)}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Parallel kernel speedup for a variety of LS-RNNs}}{6}{table.2}}
+\newlabel{table:rnn-throughput}{{2}{6}{Parallel kernel speedup for a variety of LS-RNNs}{table.2}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Accelerating existing RNN architectures}{6}{subsubsection.4.1.2}}
-\@writefile{tdo}{\contentsline {todo}{For table \ref  {table:rnn-throughput} how many layers and what was hidden size?}{6}{section*.3}}
-\pgfsyspdfmark {pgfid11}{7104429}{19973312}
-\pgfsyspdfmark {pgfid14}{34093331}{19965444}
-\pgfsyspdfmark {pgfid15}{34311761}{19752129}
+\@writefile{tdo}{\contentsline {todo}{For table \ref  {table:rnn-throughput} how many layers and what was hidden size?}{6}{section*.2}}
+\pgfsyspdfmark {pgfid6}{7104429}{15725006}
+\pgfsyspdfmark {pgfid9}{34093331}{15717138}
+\pgfsyspdfmark {pgfid10}{34311761}{15503823}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.3}GILR-LSTM throughput}{6}{subsubsection.4.1.3}}
-\@writefile{tdo}{\contentsline {todo}{I think we should delete this section. Already over length limit, doesn't show anything great}{6}{section*.4}}
-\pgfsyspdfmark {pgfid16}{7104429}{17144703}
-\pgfsyspdfmark {pgfid19}{34093331}{9317748}
-\pgfsyspdfmark {pgfid20}{34311761}{9104433}
-\@writefile{tdo}{\contentsline {todo}{Chris: Put title on Figure \ref  {fig:tp_perf}}{6}{section*.5}}
-\pgfsyspdfmark {pgfid21}{7104429}{8756095}
-\pgfsyspdfmark {pgfid24}{34093331}{-4338300}
-\pgfsyspdfmark {pgfid25}{34311761}{-4551615}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Synthetic Experiment}{6}{subsection.4.2}}
+\@writefile{tdo}{\contentsline {todo}{I think we should delete this section. Already over length limit, doesn't show anything great}{6}{section*.3}}
+\pgfsyspdfmark {pgfid11}{7104429}{12697354}
+\pgfsyspdfmark {pgfid14}{34093331}{4870399}
+\pgfsyspdfmark {pgfid15}{34311761}{4657084}
+\@writefile{tdo}{\contentsline {todo}{Chris: Put title on Figure \ref  {fig:tp_perf}}{6}{section*.4}}
+\pgfsyspdfmark {pgfid16}{7104429}{4308746}
+\pgfsyspdfmark {pgfid19}{34093331}{-8785649}
+\pgfsyspdfmark {pgfid20}{34311761}{-8998964}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a 32-dimensional input and a 2-dimensional output, for various batch sizes and sequence lengths.The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the GILR-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences.}}{7}{figure.1}}
 \newlabel{fig:tp_perf}{{1}{7}{Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a 32-dimensional input and a 2-dimensional output, for various batch sizes and sequence lengths.The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the GILR-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Synthetic Experiment}{7}{subsection.4.2}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Training curves for GILR-LSTM and CUDNNLSTM architectures for various sequence lengths. (Clockwise from top-left: 1024, 8192, 1048576)}}{8}{figure.2}}
 \newlabel{fig:synthetic_training}{{2}{8}{Training curves for GILR-LSTM and CUDNNLSTM architectures for various sequence lengths. (Clockwise from top-left: 1024, 8192, 1048576)}{figure.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Performance of the GILR-LSTM compared to CUDA-optimised CudnnLSTM implementation on problem 2b from (cite '97). We see that the GILR-LSTM has a clear advantage in training speed as the sequence length increases. We did not observe the Cudnn-LSTM converging for the longest task, even after several days. {\relax \fontsize  {7}{8pt}\selectfont  *For the longest sequence length, the number of hidden units was decreased to 64 for both architectures so that the net could fit in memory. } }}{8}{table.3}}
@@ -100,18 +92,18 @@
 \bibcite{bradbury2017quasi}{{5}{2017}{{Bradbury et~al.}}{{Bradbury, Merity, Xiong, and Socher}}}
 \bibcite{cho2014learning}{{6}{2014}{{Cho et~al.}}{{Cho, Van~Merri{\"e}nboer, Gulcehre, Bahdanau, Bougares, Schwenk, and Bengio}}}
 \bibcite{diamos2016persistent}{{7}{2016}{{Diamos et~al.}}{{Diamos, Sengupta, Catanzaro, Chrzanowski, Coates, Elsen, Engel, Hannun, and Satheesh}}}
-\@writefile{tdo}{\contentsline {todo}{how many?}{9}{section*.6}}
-\pgfsyspdfmark {pgfid26}{22755932}{35794206}
-\pgfsyspdfmark {pgfid29}{34093331}{35786338}
-\pgfsyspdfmark {pgfid30}{34311761}{35573023}
-\@writefile{tdo}{\contentsline {todo}{If we get good results (doesn't have to be best ever, but can be on par), then keep}{9}{section*.7}}
-\pgfsyspdfmark {pgfid31}{7104429}{33959198}
-\@writefile{tdo}{\contentsline {todo}{If we don't get good results, or don't have results, we will need to kick this section}{9}{section*.8}}
-\pgfsyspdfmark {pgfid36}{7104429}{33959198}
-\pgfsyspdfmark {pgfid34}{34093331}{33646928}
-\pgfsyspdfmark {pgfid35}{34311761}{33433613}
-\pgfsyspdfmark {pgfid39}{34093331}{19252286}
-\pgfsyspdfmark {pgfid40}{34311761}{19038971}
+\@writefile{tdo}{\contentsline {todo}{how many?}{9}{section*.5}}
+\pgfsyspdfmark {pgfid21}{22755932}{32910622}
+\pgfsyspdfmark {pgfid24}{34093331}{32902754}
+\pgfsyspdfmark {pgfid25}{34311761}{32689439}
+\@writefile{tdo}{\contentsline {todo}{If we get good results (doesn't have to be best ever, but can be on par), then keep}{9}{section*.6}}
+\pgfsyspdfmark {pgfid26}{7104429}{31075614}
+\@writefile{tdo}{\contentsline {todo}{If we don't get good results, or don't have results, we will need to kick this section}{9}{section*.7}}
+\pgfsyspdfmark {pgfid31}{7104429}{31075614}
+\pgfsyspdfmark {pgfid29}{34093331}{30763344}
+\pgfsyspdfmark {pgfid30}{34311761}{30550029}
+\pgfsyspdfmark {pgfid34}{34093331}{16368702}
+\pgfsyspdfmark {pgfid35}{34311761}{16155387}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{9}{section.5}}
 \bibcite{gehring2017convolutional}{{8}{2017}{{Gehring et~al.}}{{Gehring, Auli, Grangier, Yarats, and Dauphin}}}
 \bibcite{glorot2010understanding}{{9}{2010}{{Glorot and Bengio}}{{}}}
