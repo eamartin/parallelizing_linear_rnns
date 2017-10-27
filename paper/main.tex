@@ -470,9 +470,12 @@ Sequence Length & GILR-LSTM & SRU & QRNN(2) & QRNN(10)\\ \midrule
 }
 \end{table}
 
-\Chris{For table \ref{table:rnn-throughput} how many layers and what was hidden size?}
+\Eric{For table \ref{table:rnn-throughput} how many layers and what was hidden size?}
 
 \subsubsection{GILR-LSTM throughput}
+
+\Eric{I think we should delete this section. Already over length limit, doesn't show
+anything great}
 
 Finally, we compare the throughput of the GILR-LSTM to the current fastest
 LSTM implementation (which comes from the CuDNN library). Figure
@@ -487,7 +490,7 @@ of model capacity outweighs the speedup in training. The following experiment
 shows that the GILR-LSTM is able to outperform the LSTM on an example originally
 designed to illustrate the advantages of the LSTM.
 
-\Chris{Put title on Figure \ref{fig:tp_perf}}
+\Eric{Chris: Put title on Figure \ref{fig:tp_perf}}
 
 \begin{figure}[t]
 \centering
@@ -587,7 +590,7 @@ CuDNN &GILR&CuDNN&GILR\\ \cmidrule(l){2-7} Iterations (1000s) &
 \end{tabular}
 \end{table}
 
-\subsection{The Medical Setting}
+\subsection{Abnormal heart sound detection}
 Medical waveform data consists of long sequences and is a reasonable application area for RNNs.
 We applied the GILR-LSTM
 on the problem presented in the 2016 PhysioNet/Computing in
@@ -617,7 +620,7 @@ over the entire long sequence length, so we don't have to work on truncated samp
 downsampled sequenes, or
 spend lots of time manually developing EEG specific features.
 The model obtained perfect classification on the train dataset after
-a few hours \Chris{how many?} of training.
+a few hours \Eric{how many?} of training.
 On the unseen test data we obtained a score of PLACEHOLDER.
 
 \Chris{If we get good results (doesn't have to be best ever, but can be on par),
