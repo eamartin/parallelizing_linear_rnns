@@ -85,25 +85,31 @@
 \newlabel{table:rnn-throughput}{{4.1}{6}{Throughput Benchmarks}{table.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Speedup obtained when using parallel linear recurrence compared to serial linear recurrence. We analyse this for several recent architectures: the Simple Recurrent Unit from \cite  {lei2017}, the Quasi-RNN from \cite  {bradbury2017quasi}, with a convolutional filter of size 2 and 10, and the GILR-LSTM which we introduce in section \ref  {sec:ls-rnns}. To give a fair model of a typical use-case maximising the memory usage of the GPU, we set batch size \(b\) such that \(Tb = 65536\) for a sequence length \(T\).}}{6}{figure.1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Synthetic Example}{6}{subsection.4.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a 32-dimensional input and a 2-dimensional output, for various batch sizes and sequence lengths.The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the GILR-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences.}}{7}{figure.2}}
-\newlabel{fig:tp_perf}{{2}{7}{Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a 32-dimensional input and a 2-dimensional output, for various batch sizes and sequence lengths.The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the GILR-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences}{figure.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Medical Example}{7}{subsection.4.3}}
-\@writefile{tdo}{\contentsline {todo}{CITE}{7}{section*.7}}
-\pgfsyspdfmark {pgfid31}{29086296}{7110327}
-\pgfsyspdfmark {pgfid34}{35988437}{7102459}
-\pgfsyspdfmark {pgfid35}{38101972}{6889144}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Training curves for GILR-LSTM and CUDNNLSTM architectures for various sequence lengths. (Clockwise from top-left: 1024, 8192, 1048576)}}{8}{figure.3}}
-\newlabel{fig:synthetic_training}{{3}{8}{Training curves for GILR-LSTM and CUDNNLSTM architectures for various sequence lengths. (Clockwise from top-left: 1024, 8192, 1048576)}{figure.3}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Performance of the GILR-LSTM compared to CUDA-optimised CudnnLSTM implementation on problem 2b from (cite '97). We see that the GILR-LSTM has a clear advantage in training speed as the sequence length increases. We did not observe the Cudnn-LSTM converging for the longest task, even after several days. {\relax \fontsize  {7}{8}\selectfont  *For the longest sequence length, the number of hidden units was decreased to 64 for both architectures so that the net could fit in memory. } }}{8}{table.2}}
-\newlabel{my-label}{{2}{8}{Performance of the GILR-LSTM compared to CUDA-optimised CudnnLSTM implementation on problem 2b from (cite '97). We see that the GILR-LSTM has a clear advantage in training speed as the sequence length increases. We did not observe the Cudnn-LSTM converging for the longest task, even after several days. {\scriptsize *For the longest sequence length, the number of hidden units was decreased to 64 for both architectures so that the net could fit in memory. }}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a 32-dimensional input and a 2-dimensional output, for various batch sizes and sequence lengths.The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the GILR-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences.}}{7}{table.2}}
+\newlabel{fig:tp_perf}{{2}{7}{Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a 32-dimensional input and a 2-dimensional output, for various batch sizes and sequence lengths.The LSTM only has a single row of data because its throughput is independent of sequence length. Entries are missing from the GILR-LSTM table because there was not enough memory on the GPU to handle such large batch sizes and sequences}{table.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Training curves for GILR-LSTM and CUDNNLSTM architectures for various sequence lengths. (Clockwise from top-left: 1024, 8192, 1048576)}}{8}{figure.2}}
+\newlabel{fig:synthetic_training}{{2}{8}{Training curves for GILR-LSTM and CUDNNLSTM architectures for various sequence lengths. (Clockwise from top-left: 1024, 8192, 1048576)}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Performance of the GILR-LSTM compared to CUDA-optimised CudnnLSTM implementation on problem 2b from (cite '97). We see that the GILR-LSTM has a clear advantage in training speed as the sequence length increases. We did not observe the Cudnn-LSTM converging for the longest task, even after several days. {\relax \fontsize  {7}{8}\selectfont  *For the longest sequence length, the number of hidden units was decreased to 64 for both architectures so that the net could fit in memory. } }}{8}{table.3}}
+\newlabel{my-label}{{3}{8}{Performance of the GILR-LSTM compared to CUDA-optimised CudnnLSTM implementation on problem 2b from (cite '97). We see that the GILR-LSTM has a clear advantage in training speed as the sequence length increases. We did not observe the Cudnn-LSTM converging for the longest task, even after several days. {\scriptsize *For the longest sequence length, the number of hidden units was decreased to 64 for both architectures so that the net could fit in memory. }}{table.3}{}}
+\citation{lei2017}
+\citation{lei2017}
 \bibcite{abadi2016tensorflow}{{1}{2016}{{Abadi et~al.}}{{Abadi, Agarwal, Barham, Brevdo, Chen, Citro, Corrado, Davis, Dean, Devin, et~al.}}}
 \bibcite{amodei2015deep}{{2}{2015}{{Amodei et~al.}}{{Amodei, Anubhai, Battenberg, Case, Casper, Catanzaro, Chen, Chrzanowski, Coates, Diamos, et~al.}}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}The Medical Setting}{9}{subsection.4.3}}
+\@writefile{tdo}{\contentsline {todo}{CITE}{9}{section*.7}}
+\pgfsyspdfmark {pgfid31}{29086296}{44800461}
+\pgfsyspdfmark {pgfid34}{35988437}{44792593}
+\pgfsyspdfmark {pgfid35}{38101972}{44579278}
+\@writefile{tdo}{\contentsline {todo}{Quite likely that the results won't be available for tomorrow, or that they won't be particularly impressive. We may have to scratch this entire section unfortunately}{9}{section*.8}}
+\pgfsyspdfmark {pgfid36}{16752605}{27790449}
+\pgfsyspdfmark {pgfid39}{35988437}{27782581}
+\pgfsyspdfmark {pgfid40}{38101972}{27569266}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{9}{section.5}}
 \bibcite{balduzzi2016strongly}{{3}{2016}{{Balduzzi and Ghifary}}{{}}}
 \bibcite{blelloch1990prefix}{{4}{1990}{{Blelloch}}{{}}}
 \bibcite{bradbury2017quasi}{{5}{2017}{{Bradbury et~al.}}{{Bradbury, Merity, Xiong, and Socher}}}
 \bibcite{cho2014learning}{{6}{2014}{{Cho et~al.}}{{Cho, Van~Merri{\"e}nboer, Gulcehre, Bahdanau, Bougares, Schwenk, and Bengio}}}
 \bibcite{diamos2016persistent}{{7}{2016}{{Diamos et~al.}}{{Diamos, Sengupta, Catanzaro, Chrzanowski, Coates, Elsen, Engel, Hannun, and Satheesh}}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{9}{section.5}}
 \bibcite{gehring2017convolutional}{{8}{2017}{{Gehring et~al.}}{{Gehring, Auli, Grangier, Yarats, and Dauphin}}}
 \bibcite{glorot2010understanding}{{9}{2010}{{Glorot and Bengio}}{{}}}
 \bibcite{hausknecht2015deep}{{10}{2015}{{Hausknecht and Stone}}{{}}}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.9.19)  27 OCT 2017 00:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.9.19)  27 OCT 2017 02:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1132,64 +1132,67 @@ l.572
 File: ./1k_synthetic.png Graphic file (type png)
 
 <use ./1k_synthetic.png>
-Package pdftex.def Info: ./1k_synthetic.png used on input line 593.
+Package pdftex.def Info: ./1k_synthetic.png used on input line 603.
 (pdftex.def)             Requested size: 198.7425pt x 121.9225pt.
  <./8k_synthetic.png, id=165, 578.16pt x 397.485pt>
 File: ./8k_synthetic.png Graphic file (type png)
 
 <use ./8k_synthetic.png>
-Package pdftex.def Info: ./8k_synthetic.png used on input line 596.
+Package pdftex.def Info: ./8k_synthetic.png used on input line 606.
 (pdftex.def)             Requested size: 198.7425pt x 136.63513pt.
  <./1M_synthetic.png, id=166, 578.16pt x 397.485pt>
 File: ./1M_synthetic.png Graphic file (type png)
 
 <use ./1M_synthetic.png>
-Package pdftex.def Info: ./1M_synthetic.png used on input line 599.
+Package pdftex.def Info: ./1M_synthetic.png used on input line 609.
 (pdftex.def)             Requested size: 238.49341pt x 163.96458pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 606.
+               Default added (so using `tbp') on input line 616.
 
 
-Overfull \hbox (43.42284pt too wide) in paragraph at lines 615--629
+Overfull \hbox (43.42284pt too wide) in paragraph at lines 625--639
  [][] 
  []
 
-[7pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7pdfTeX warning (ext4): destination with the same identifier (name{table.2}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.648 
+l.658 
        <./cudnn_heatmap.png>] [8pdfTeX warning (ext4): destination with the sam
-e identifier (name{figure.3}) has been already used, duplicate ignored
+e identifier (name{figure.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.648 
-      pdfTeX warning (ext4): destination with the same identifier (name{table.2
+l.658 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.3
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.648 
+l.658 
        <./1k_synthetic.png> <./8k_synthetic.png> <./1M_synthetic.png>] [9]
 [10]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 811.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 811.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 850.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 850.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 811.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 811.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 850.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 850.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: F952FB05DFF05D6869D8950197C7E18E;890.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 811.
+(rerunfilecheck)             Checksum: F7F5BD905C3AF5DFAF149B21A68CE527;894.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 850.
  ) 
 Here is how much of TeX's memory you used:
- 19948 strings out of 493089
- 364529 string characters out of 6134842
- 499127 words of memory out of 5000000
- 22828 multiletter control sequences out of 15000+600000
+ 19954 strings out of 493089
+ 364679 string characters out of 6134842
+ 499731 words of memory out of 5000000
+ 22833 multiletter control sequences out of 15000+600000
  40604 words of font info for 150 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,14n,76p,1347b,878s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1209,10 +1212,10 @@ st/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2015/texmf-dist
 /fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/typ
 e1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on main.pdf (10 pages, 511886 bytes).
+Output written on main.pdf (10 pages, 513173 bytes).
 PDF statistics:
- 263 PDF objects out of 1000 (max. 8388607)
- 223 compressed objects within 3 object streams
- 63 named destinations out of 1000 (max. 500000)
+ 266 PDF objects out of 1000 (max. 8388607)
+ 226 compressed objects within 3 object streams
+ 64 named destinations out of 1000 (max. 500000)
  21137 words of extra memory for PDF output out of 24883 (max. 10000000)
 

@@ -488,7 +488,7 @@ of model capacity outweighs the speedup in training. The following experiment
 shows that the GILR-LSTM is able to outperform the LSTM on an example originally
 designed to illustrate the advantages of the LSTM.
 
-\begin{figure}[t]
+\begin{table}[t]
 \centering
 \includegraphics[width=12cm]{cudnn_heatmap.png}
 \caption{Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a
@@ -498,7 +498,7 @@ designed to illustrate the advantages of the LSTM.
   because there was not enough memory on the GPU to handle such large batch
   sizes and sequences.}
 \label{fig:tp_perf}
-\end{figure}
+\end{table}
 
 
 % Experiments were performed on the N-MNIST \cite{orchard2015converting} dataset. N-MNIST captures the MNIST digit dataset \cite{lecun1998mnist} by panning
@@ -587,6 +587,16 @@ converge most rapidly. The criterion for convergence was five consecutive
 minibatches giving 100\% accuracy. As can be seen from the learning curves
 in figure \ref{fig:synthetic_training}, this was a reasonable criterion. For the
 longest sequence-length, we didn't observe the CuDNN-LSTM converging.
+
+The results illustrate that the GILR-LSTM is able to robustly outperform the
+CuDNN-LSTM, which is currently the fastest LSTM implementation available. This
+is somewhat surprising, as we might expect that the LSTM would do particularly
+well at an example that was specifically constructed for it. We can conclude that
+the nonlinearities in the LSTM's design are not vital for its performance given
+that the linear GILR-LSTM is able to converge, and that if these nonlinearities are
+not completely necessary, they entail a large performance cost by diallowing the
+plr algorithm from being used.
+
 \begin{figure}
   \centering
   \begin{minipage}{0.5\textwidth}
@@ -628,7 +638,7 @@ C &GILR&CuDNN&GILR\\ \cmidrule(l){2-7} Iterations (1000s) &
 \end{tabular}
 \end{table}
 
-\subsection{Medical Example}
+\subsection{The Medical Setting}
 A common application of RNNs is in medicine. In order to illustrate the
 increased performance that the plr algorithm allows, we implement an GILR-LSTM
 on the problem presented in \Chris{CITE}, the 2016 PhysioNet/Computing in
@@ -659,14 +669,43 @@ Key points are:
     and with little hyperparameter tuning}
 \end{itemize}
 
-NEED TO GET THOSE RESULTS!
+NEED TO GET THOSE RESULTS!\Chris{Quite likely that the results won't be available
+  for tomorrow, or that they won't be particularly impressive. We may have to
+  scratch this entire section unfortunately}
 
   
 \section{Conclusion}
-Parallel linear recurrence is an extremely powerful algorithm and the GILR-LSTM is just one
-of many possible models that can be built with it. Future applications of parallel linear recurrence could include sequences orders of magnitude longer than N-MNIST, the development of parallel computable differentiable memory modules, and the combination of linear recurrence with convolutional sequence models. Besides future research, existing models such as Quasi-RNNs and strongly typed RNNs that already contain linear recurrences can immediately benefit from parallel linear recurrence. This work demonstrates the GILR-LSTM significantly accelerates the training of small to medium sized LSTMs. Although similar techniques have been used before, the now explicit concept of linear surrogacy provides a framework for future development and analysis of fast sequence models.
+Parallel linear recurrence is an extremely powerful algorithm and the GILR-LSTM
+is just one of many possible models that can be built with it. While we were
+previously forced to use large minibatches in order to obtain reasonable
+training speed, with PLR in many cases we can train rapidly on small minibatch
+sizes, freeing us to utilise extremely long sequence lengths and more complex
+models. Our CUDA kernel is up to 40 times faster than a serial kernel on
+sequence lengths of 65,536, and this benefit transfers to implemented models,
+speeding up the SRU \cite{lei2017} by a factor of 9. The impressive results in
+\cite{lei2017} and other recent work comprehensively show that
+linearly-recurrent RNNs are, in many respects, equally as powerful as nonlinear
+LSTMs. Our results on the synthetic example continue this trend, showing that
+the GILR-LSTM is able to handle sequence length regimes that are longer than any
+we have seen seriously suggested in the literature. We feel that the framework
+of describing linear RNNs as linear surrogates for nonlinear RNNs is a fruitful
+approach, and that this, paired with the PLR algorithm, will substantially
+advance the ability to train RNNs, and to understand timeseries data. 
 
-We intend to expand upon the experiments section and open-source the parallel linear recurrence kernel in the near future.
+%Future work can the development of parallel computable
+%differentiable memory modules, and the combination of linear recurrence with
+%convolutional sequence models.
+
+% Besides future research, existing models such as
+% Quasi-RNNs and strongly typed RNNs that already contain linear recurrences can
+% immediately benefit from parallel linear recurrence. This work demonstrates the
+% GILR-LSTM significantly accelerates the training of small to medium sized
+% LSTMs. Although similar techniques have been used before, the now explicit
+% concept of linear surrogacy provides a framework for future development and
+% analysis of fast sequence models.
+
+We intend to expand upon the experiments section and open-source the parallel
+linear recurrence kernel in the near future.
 
 \subsubsection*{Acknowledgments}
 We would like to acknowledge Kevin Bowers, Alex Meiburg, JD Co-Reyes, Carson
