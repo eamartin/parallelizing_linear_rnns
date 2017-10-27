@@ -391,7 +391,7 @@ that this speedup translates to implementations of LS-RNNs such as QRNN (where
 we can get a speedup of up to 9x).
 
 In order to illustrate that the linearization does not necessarily come at the
-cost of expressibility, we show that the GILR-LSTM architecture, computed with
+cost of expressibility, we show that the GILR-LSTM architecture computed with
 the parallel linear recurrence algorithm, is able to outperform the optimized CuDNN LSTM
 implementation
 on a pathological example from the original LSTM paper
@@ -481,19 +481,6 @@ small minibatch regime, with a 30x speedup at a sequence length of 65,536.
 The GILR-LSTM allows us to achieve high throughput for all choices of minibatch size and
 sequence length.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% The computational performance of the LSTM and GILR-LSTM models were compared       %
-% across a wide range of minibatch sizes and sequence lengths. Although the 234    %
-% unit GILR-LSTM has a similar number of parameters to the 256 unit LSTM, we         %
-% measured the computational performance of a 256 unit GILR-LSTM to observe any      %
-% impact of the linear surrogate calculation. The serial evaluation of the LSTM    %
-% causes its throughput to be independent of the sequence length as a doubling of  %
-% sequence length causes a doubling of runtime. Notably, the GILR-LSTM can achieve a %
-% higher throughput by running on one 8192 event sequence at a time than an LSTM   %
-% running with 256 sequence minibatches. Similar speedups were found for           %
-% inference.                                                                       %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 Unlike the previous case, these speedups do come at a cost. The GILR-LSTM
 architecture is different to the canonical LSTM, and it's possible that the loss
 of model capacity outweighs the speedup in training. The following experiment
@@ -513,103 +500,6 @@ designed to illustrate the advantages of the LSTM.
   sizes and sequences.}
 \label{fig:tp_perf}
 \end{figure}
-
-
-% % Experiments were performed on the N-MNIST \cite{orchard2015converting}
-% dataset. N-MNIST captures the MNIST digit dataset \cite{lecun1998mnist} by
-% panning % an event driven camera over each digit. Each example in N-MNIST is a
-% sequence of single pixel events (x, y, polarity, timestamp) where % x and y each
-% indicate a pixel position in [0, 33], polarity indicates whether the pixel was
-% switching on or off, and timestamp is the time of the event in
-% microseconds. Videos produced from the event data show that positive polarity
-% events are often located on the leading edge of the digit motion and negative
-% polarity events on the trailing edge. Between the 60,000 digits in the training
-% set, N-MNIST contains approximately 250 million pixel events with sequence
-% lengths ranging from 500 to 8000 and averaging 4000 events.
-
-% % We attempt to forecast 50 events ahead in N-MNIST using a two layer LSTM with
-% 256 units per layer and a two layer GILR-LSTM with 234 units per layer. The
-% GILR-LSTM layer size was selected so that it had slightly fewer parameters than
-% the LSTM. Each model transformed the incoming event position into a
-% 40-dimensional embedding vector which was then combined with the polarity to
-% produce a 41 dimensional input. Both models output a $2 \mathbf{x} 34^2$ matrix
-% containing two future event location probability distributions conditioned on
-% the polarity of the future event. The training algorithm only considers the
-% probability distribution of the true future polarity and uses the cross entropy
-% loss function. The Adam \cite{kingma2014adam} optimization algorithm and Glorot
-% \cite{glorot2010understanding} initialization scheme were used. Training on a
-% minibatch of size $b$ with sequence length $T$ consisted of uniformly sampling
-% $b$ N-MNIST sequences and then extracting a single random $T$ element
-% subsequence (and its 50 element ahead forecast) from the sequence. Sequences
-% less than $T$ elements were padded out to length $T$, and there was a "burn-in"
-% of 30 events at the start of each sequence where no predictions were made. An
-% epoch was defined as a pass over as many pixel events as there are in the full
-% training set.
-
-% % All experiments were performed using TensorFlow 1.0 \cite{abadi2016tensorflow}
-% on a single Nvidia K80 GPU running for up to 18 hours. The LSTM model was
-% computed using TensorFlow's dynamic\_rnn and BasicLSTMCell routines which are
-% slower than but algorithmically similar to the cuDNN LSTM implementation.
-
-% % \subsection{Training performance} % The speed of neural net training is not
-% solely determined by the training throughput but also by the frequency of
-% optimization steps. As an example, a batch method may process inputs at the same
-% rate as a minibatch method, but the minibatch method will generally converge
-% much faster on large datasets. On an infinite dataset, the batch method never
-% takes a single optimization step regardless of its throughput. With this example
-% in mind, it is clear that achieving fast training is a balancing act between
-% training data throughput and optimization step latency and that training
-% performance should be evaluated with training curves and not just throughput
-% numbers such as time per epoch.
-
-% % The LSTM and GILR-LSTM offer differ latency and throughput tradeoffs. LSTM
-% throughput depends only on minibatch size but LSTM latency depends on both
-% minibatch size and sequence length. Experiments were conducted training the LSTM
-% models with minibatch size 256 and sequence lengths 128, 256, 512, and
-% 1024. Figure \ref{fig:learning_curves} shows the smaller sequence lengths led to
-% faster initial learning but inferior final performance.
-
-% % The throughput and latency of the GILR-LSTM are both influenced by batch size
-% and sequence length. Several GILR-LSTMs were trained with batch size 16 and
-% sequence length 1024. This combination was chosen because of the nearly maximum
-% throughput, the low latency, and the ease of building a minibatch given the
-% distribution of sequence lengths in the data set. The 234 unit GILR-LSTM reaches
-% a better training loss in roughly 4.5 hours than any of the LSTMs could reach in
-% 18 hours. This experimental evidence indicates the GILR-LSTM is as powerful of a
-% model as the LSTM and can be trained in a fraction of the time.
-
-% \begin{figure}[t]
-% \centering
-% \includegraphics[width=12cm]{lc2.png}
-% \caption{The LSTM models had a direct relationship between sequence length and training curve: the shorter the sequence length, the faster the initial learning and
-% the higher the final loss. The faster initial learning is explained by the decreased
-% latency of optimization steps and the higher final loss is explained by the
-% inability to learn long dependencies. The GILR-LSTM has 234 units per hidden
-% layer to have the same number of parameters as the 256 unit LSTMs.}
-% \label{fig:learning_curves}
-% \end{figure}
-
-% \subsection{Test performance}
-% \begin{table}[h]
-%   \caption{N-MNIST test results}
-%   \label{test-results}
-%   \centering
-%   \begin{tabular}{lllll}
-%     \toprule
-%     & Train Cross Entropy     & Test Cross Entropy     & Top-5 Accuracy & Top-20 Accuracy \\
-%     \midrule
-%     GILR-LSTM 			&  \textbf{4.567} & 4.856           & 10.51\% & 36.70\%   \\
-%     LSTM, seqlen=128    & 4.664 & \textbf{4.846}  & \textbf{10.62\%} & \textbf{37.08\%}   \\
-%     LSTM, seqlen=256    & 4.620                & 4.906           & 10.11\% & 35.40\%   \\
-%     LSTM, seqlen=512    & 4.602                & 4.883           & 10.45\% & 36.32\%   \\
-%     LSTM, seqlen=1024   & 4.611                & 4.880           & 10.32\% & 35.92\%   \\
-%     \bottomrule
-%   \end{tabular}
-% \end{table}
-% Beyond cross entropy on train and test, we also evaluated top-$k$ accuracy for $k=5, 20$. A probability distribution is top-$k$ correct if it assigns the realized location one of the
-% $k$ largest probabilities. N-MNIST contains 1156 pixel positions, so top-5 and top-20 accuracy are equivalent to localizing the future to 0.43\% and 1.7\% of pixels.
-
-% No regularization was attempted and all of the models overfit, as indicated by the best test performance from the model with the worst train performance. Table \ref{test-results} contains the full test results. Our focus was the fast training of powerful models, and we leave regularizing parallel linear recurrences and LS-RNNs to future work. Although not tested, it is possible that the GILR-LSTM generalized better than the LSTMs trained on long sequences due to the much smaller minibatch size of GILR-LSTM leading to a wider minima.
 
 \subsection{Synthetic Experiment}
 In order to demonstrate how PLR may be used to speed up tasks that the LSTM is
