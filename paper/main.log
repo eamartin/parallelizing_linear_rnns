@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.4.5)  26 OCT 2017 23:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.4.5)  27 OCT 2017 00:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1184,104 +1184,100 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 196.
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 215.
- [2] [3] [4]
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 416.
-
-[5] <cudnn_heatmap.png, id=150, 604.1772pt x 500.8311pt>
+ [2] [3] [4] [5]
+<cudnn_heatmap.png, id=168, 604.1772pt x 500.8311pt>
 File: cudnn_heatmap.png Graphic file (type png)
-
-<use cudnn_heatmap.png>
-Package pdftex.def Info: cudnn_heatmap.png used on input line 499.
+ <use cudnn_heatmap.png>
+Package pdftex.def Info: cudnn_heatmap.png used on input line 507.
 (pdftex.def)             Requested size: 341.43306pt x 283.03888pt.
- [6pdfTeX warning (ext4): destination with the same identifier (name{table.1}) 
-has been already used, duplicate ignored
+
+[6pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
+as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.626 
-      pdfTeX warning (ext4): destination with the same identifier (name{figure.
-1}) has been already used, duplicate ignored
+l.631 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.2
+}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.626 
-      ] <./1k_synthetic.png, id=163, 579.6054pt x 355.5684pt>
+l.631 
+      ] <./1k_synthetic.png, id=185, 579.6054pt x 355.5684pt>
 File: ./1k_synthetic.png Graphic file (type png)
 
 <use ./1k_synthetic.png>
-Package pdftex.def Info: ./1k_synthetic.png used on input line 659.
+Package pdftex.def Info: ./1k_synthetic.png used on input line 660.
 (pdftex.def)             Requested size: 198.7425pt x 121.9225pt.
- <./8k_synthetic.png, id=164, 578.16pt x 397.485pt>
+ <./8k_synthetic.png, id=186, 578.16pt x 397.485pt>
 File: ./8k_synthetic.png Graphic file (type png)
 
 <use ./8k_synthetic.png>
-Package pdftex.def Info: ./8k_synthetic.png used on input line 662.
+Package pdftex.def Info: ./8k_synthetic.png used on input line 663.
 (pdftex.def)             Requested size: 198.7425pt x 136.63513pt.
- <./1m_synthetic.png, id=165, 578.16pt x 397.485pt>
+ <./1m_synthetic.png, id=187, 578.16pt x 397.485pt>
 File: ./1m_synthetic.png Graphic file (type png)
 
 <use ./1m_synthetic.png>
-Package pdftex.def Info: ./1m_synthetic.png used on input line 665.
+Package pdftex.def Info: ./1m_synthetic.png used on input line 666.
 (pdftex.def)             Requested size: 238.49341pt x 163.96458pt.
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7pdfTeX warning (ext4): destination with the same identifier (name{figure.1})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.671   \end{figure}
+                     <./cudnn_heatmap.png>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 672.
+               Default added (so using `tbp') on input line 673.
 
 
-Overfull \hbox (43.42284pt too wide) in paragraph at lines 681--695
+Overfull \hbox (43.42284pt too wide) in paragraph at lines 682--696
  [][] 
  []
 
-
-Underfull \vbox (badness 1681) has occurred while \output is active []
-
- [7pdfTeX warning (ext4): destination with the same identifier (name{table.2}) 
+[8pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.714 
-       <./cudnn_heatmap.png>] [8pdfTeX warning (ext4): destination with the sam
-e identifier (name{figure.2}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.714 
+l.715 
       pdfTeX warning (ext4): destination with the same identifier (name{table.3
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.714 
+l.715 
        <./1k_synthetic.png> <./8k_synthetic.png> <./1m_synthetic.png>]
 
 LaTeX Warning: Marginpar on page 9 moved.
 
 [9] [10]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 912.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 912.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 913.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 913.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 912.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 912.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 913.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 913.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: F7F5BD905C3AF5DFAF149B21A68CE527;894.
+(rerunfilecheck)             Checksum: 128D23159A4D912F1B0C0F1C1FF10114;1154.
 
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 912.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 913.
  ) 
 Here is how much of TeX's memory you used:
- 20136 strings out of 494953
- 365812 string characters out of 6180978
- 486846 words of memory out of 5000000
- 22815 multiletter control sequences out of 15000+600000
+ 20172 strings out of 494953
+ 366580 string characters out of 6180978
+ 491178 words of memory out of 5000000
+ 22846 multiletter control sequences out of 15000+600000
  40829 words of font info for 152 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 62i,14n,76p,633b,887s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,14n,76p,602b,887s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc} </home/emartin/.t
 exmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk></usr/share/texlive/texmf-d
 ist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fo
@@ -1297,10 +1293,10 @@ live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times
 /utmri8a.pfb>
-Output written on main.pdf (10 pages, 517240 bytes).
+Output written on main.pdf (10 pages, 518308 bytes).
 PDF statistics:
- 284 PDF objects out of 1000 (max. 8388607)
- 228 compressed objects within 3 object streams
- 61 named destinations out of 1000 (max. 500000)
- 21137 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 305 PDF objects out of 1000 (max. 8388607)
+ 245 compressed objects within 3 object streams
+ 66 named destinations out of 1000 (max. 500000)
+ 21161 words of extra memory for PDF output out of 24883 (max. 10000000)
 

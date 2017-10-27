@@ -399,13 +399,15 @@ on a pathological example from the original LSTM paper
 quickly achieve state of the art results on an existing medical data
 set. \Chris{I hope so\ldots}
 
-\subsection{Throughput Benchmarks}
+\subsection{Throughput benchmarks}
+
+\subsubsection{Kernel performance}
 We first illustrate the throughput advantage of the parallel scan algorithm for
 evaluating the linear recurrence. For a minibatch comprised of \(b\) sequences
 of length \(T\), we define the number of events as \(bT\) and the throughput as
 the number of events per second. We implement two CUDA kernels, one which
 evaluates the parallel linear recurrence described in algorithm \ref{alg:plr},
-and one which evaluates the linear recurrence using the standard serial
+and one which evaluates the linear recurrence on GPU using the standard serial
 approach (with parallelization over features but not sequence length).
 This comparison is performed directly at the kernel level, avoiding
 any overhead from TensorFlow. We find that the parallel kernel has
@@ -413,40 +415,41 @@ a distinct advantage at long sequence lengths with a speedup factor of up to 40x
 as shown in table \ref{table:kernel-throughput}.
 At short sequence lengths, the parallel kernel does not perform well due to the
 overhead of multiple passes over data and communication between processors.
-\begin{table}[]
-  \centering
-  \caption{
-    Speedup of the parallel kernel compared to the serial kernel at various
-    values of $(\text{minibatch size } \mathbf{x} \text{ features}) = m$.
-    Performance was directly measured without any overhead from TensorFlow.
-  }
-\label{table:kernel-throughput}
-\begin{tabular}{@{}llll@{}}
+\begin{table}
+\begin{center}
+  \begin{tabular}{@{}llll@{}}
+    \label{table:kernel-throughput}
 Sequence Length & \(m=4\)  & \(m=32\) & \(m=128\) \\ \midrule
 16              & 0.06 & 0.06 & 0.05  \\
 256             & 0.22 & 0.22 & 0.86  \\
 4,096           & 1.02 & 2.94 & 3.36  \\
 65,536          & 38.5 & 41.8 & 17.5  \\ \bottomrule
-\end{tabular}
+  \end{tabular}
+\end{center}
+\caption{
+  Speedup of the parallel kernel compared to the serial kernel at various
+  values of $(\text{minibatch size } \mathbf{x} \text{ features}) = m$.
+  Performance was directly measured without any overhead from TensorFlow.
+}
 \end{table}
+
+\subsubsection{Accelerating existing RNN architectures}
 
 Many recently introduced RNNs can be accelerated with the parallel linear recurrence
 algorithm.
 Table \ref{table:rnn-throughput} shows the
-throughput advantage by using a parallel linear recurrence when compared to a
-serial linear recurrence. Since PLR and SLR are simply different methods for
-computing the recurrence, there is no penalty incurred for this speedup - we
-obtain exactly the same output.
+throughput advantage from using parallel linear recurrence compared to
+serial linear recurrence. Both methods compute an identical recurrence,
+so using parallel rather than serial causes no numerical changes.
 
-Typically experiments will aim to maximize the memory
-utilisation of the GPU, so we simulate this by choosing the product of the batch
-size and the sequence length to be constant. We see that the architectures which
-have fewer terms (for which the linear recurrence is a higher proportion of the
-computational burden) are more effected by the switch to PLR.  This is
+We controlled for GPU memory usage by choosing minibatch size such that the product
+of minibatch size and sequence length is constant. We see that the simpler architectures
+(for which the linear recurrence is a higher proportion of the
+computational burden) are more affected by the switch to the parallel kernel.  This is
 particularly clear in the case of the QRNN, where including a wider
-convolutional window results in less time spent on the recurrence and less to
-gain from the parallelization.
-\begin{figure}
+convolutional window results in more time spent outside of the linear recurrence and
+therefore less to gain from the parallelization.
+\begin{table}
 \begin{center}
   \begin{tabular}{@{}lrrrr@{}}
     \label{table:rnn-throughput}
@@ -457,22 +460,25 @@ Sequence Length & GILR-LSTM & SRU & QRNN(2) & QRNN(10)\\ \midrule
 65,536 & 1.41 & 9.21 & 6.68 & 2.05\\ \bottomrule
   \end{tabular}
 \end{center}
-\caption{Speedup obtained when using parallel linear recurrence compared to
-  serial linear recurrence. We analyse this for several recent architectures:
-  the Simple Recurrent Unit from \cite{lei2017}, the Quasi-RNN from
-  \cite{bradbury2017quasi}, with a convolutional filter of size 2 and 10, and
-  the GILR-LSTM which we introduce in section \ref{sec:ls-rnns}. To give a fair
-  model of a typical use-case maximising the memory usage of the GPU, we set
-  batch size \(b\) such that \(Tb = 65536\) for a sequence length \(T\).}
-\end{figure}
+\caption{
+  Speedup obtained from using parallel linear recurrence rather than
+  serial linear recurrence. We analyse this for
+  SRUs \cite{lei2017} and QRNNs \cite{bradbury2017quasi} with a convolutional
+  filters of size 2 and 10, and GILR-LSTM which we introduce in section \ref{sec:ls-rnns}.
+  We controlled for GPU memory by setting minibatch size $b$ such that
+  $bT = 65536$ for sequence length $T$.
+}
+\end{table}
 
-Finally, we compare the throughput of the linear surrogate LSTM to the current
-fastest available implementation of the LSTM, the CuDNN-LSTM. Figure
-\ref{fig:tp_perf} shows that our GILR-LSTM has higher throughput for most of the
-low-batch-size regime, with a 30x speedup at a sequence length of 65,536. Recent
-work \cite{keskar2017large} has suggested that small mini-batches may aid
-generalization by encouraging the discovery of shallow minima. The GILR-LSTM
-allows us to achieve high throughput for all choices of minibatch size and
+\Chris{For table \ref{table:rnn-throughput} how many layers and what was hidden size?}
+
+\subsubsection{GILR-LSTM throughput}
+
+Finally, we compare the throughput of the GILR-LSTM to the current fastest
+LSTM implementation (which comes from the CuDNN library). Figure
+\ref{fig:tp_perf} shows that the GILR-LSTM has higher throughput for most of the
+small minibatch regime, with a 30x speedup at a sequence length of 65,536.
+The GILR-LSTM allows us to achieve high throughput for all choices of minibatch size and
 sequence length.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -494,7 +500,9 @@ of model capacity outweighs the speedup in training. The following experiment
 shows that the GILR-LSTM is able to outperform the LSTM on an example originally
 designed to illustrate the advantages of the LSTM.
 
-\begin{table}[t]
+\Chris{Put title on Figure \ref{fig:tp_perf}}
+
+\begin{figure}[t]
 \centering
 \includegraphics[width=12cm]{cudnn_heatmap.png}
 \caption{Throughput comparison between LSTM-256-256 with GILR-LSTM-256-256, with a
@@ -504,7 +512,7 @@ designed to illustrate the advantages of the LSTM.
   because there was not enough memory on the GPU to handle such large batch
   sizes and sequences.}
 \label{fig:tp_perf}
-\end{table}
+\end{figure}
 
 
 % % Experiments were performed on the N-MNIST \cite{orchard2015converting}
@@ -603,55 +611,50 @@ designed to illustrate the advantages of the LSTM.
 
 % No regularization was attempted and all of the models overfit, as indicated by the best test performance from the model with the worst train performance. Table \ref{test-results} contains the full test results. Our focus was the fast training of powerful models, and we leave regularizing parallel linear recurrences and LS-RNNs to future work. Although not tested, it is possible that the GILR-LSTM generalized better than the LSTMs trained on long sequences due to the much smaller minibatch size of GILR-LSTM leading to a wider minima.
 
-\subsection{Synthetic Example}
+\subsection{Synthetic Experiment}
 In order to demonstrate how PLR may be used to speed up tasks that the LSTM is
-well-suited for, we tackle a pathological inference problem. Originally
-introduced as example 2b from Hochreiter and Schmidhtbuer's introduction of the
-LSTM, \cite{hochreiter1997long}, it involves storing a number for a very long
-sequence of time steps. We have an alphabet of size \(p\) with each character
-represented as a particular one-hot vector in this space. We input a sequence of
-\(n\) of these vectors, chosen at random (with replacement). The first vector in
-the sequence is always the same, up to the sign of the component (i.e. it is \(\pm
-\boldsymbol{p_0} \).
-
-The two signs on the first component separate the sequences into two sets. The
-whole sequence is fed into the LSTM and we aim to learn to classify the
-sequences. This requires remembering the first element over the length of the
-sequence. Due to the large throughput of the GILR-LSTM, we would expect that it
+well-suited for, we tackle a pathological inference problem first introduced
+in Hochreiter and Schmidhuber's initial LSTM paper \cite{hochreiter1997long}.
+The input consists of sequences of length $n$ with each sequence element a randomly
+chosen one-hot vector in $p$ dimensional space.
+The first vector in each sequence is always the same, up to the sign of the component (i.e. it is $\pm
+\boldsymbol{p_0}$). The sequential model must read in an entire sequence and then output
+the sign of the first sequence element.
+This sequence classification problem requires remembering the first element over the length of the
+sequence and is a canonical example of the long-term dependency problem.
+Due to the large throughput of the GILR-LSTM, we would expect that it
 would do better when the sequence length is large. In the original formulation
 of the problem (dealing in the regime with around one hundred timesteps)
-, \(p\) is set equal to \(n\). Since this would make the size of the input data
+, $p$ is set equal to $n$. As this would make the size of the input data
 grow impracticaly large as \(\mathcal{O}(n^2)\) for long sequences, we fix \(p =
 128\) and vary \(n\).
 
-We generated three sets of data: for \(n\) equal to 1,024, 8,192, and
-1,048,576. For each of these we compared a two-layer GILR-LSTM with 512 hidden
-units to a canonical LSTM network with roughly the same number of parameters. We
-could imagine using a two-layer LSTM with 512 hidden units in each layer, or a
-one-layer LSTM with 1024 hidden units.
+We generated sequences for $n$ equal to 1,024, 8,192, and
+1,048,576. For each of these we compared a two layer GILR-LSTM with 512 hidden
+units to a two layer LSTM with 512 hidden units per layer implemented by CuDNN.
 
-Initial experiments showed that the two-layer LSTM was much quicker to converge
-than the one-layer LSTM, so here we compare the GILR-LSTM to the two-layer
-CudnnLSTM.  We ran all experiments on a NVIDIA K80 GPU, choosing the largest
-minibatch size which fit into the GPU memory, with five runs per configuration
+We ran all experiments on a NVIDIA K80 GPU, choosing the largest
+minibatch size which fit into the GPU memory with five runs per configuration
 allowing us to find the average and standard deviation of the time and number of
-iterations to convergence. For all CUDA runs, a brief search over learning rate
+iterations to convergence. A brief search over learning rate
 and batch size was carried out to find the parameters which allow the network to
-converge most rapidly. The criterion for convergence was five consecutive
-minibatches giving 100\% accuracy. As can be seen from the learning curves
-in figure \ref{fig:synthetic_training}, this was a reasonable criterion. For the
-longest sequence-length, we didn't observe the CuDNN-LSTM converging.
+converge most rapidly for all runs. The criterion for convergence was five consecutive
+minibatches giving 100\% accuracy. The learning curves
+in figure \ref{fig:synthetic_training} give support to this being a reasonable
+convergence criteria.
+For the longest sequence length, we could not run long enough to observe the LSTM converge.
 
-The results illustrate that the GILR-LSTM is able to robustly outperform the
-CuDNN-LSTM, which is currently the fastest LSTM implementation available. This
-is somewhat surprising, as we might expect that the LSTM would do particularly
-well at an example that was specifically constructed for it. We can conclude that
-the nonlinearities in the LSTM's design are not vital for its performance given
-that the linear GILR-LSTM is able to converge, and that if these nonlinearities are
-not completely necessary, they entail a large performance cost by diallowing the
-plr algorithm from being used. Furthermore, the sequence length of over one million
-is the largest sequence length we have seen seriously discussed. The GILR
-handles it straightforwardly.
+The results illustrate that the GILR-LSTM is able to converge much more quickly than
+the fastest available LSTM implementation.
+This is somewhat surprising given the LSTM was specifically constructed for problems
+of this sort. This GILR-LSTM convergence
+leads to the conclusion that the non-linearities present in
+LSTM are not necessary for solving this instance of the long-term dependency problem.
+The time to convergence further leads to the conclusion that inclusion of a non-linearity
+at every step incurs a significant training time slowdown.
+Furthermore, the GILR-LSTM is able to learn to carry dependencies over a one million
+element sequence. As far as we know, this one million step sequence experiment
+is the longest sequential learning problem to be handled by neural networks to date.
 
 \begin{figure}
   \centering
@@ -695,18 +698,20 @@ CuDNN &GILR&CuDNN&GILR\\ \cmidrule(l){2-7} Iterations (1000s) &
 \end{table}
 
 \subsection{The Medical Setting}
-A common application of RNNs is in medicine. In order to illustrate the
-increased performance that the plr algorithm allows, we implement an GILR-LSTM
-on the problem presented in , the 2016 PhysioNet/Computing in
+Medical waveform data consists of long sequences and is a reasonable application area for RNNs.
+We applied the GILR-LSTM
+on the problem presented in the 2016 PhysioNet/Computing in
 Cardiology Challenge 2016.  The aim of the Classification of Normal/Abnormal
-Heart Sound Recordings challenge is to determine which of a set of EEGs are
-produced by people with abnormal hearts.  The data is recorded from a variety of
-sources and split into a training and testing set. The testing set is not
+Heart Sound Recordings challenge is classify electroencephalogram (EEG) recordings
+as coming from a normal or abnormal heart.
+The waveforms are recorded on several sets of sensors
+and split into a training and testing set. The testing set is not
 publicly available, but can be evaluated through a web portal. The top results
-cover a large range of techniques, but generally rely on featurization of the
-raw EEG records. We want to see if we are able to leverage our advantage at high
-sequence-lenghts to train directly on the raw EEG. The EEGs are sampled at 2,000
-Hz and range in length from several seconds to more than one hundred seconds,
+cover a large range of techniques, but generally rely on manual featurization of the
+raw EEG records. The GILR-LSTM's ability to handle long sequences makes it a
+candidate for training directly on the raw EEG signal.
+The EEGs are sampled at 2,000 Hz
+and range in length from several seconds to more than one hundred seconds,
 giving a max sequence length of over 200,000. Since the testing server is not
 equipped with a GPU, we cannot run PLR in the inference. We resample the
 records to 500 Hz so that we are able to evaluate the test results in a
@@ -714,15 +719,16 @@ reasonable amount of time, padding all records that are shorter than the longest
 
 The training set of data is unbalanced, with 75\% of the data corresponding to
 normal hearts. We rebalance the data by oversampling the abnormal data by a factor
-of three, including each abnormal heart three times. We train a network consisting
-of three stacked GIRL-LSTM layers, each with 16 hidden units. Although reasonably
-small, since the input is only one-dimensional 16 hidden units allows us to
-develop representations. PLR allows us to train the network very rapidly over a
-long sequence length, so we don't have to downsample and lose information or
-spend lots of time developing methods to form features.
-We were able to fit exactly to the training set after
-a few hours of training, and on the unseen test data we obtained a score of
-PLACEHOLDER.
+of three, including each abnormal heart three times. We train a network feeding
+the one dimensional input signal into three stacked GILR-LSTM layers of 16 hidden units each.
+Although reasonably small, 16 hidden units allows developing
+develop representations. Parallel linear recurrence allows us to rapidly train the network
+over the entire long sequence length, so we don't have to work on truncated samples,
+downsampled sequenes, or
+spend lots of time manually developing EEG specific features.
+The model obtained perfect classification on the train dataset after
+a few hours \Chris{how many?} of training.
+On the unseen test data we obtained a score of PLACEHOLDER.
 
 \Chris{If we get good results (doesn't have to be best ever, but can be on par),
   then keep}
@@ -730,16 +736,15 @@ PLACEHOLDER.
   this section}
 
 \section{Conclusion}
-Parallel linear recurrence is an extremely powerful algorithm and the GILR-LSTM
-is just one of many possible models that can be built with it. While we were
-previously forced to use large minibatches in order to obtain reasonable
-training speed, with PLR in many cases we can train rapidly on small minibatch
-sizes, freeing us to utilise extremely long sequence lengths and more complex
-models. Our CUDA kernel is up to 40 times faster than a serial kernel on
+Parallel linear recurrence can accelerate existing RNNs and be used in the design
+of new architectures such as the GILR-LSTM. Parallel linear recurrence enables
+rapid training with small minibatches, which further enables training models on
+extremely long sequence lengths.
+Our CUDA kernel is up to 40 times faster than a serial kernel on
 sequence lengths of 65,536, and this benefit transfers to implemented models,
 speeding up the SRU \cite{lei2017} by a factor of 9. The impressive results in
 \cite{lei2017} and other recent work comprehensively show that
-linearly-recurrent RNNs are, in many respects, equally as powerful as nonlinear
+linear RNNs are, in many respects, equally as powerful as nonlinear
 LSTMs. Our results on the synthetic example continue this trend, showing that
 the GILR-LSTM is able to handle sequence length regimes that are longer than any
 we have seen seriously suggested in the literature. We feel that the framework
