@@ -740,12 +740,10 @@ Parallel linear recurrence can accelerate existing RNNs and be used in the desig
 of new architectures such as the GILR-LSTM. Parallel linear recurrence enables
 rapid training with small minibatches, which further enables training models on
 extremely long sequence lengths.
-Our CUDA kernel is up to 40 times faster than a serial kernel on
-sequence lengths of 65,536, and this benefit transfers to implemented models,
-speeding up the SRU \cite{lei2017} by a factor of 9. The impressive results in
+The impressive results in
 \cite{lei2017} and other recent work comprehensively show that
-linear RNNs are, in many respects, equally as powerful as nonlinear
-LSTMs. Our results on the synthetic example continue this trend, showing that
+linear RNNs can often be used in place of traditional non-linear RNNs.
+Our results on the synthetic example continue this trend, showing that
 the GILR-LSTM is able to handle sequence length regimes that are longer than any
 we have seen seriously suggested in the literature. We feel that the framework
 of describing linear RNNs as linear surrogates for nonlinear RNNs is a fruitful
