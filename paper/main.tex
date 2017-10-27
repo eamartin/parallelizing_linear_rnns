@@ -595,7 +595,9 @@ well at an example that was specifically constructed for it. We can conclude tha
 the nonlinearities in the LSTM's design are not vital for its performance given
 that the linear GILR-LSTM is able to converge, and that if these nonlinearities are
 not completely necessary, they entail a large performance cost by diallowing the
-plr algorithm from being used.
+plr algorithm from being used. Furthermore, the sequence length of over one million
+is the largest sequence length we have seen seriously discussed. The GILR
+handles it straightforwardly.
 
 \begin{figure}
   \centering
@@ -624,8 +626,8 @@ plr algorithm from being used.
 \label{my-label} 
 \begin{tabular}{@{}lllllll@{}} \toprule Sequence Length &
 \multicolumn{2}{c}{\textbf{1,024}} & \multicolumn{2}{c}{\textbf{8,192}} &
-\multicolumn{2}{c}{\textbf{1,048,576\(^*\)}} \\ \midrule &CuDNN& G &
-C &GILR&CuDNN&GILR\\ \cmidrule(l){2-7} Iterations (1000s) &
+\multicolumn{2}{c}{\textbf{1,048,576\(^*\)}} \\ \midrule &CuDNN& GILR &
+CuDNN &GILR&CuDNN&GILR\\ \cmidrule(l){2-7} Iterations (1000s) &
                      1.0 %bs=8
                      \(\pm\) 0.4 & 0.55 %bs=8
                                     \(\pm\) 0.04 & 0.44 %bs=8
