@@ -374,22 +374,18 @@ a distinct advantage at long sequence lengths with a speedup factor of up to 40x
 as shown in table \ref{table:kernel-throughput}.
 At short sequence lengths, the parallel kernel does not perform well due to the
 overhead of multiple passes over data and communication between processors.
-\begin{table}
+\begin{table}[t]
+\caption{Parallel kernel speedup on $m$ features}
 \begin{center}
-  \begin{tabular}{@{}llll@{}}
-    \label{table:kernel-throughput}
+\begin{tabular}{@{}llll@{}}
+\label{table:kernel-throughput}
 Sequence Length & \(m=4\)  & \(m=32\) & \(m=128\) \\ \midrule
 16              & 0.06 & 0.06 & 0.05  \\
 256             & 0.22 & 0.22 & 0.86  \\
 4,096           & 1.02 & 2.94 & 3.36  \\
 65,536          & 38.5 & 41.8 & 17.5  \\ \bottomrule
-  \end{tabular}
+\end{tabular}
 \end{center}
-\caption{
-  Speedup of the parallel kernel compared to the serial kernel at various
-  values of $(\text{minibatch size } \mathbf{x} \text{ features}) = m$.
-  Performance was directly measured without any overhead from TensorFlow.
-}
 \end{table}
 
 \subsubsection{Accelerating existing RNN architectures}
