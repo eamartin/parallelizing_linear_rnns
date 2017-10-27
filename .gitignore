@@ -1,2 +1,5 @@
 *.pyc
 *~
+paper/main.log
+paper/main.synctex.gz
+paper/missfont.log

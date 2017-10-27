@@ -107,7 +107,7 @@ recent work on linear RNNs into a new framework of linear surrogate RNNs and dev
 a linear surrogate for the long short-term memory unit, the GILR-LSTM, which is
 able to achieve throughput 30 times greater than the currently fastest-available LSTM
 implementation. We show that the GILR-LSTM is able to perform well on real-world
-problems, 
+problems,
 \end{abstract}
 
 \section{Introduction}
@@ -171,9 +171,9 @@ initial value $b$ is defined as
 \begin{align*}
 \scan(\oplus, [a_1, a_2, ..., a_n], b) = [(a_1 \oplus b), (a_2 \oplus a_1 \oplus b), ..., (a_n \oplus a_{n-1} ... \oplus a_1 \oplus b)]
 \end{align*}
-The reduction of $\oplus$ over array $A$ and initial value $b$ is denoted 
+The reduction of $\oplus$ over array $A$ and initial value $b$ is denoted
 $\reduce(\oplus, A, b)$ and is the final element of $\scan(\oplus, A, b)$.
-Despite their dependent computation graph, algorithms exist to parallelize scans 
+Despite their dependent computation graph, algorithms exist to parallelize scans
 and reductions when $\oplus$ is associative \cite{ladner1980parallel}.
 
 \citet{blelloch1990prefix} shows that first order recurrences of the form
@@ -184,7 +184,7 @@ the parallel scan algorithm if three conditions are met:
 \item $\oplus$ is associative: $(a \oplus b) \oplus c = a \oplus (b \oplus c)$
 \item $\otimes$ is semiassociative: there exists a binary associative operator
 $\odot$ such that $a \otimes (b \otimes c) = (a \odot b) \otimes c$
-\item $\otimes$ distributes over $\oplus$: $a\otimes(b\oplus c) = (a\otimes b) \oplus (a \otimes c)$ 
+\item $\otimes$ distributes over $\oplus$: $a\otimes(b\oplus c) = (a\otimes b) \oplus (a \otimes c)$
 \end{enumerate}
 
 Considering the familiar operations in linear algebra, we see that the
@@ -237,19 +237,19 @@ algorithm for the interested reader.
   \ParFor{$i \gets 0,p-1$}
     \State $h_{S_i:E_i} = \scan(\bullet, y_{S_i:E_i}, C_{i-1})$
   \EndParFor
-  
+
   \State \Return $h$
 \end{algorithmic}
 \end{algorithm}
 
 \subsection{Theoretical performance}
-The cost of a serial scan over a sequence of length $T$ is 
+The cost of a serial scan over a sequence of length $T$ is
 $C_\text{sscan} \in \mathcal{O}((C_\otimes + C_\oplus)T)$, compared to the parallel scan cost
 $C_\text{pscan} \in \mathcal{O}(2(C_\odot + C_\otimes + C_\oplus)(T/p + \lg p))$ \cite{blelloch1990prefix},
-where \(p\) is the number of available parallel cores. 
-If $h_t$ is a vector of dimension $n$ then 
+where \(p\) is the number of available parallel cores.
+If $h_t$ is a vector of dimension $n$ then
 $C_\odot \in  \mathcal{O}(n^3), C_\otimes \in \mathcal{O}(n^2), C_\oplus \in \mathcal{O}(n)$ giving
-$C_\text{pscan} \in \mathcal{O}(2(n^3 + n^2 + n)(T/p + \lg p))$ and 
+$C_\text{pscan} \in \mathcal{O}(2(n^3 + n^2 + n)(T/p + \lg p))$ and
 $C_\text{sscan} \in \mathcal{O}((n^2 + n)T)$. The $\mathcal{O}(n^3)$ cost of the matrix
 multiplication in the parallel algorithm can counter-act any parallel speedups for
 sufficiently large hidden states and lead to a slower algorithm overall.
@@ -280,7 +280,7 @@ to implement schemes such as exponential moving averages or a gating mechanism.
 \subsection{Backpropagation}
 \begin{align*}
 \nabla_{h_T}L &= \frac{\partial L}{\partial h_T} \\
-\nabla_{h_t}L &= \frac{\partial h_{t+1}}{\partial h_t} \odot \nabla_{h_{t+1}} L + \frac{\partial L}{\partial h_t} \\ 
+\nabla_{h_t}L &= \frac{\partial h_{t+1}}{\partial h_t} \odot \nabla_{h_{t+1}} L + \frac{\partial L}{\partial h_t} \\
 &= \lambda_{t+1} \odot \nabla_{h_{t+1}} L + \frac{\partial L}{\partial h_t} \\
 \nabla_{\lambda_t}L &= \frac{\partial h_t}{\partial\lambda_t} \odot \nabla_{h_t}L = h_{t-1} \odot \nabla_{h_t}L \\
 \nabla_{x_t}L &= \nabla_{h_t} L \\
@@ -303,7 +303,7 @@ implementation details mean that peak performance is only obtained on sequences
 of at least several thousand steps on at least a 32 element vector.
 
 \section{Models}
-Parallel linear recurrence can be used to construct a wide variety of differentiable modules that can be evaluated in parallel. Common applications of linear recurrence include gating schemes and exponential moving averages. Although linear recurrence values can depend only linearly on previous elements, the stacking of linear recurrent layers separated by non-linearities allows for a non-linear dependence on the past. In this sense the non-linear depth of a linear recurrent network is the number of layers and not the sequence length. 
+Parallel linear recurrence can be used to construct a wide variety of differentiable modules that can be evaluated in parallel. Common applications of linear recurrence include gating schemes and exponential moving averages. Although linear recurrence values can depend only linearly on previous elements, the stacking of linear recurrent layers separated by non-linearities allows for a non-linear dependence on the past. In this sense the non-linear depth of a linear recurrent network is the number of layers and not the sequence length.
 
 \subsection{Gated impulse linear recurrent layer}
 A gated impulse linear recurrent (GILR) layer transforms its $m$ dimensional inputs $x_t$ into a sequence of $n$ dimensional hidden states $h_t$:
@@ -352,7 +352,7 @@ summarizing the previous inputs while $s_t$ serves as the output of $f$ to be
 passed to other layers of the network. We can decouple these uses and introduce
 independent variables for each purpose: \(s_t\) is passed onto other layers of the network
 and we introduce the linear surrogate \(\tilde{s}_t\) which is passed onto the
-next state, with \(s_t = f(\tilde{s}_{t-1}, x_t)\). We are still able to choose a 
+next state, with \(s_t = f(\tilde{s}_{t-1}, x_t)\). We are still able to choose a
 nonlinear \(f\), our only limitation being that \(\tilde{s}_t\) must be linearly
 computable.  We refer to this class of model as a linear surrogate RNN
 (LS-RNN). Quasi-RNNs \cite{bradbury2017quasi} are LS-RNNs using $\tilde{h}_{t-1}
@@ -414,7 +414,7 @@ involved in marshalling the parallel algorithm. \Chris{Important:
 \begin{table}[]
   \centering
 \caption{Speedup of the PLR kernel compared to the SLR kernel, without any
-  overhead from Tensorflow, for various sequence lengths and input size \(m\).}      
+  overhead from Tensorflow, for various sequence lengths and input size \(m\).}
 \label{table:kernel-throughput}
 \begin{tabular}{@{}llll@{}}
 Sequence Length & \(m=4\)  & \(m=32\) & \(m=128\) \\ \midrule
@@ -424,7 +424,7 @@ Sequence Length & \(m=4\)  & \(m=32\) & \(m=128\) \\ \midrule
 65,536          & 38.5 & 41.8 & 17.5  \\ \bottomrule
 \end{tabular}
 \end{table}
-  
+
 Many of the RNNs that have been recently introduced can be implemented with a
 parallel linear recurrence. Table \ref{table:rnn-throughput} shows the
 throughput advantage by using a parallel linear recurrence when compared to a
@@ -449,7 +449,7 @@ Sequence Length & GILR-LSTM & SRU & QRNN(2) & QRNN(10)\\ \midrule
 256 & 0.91 & 0.84 & 0.86 & 0.99\\
 4,096 & 0.98 & 1.38 & 1.18 & 1.05\\
 65,536 & 1.41 & 9.21 & 6.68 & 2.05\\ \bottomrule
-  \end{tabular}  
+  \end{tabular}
 \end{center}
 \caption{Speedup obtained when using parallel linear recurrence compared to
   serial linear recurrence. We analyse this for several recent architectures:
@@ -593,7 +593,7 @@ designed to illustrate the advantages of the LSTM.
 %   \end{tabular}
 % \end{table}
 % Beyond cross entropy on train and test, we also evaluated top-$k$ accuracy for $k=5, 20$. A probability distribution is top-$k$ correct if it assigns the realized location one of the
-% $k$ largest probabilities. N-MNIST contains 1156 pixel positions, so top-5 and top-20 accuracy are equivalent to localizing the future to 0.43\% and 1.7\% of pixels. 
+% $k$ largest probabilities. N-MNIST contains 1156 pixel positions, so top-5 and top-20 accuracy are equivalent to localizing the future to 0.43\% and 1.7\% of pixels.
 
 % No regularization was attempted and all of the models overfit, as indicated by the best test performance from the model with the worst train performance. Table \ref{test-results} contains the full test results. Our focus was the fast training of powerful models, and we leave regularizing parallel linear recurrences and LS-RNNs to future work. Although not tested, it is possible that the GILR-LSTM generalized better than the LSTMs trained on long sequences due to the much smaller minibatch size of GILR-LSTM leading to a wider minima.
 
@@ -653,16 +653,16 @@ handles it straightforwardly.
     \includegraphics[width=1.0\textwidth]{./1k_synthetic.png}
   \end{minipage}%
     \begin{minipage}{0.5\textwidth}
-    \includegraphics[width=1.0\textwidth]{./8k_synthetic.png}      
+    \includegraphics[width=1.0\textwidth]{./8k_synthetic.png}
   \end{minipage}
   \begin{minipage}{0.6\textwidth}
-    \includegraphics[width=1.0\textwidth]{./1M_synthetic.png}      
+    \includegraphics[width=1.0\textwidth]{./1m_synthetic.png}
   \end{minipage}
   \caption{Training curves for GILR-LSTM and CUDNNLSTM architectures for various
   sequence lengths. (Clockwise from top-left: 1024, 8192, 1048576)}
     \label{fig:synthetic_training}
   \end{figure}
-  
+
 \begin{table}[]
 \centering
 \caption{Performance of the GILR-LSTM compared to CUDA-optimised CudnnLSTM
@@ -671,7 +671,7 @@ handles it straightforwardly.
   We did not observe the Cudnn-LSTM converging for the longest task, even after several days.
   {\scriptsize *For the longest sequence length, the number of hidden units was decreased to
     64 for both architectures so that the net could fit in memory. }    }
-\label{my-label} 
+\label{my-label}
 \begin{tabular}{@{}lllllll@{}} \toprule Sequence Length &
 \multicolumn{2}{c}{\textbf{1,024}} & \multicolumn{2}{c}{\textbf{8,192}} &
 \multicolumn{2}{c}{\textbf{1,048,576\(^*\)}} \\ \midrule &CuDNN& GILR &
@@ -722,7 +722,7 @@ PLACEHOLDER.
   then keep}
 \Chris{If we don't get good results, or don't have results, we will need to kick
   this section}
-  
+
 \section{Conclusion}
 Parallel linear recurrence is an extremely powerful algorithm and the GILR-LSTM
 is just one of many possible models that can be built with it. While we were
@@ -739,7 +739,7 @@ the GILR-LSTM is able to handle sequence length regimes that are longer than any
 we have seen seriously suggested in the literature. We feel that the framework
 of describing linear RNNs as linear surrogates for nonlinear RNNs is a fruitful
 approach, and that this, paired with the PLR algorithm, will substantially
-advance the ability to train RNNs, and to understand timeseries data. 
+advance the ability to train RNNs, and to understand timeseries data.
 
 %Future work can the development of parallel computable
 %differentiable memory modules, and the combination of linear recurrence with
@@ -894,7 +894,7 @@ T.~Lei, Y.~Zhang,
 \newblock \emph{arXiv preprint arXiv:1709.02755 }, 2017.
 
 \bibitem[Goldberger et~al.(2000) Amaral, Glass, Hausdorff, Ivanov, Mark, Mietus,
-    Moody, Peng, Stanley]{physiobank} Goldberger et~al. 
+    Moody, Peng, Stanley]{physiobank} Goldberger et~al.
     \newblock PhysioBank, PhysioToolkit, and PhysioNet:
 Components of a New Research Resource for Complex Physiologic
 Signals.
