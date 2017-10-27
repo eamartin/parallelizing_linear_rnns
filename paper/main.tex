@@ -163,7 +163,7 @@ We investigate this idea further and deliver the following contributions:
 \item{We describe how several recent linear RNNs can be described as
     linear surrogates for non-linear architectures. We introduce a linear
     surrogate for the LSTM and show that we are able to train it
-    with a speedup of 5-10x compared to the CuDNN-LSTM when we use the
+    with a speedup of 5-10x compared to the CuDNN LSTM when we use the
     parallel linear recurrence algorithm.}
 \end{itemize}
 
@@ -471,7 +471,7 @@ One of the key strengths of the LSTM is that it is capable of dealing with
 long-term dependencies. In order to demonstrate that the GILR-LSTM is also able
 to handle long-term dependencies we tackle a canonical example of inference over
 many time steps from \citet{hochreiter1997long}.  We show that in fact the
-GILR-LSTM is able to outperform the CuDNN-LSTM and extend to sequence lengths
+GILR-LSTM is able to outperform the CuDNN LSTM and extend to sequence lengths
 orders of magnitude longer than dealt with previously. The input consists of
 sequences of length $n$ where for $n > 0$ each element is a randomly chosen
 one-hot vector \(x\) in $p$-dimensional space.  The first vector in each
@@ -513,10 +513,10 @@ For the longest sequence length, we did not observe the CuDNN LSTM converging, e
 several days' training.
 
 \begin{table}[]
+\label{table:synth-table}
 \centering
 \caption{Performance of the GILR-LSTM compared to the CuDNN LSTM
   on problem 2b from \citet{hochreiter1997long}. }
-\label{table:synth-table}
 \begin{tabular}{@{}lllllll@{}} \toprule Sequence Length &
 \multicolumn{2}{c}{\textbf{1,024}} & \multicolumn{2}{c}{\textbf{8,192}} &
 \multicolumn{2}{c}{\textbf{1,048,576}} \\ \midrule &CuDNN& GILR &
@@ -533,14 +533,13 @@ CuDNN &GILR&CuDNN&GILR\\ \cmidrule(l){2-7} Iterations (1000s) &
 \end{tabular}
 \end{table}
 
-The results as show in table \ref{synth-table} illustrate that the GILR-LSTM is able to converge between 6 and 10
-times faster than the CuDNN-LSTM. This is somewhat surprising
+The results as show in table \ref{table:synth-table} illustrate that the GILR-LSTM is able to converge between 6 and 10
+times faster than the CuDNN LSTM. This is somewhat surprising
 given the LSTM was specifically constructed for problems of this sort, and the
 CuDNN LSTM implementation is highly optimized (to the extent that
 the monolithic interface it exposes is difficult to modify or extend). The
 GILR-LSTM is implemented entirely in standard TensorFlow with the exception of
-the call to new linear recurrence kernel in place of a TensorFlow symbolic
-loop.
+using the new linear recurrence op instead of a TensorFlow symbolic loop.
 Convergence of the GILR-LSTM models
 leads to the conclusion that the non-linearities present in LSTM are
 not necessary for solving this instance of the long-term dependency problem.
@@ -562,11 +561,11 @@ networks to date.
   \begin{minipage}{0.5\textwidth}
     \includegraphics[width=1.0\textwidth]{./1m_synthetic_new.png}
   \end{minipage}
-  \caption{Training curves for GILR-LSTM and CuDNN-LSTM architectures for various
-    sequence lengths. Since we used
-    small batch sizes to train and evaluate accuracy, the accuracy fluctuated
-    (between 0 and 1 for the longest sequence). We show the mean and standard deviation
-    in a sliding window around each learning curve to illustrate this.}
+  \caption{Learning curves for GILR-LSTM and CuDNN LSTM architectures for various
+    sequence lengths. Each plot includes learning curves from multiple independent
+    runs. The shaded area around each learning curve shows the rolling variance
+    of the loss over minibatches within the run.
+}
     \label{fig:synthetic_training}
   \end{figure}
 
