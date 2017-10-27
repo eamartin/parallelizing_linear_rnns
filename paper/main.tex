@@ -509,15 +509,13 @@ converge most rapidly for all runs. The criterion for convergence was five conse
 minibatches giving 100\% accuracy. The learning curves
 in figure \ref{fig:synthetic_training} give support to this being a reasonable
 convergence criteria.
-For the longest sequence length, we did not observe the CuDDN converging, even after
+For the longest sequence length, we did not observe the CuDNN LSTM converging, even after
 several days' training.
+
 \begin{table}[]
 \centering
-\caption{Performance of the GILR-LSTM compared to the CuDNN-LSTM
-  on problem 2b from \citet{hochreiter1997long}. We see that the GILR-LSTM has a
-  clear advantage in training speed as the sequence length increases.  We did
-  not observe the Cudnn-LSTM converging for the longest task, even after several
-  days.}
+\caption{Performance of the GILR-LSTM compared to the CuDNN LSTM
+  on problem 2b from \citet{hochreiter1997long}. }
 \label{table:synth-table}
 \begin{tabular}{@{}lllllll@{}} \toprule Sequence Length &
 \multicolumn{2}{c}{\textbf{1,024}} & \multicolumn{2}{c}{\textbf{8,192}} &
