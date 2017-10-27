@@ -132,9 +132,9 @@ disadvantages.  RNN model size is often limited by GPU memory size, and running
 a forward and backward pass on a minibatch requires memory linear in the
 minibatch size.  Grouping data into minibatches increases the latency of each
 pass and reduces the rate of optimization steps. Finally, training with larger
-minibatches damages generalization ability \cite{keskar2017large}. It is clearly
-important to investigate if it is possible to parallelise RNN training without
-introducing minibatches. Persistent RNNs \cite{diamos2016persistent} use a novel
+minibatches damages generalization ability \cite{keskar2017large}. Given these
+effects, it is desirable to obtain high training throughput with small minibatches.
+Persistent RNNs \cite{diamos2016persistent} use a novel
 implementation that can achieve high GPU utilization with very small minibatch
 sizes when the recurrent state is larger than 500 elements, but even persistent
 RNNs become limited by the serial evaluation inefficiency at smaller hidden
@@ -155,14 +155,9 @@ typically rely on either an attention mechanism or a (possibly linear) recurrent
 layer to integrate information at scales larger than the filter
 width. Introduction of a recurrent layer prevents full parallelization over the
 sequence length while attention mechanisms are expensive to apply on long
-sequences in online inference use cases.  One dimensional convolution can be
-viewed as a learnable linear finite impulse response (FIR) filter with a
-parallel evaluation algorithm, while linear recurrence is a learnable linear
-infinite impulse response (IIR).\Chris{Seems like an aside - take out?}
+sequences in online inference use cases.
 
-  This work parallelizes evaluation of linear recurrences through application of
-the parallel scan algorithm.
-
+A linear recurrence is a specific instance of a general form of computation known as a scan.
 Scans and reductions are computations involving repeated application of a binary
 operator $\oplus$ over an array of data. Computing the sum or maximum
 of an array is an example of a reduction, while a cumulative sum is a common
@@ -189,23 +184,23 @@ $\odot$ such that $a \otimes (b \otimes c) = (a \odot b) \otimes c$
 
 Considering the familiar operations in linear algebra, we see that the
 associative operation of vector addition
-($\boldsymbol{x} \oplus \boldsymbol{y} = \boldsymbol{x} + \boldsymbol{y}$), the
+($x \oplus y = x + y$), the
 semiassociative operation of matrix-vector multiplication
-($A \otimes \boldsymbol{x} = A\boldsymbol{x}$) and the associative operation of
+($A \otimes x = Ax$) and the associative operation of
 matrix-matrix multiplication ($A \odot B=AB$) satisfy Blelloch's three
 conditions, allowing $h_t = \Lambda_t h_{t-1} + x_t$ to be evaluated in parallel
 over time steps \(t\) for vectors $x_t$ and square matrices $\Lambda_t$.
 
 We investigate this idea further and deliver the following contributions:
 \begin{itemize}
-\item{We classify the RNNs which satisfy the conditions above, and
-    show that many of the RNNs used in practice such as the Quasi-RNN are
+\item{We classify RNNs which satisfy the conditions above, and
+    show that many RNNs used in practice such as Quasi-RNNs (QRNNs) \cite{bradbury2017quasi} are
     contained in this class}
 \item{We provide an implementation of the parallel linear recurrence
     algorithm as a CUDA kernel, and show that it speeds up training of
-    the SRU and QRNN architectures by factors of up to 9x}
+    QRNN and Simple Recurrent Unit (SRU) \cite{lei2017} architectures by factors of up to 9x}
 \item{We describe how several recent linear RNNs can be described as
-    linear surrogates for nonlinear architectures. We introduce a linear
+    linear surrogates for non-linear architectures. We introduce a linear
     surrogate for the LSTM and show that we are able to train it
     with a speedup of 5-10x compared to the CuDNN-LSTM when we use the
     parallel linear recurrence algorithm.}
@@ -245,8 +240,7 @@ algorithm for the interested reader.
 \subsection{Theoretical performance}
 The cost of a serial scan over a sequence of length $T$ is
 $C_\text{sscan} \in \mathcal{O}((C_\otimes + C_\oplus)T)$, compared to the parallel scan cost
-$C_\text{pscan} \in \mathcal{O}(2(C_\odot + C_\otimes + C_\oplus)(T/p + \lg p))$ \cite{blelloch1990prefix},
-where \(p\) is the number of available parallel cores.
+$C_\text{pscan} \in \mathcal{O}(2(C_\odot + C_\otimes + C_\oplus)(T/p + \lg p))$ \cite{blelloch1990prefix} on $p$ processors.
 If $h_t$ is a vector of dimension $n$ then
 $C_\odot \in  \mathcal{O}(n^3), C_\otimes \in \mathcal{O}(n^2), C_\oplus \in \mathcal{O}(n)$ giving
 $C_\text{pscan} \in \mathcal{O}(2(n^3 + n^2 + n)(T/p + \lg p))$ and
@@ -257,9 +251,10 @@ sufficiently large hidden states and lead to a slower algorithm overall.
 To avoid this problem, we will only consider diagonal matrices $\Lambda_t$, in
 which case both matrix-matrix and matrix-vector multiplication have cost
 proportional to $n$ and $C_\text{pscan}\in \mathcal{O}(6n(T/p + \lg p))$ and
-$C_\text{sscan} \in \mathcal{O}(2nT)$. Assuming $p \ll T$, then $C_\text{pscan} \le
-C_\text{sscan}$ when $p \ge 3$.\Chris{Can include the actual speedup
-  factor, \(\alpha = \frac{PT}{3(T + \lg(p))}\).}
+$C_\text{sscan} \in \mathcal{O}(2nT)$. This gives a parallel speedup factor of
+$\frac{pT}{3(T+\lg p)}$. Assuming $p \ll T$, then $C_\text{pscan} \le
+C_\text{sscan}$ when $p \ge 3$.
+
 As we are only considering diagonal matrices,
 we write the linear recurrence as $h_t = \lambda_t \odot h_{t-1} + x_t$
 where $\odot$ indicates elementwise multiplication.
@@ -267,8 +262,7 @@ where $\odot$ indicates elementwise multiplication.
 Limiting $\Lambda_t$ to be diagonal may seem like a severe constraint but there are
 several reasons to do so beyond the unfavorable parallelization performance. Relatively few neural
 network models use separate recurrent matrices for each sequence element and using these
-separate matrices would require potentially prohibitive $n^2T$ memory.\Chris{I can't
-seem to find anyone explicitly saying this before from a quick google.}
+separate matrices would require potentially prohibitive $n^2T$ memory.
 Applying
 the same matrix $\Lambda$ to each sequence element is also unappealing considering that a matrix
 multiplication can be thought of as a rotation and a scaling. The same rotation at every
@@ -290,13 +284,13 @@ to implement schemes such as exponential moving averages or a gating mechanism.
 The backpropagation equations center around a linear recurrence over $\frac{\partial L}{\partial h_t}$ in the reverse order of the original sequence. This allows for parallelizing both the forwards and backwards pass of a linear RNN over the sequence length.
 
 \subsection{Implementation}
-In 2017, GPUs commonly used in deep learning consist of between 640 and 3200
-concurrently executing warps. Each warp operates on 32 single precision floating
+GPUs commonly used for deep learning in 2017 consist of between 640 and 3200 parallel
+processors known as warps. Each warp operates on 32 single precision floating
 point numbers in parallel.
 
 This work implemented parallel linear recurrence as a CUDA kernel with bindings
 into the TensorFlow \cite{abadi2016tensorflow} framework. Each warp acts as a
-processor, which means the algorithmic parallelizability $p$ is up to 3200 and the theoretical
+processor, which means the algorithmic $p$ is up to 3200 and the theoretical
 parallelization speedup factor is up to several hundred.  The 32 lanes of each
 warp work on different elements of the recurrence vector in parallel. These
 implementation details mean that peak performance is only obtained on sequences
@@ -320,7 +314,7 @@ $\tau$. Stacking GILR layers allows for rich non-linear dependence on previous
 events while still taking advantage of fast parallel sequence evaluation.
 
 \subsubsection{Impact on effective "batch size"}
-Consider evaluating an RNN with recurrence $h_t = \sigma(Uh_{t-1} + Vx_t + b)$,
+Consider evaluating an RNN with recurrence $h_t = \sigma(Uh_{t-1} + Vx_t + b)$
 from $m$ inputs to $n$ hidden units on a sequence of length $T$ with minibatch
 size $b$ using a serial evaluation strategy. At each of $T$ iterations, the
 naive approach performs two $(b, m) \times (m, n)$ matrix
@@ -328,8 +322,8 @@ multiplications. Larger matrix multiplications achieve higher throughput due to
 less IO overhead, so the better approach computes $Vx_t$ for all $t$ ahead of
 time in a single $(bT, m) \times (m, n)$ matrix multiply. The non-linear
 recurrence forces even the better approach to perform $T$ potentially small $(b,
-m) \times (m, n)$ matrix multiplications in serial which makes performance
-heavily dependent on minibatch size.
+m) \times (m, n)$ matrix multiplications in serial. This makes serial RNN
+performance heavily dependent on minibatch size.
 
 Now consider the GILR, noting that it has the same two matrix-vector
 multiplications per iteration as the above RNN. The intermediate variables $g$
@@ -338,7 +332,7 @@ matrix multiplication each. Given $g$ and $i$, $h$ can be computed using a
 parallel linear recurrence over $T$ vectors each of $bn$ elements. Rather than
 $T$ small operations, the GILR can be evaluated over all sequence elements with
 two large matrix multiplications and a parallel linear recurrence. GILR performance
-is much less dependent on batch size as the matrix multiplies see an "effective
+is much less dependent on batch size as the matrix multiplication kernel sees an "effective
 batch size" of $bT$ and $T$ is typically large.
 
 \subsection{Linear surrogate RNNs}
@@ -346,8 +340,8 @@ batch size" of $bT$ and $T$ is typically large.
 RNNs learn a transition function $s_t = f(s_{t-1}, x_t)$ which combines previous
 state $s_{t-1}$ with input $x_t$ to compute current state $s_t$. Non-linear $f$
 prevents application of the parallel linear recurrence algorithm and forces slow
-serial evaluation. To work around this inefficiency, note that $s_t$ serves a
-dual purpose. In $s_t = f(s_{t-1}, x_t)$, $s_{t-1}$ serves as an input to $f$
+serial evaluation. To work around this inefficiency, note that $s_t$ serves
+dual purposes. In $s_t = f(s_{t-1}, x_t)$, $s_{t-1}$ serves as an input to $f$
 summarizing the previous inputs while $s_t$ serves as the output of $f$ to be
 passed to other layers of the network. We can decouple these uses and introduce
 independent variables for each purpose: \(s_t\) is passed onto other layers of the network
@@ -355,27 +349,34 @@ and we introduce the linear surrogate \(\tilde{s}_t\) which is passed onto the
 next state, with \(s_t = f(\tilde{s}_{t-1}, x_t)\). We are still able to choose a
 nonlinear \(f\), our only limitation being that \(\tilde{s}_t\) must be linearly
 computable.  We refer to this class of model as a linear surrogate RNN
-(LS-RNN). Quasi-RNNs \cite{bradbury2017quasi} are LS-RNNs using $\tilde{h}_{t-1}
+(LS-RNN). QRNNs \cite{bradbury2017quasi} are LS-RNNs using $\tilde{h}_{t-1}
 = W_k x_{t-k} + ... W_1 x_{t-1}$ and strongly typed
 RNNs\cite{balduzzi2016strongly} are LS-RNNs with $\tilde{h}_t=x_{t-1}$. Although
 not a rule, LS-RNNs can often be parallelized over sequence length with either
 convolution or linear recurrence.
 
-As an example LS-RNN, consider an LSTM:
-\begin{align*} f_t, i_t, o_t &= \sigma(U_{f,i,o} h_{t-1} + V_{f,i,o} x_t +
-b_{f,i,o}) \\ z_t &= \tau(U_z h_{t-1} + V_z x_t + b_z) \\ c_t &= f_t \odot
-c_{t-1} + i_t \odot z_t \\ h_t &= o_t \odot c_t
-\end{align*} An LSTM has state $s_t = (h_t, c_t)$. Since $c_t$ depends only
+Consider an LSTM:
+\begin{align*}
+  f_t, i_t, o_t &= \sigma(U_{f,i,o} h_{t-1} + V_{f,i,o} x_t + b_{f,i,o}) \\
+  z_t &= \tau(U_z h_{t-1} + V_z x_t + b_z) \\
+  c_t &= f_t \odot c_{t-1} + i_t \odot z_t \\
+  h_t &= o_t \odot c_t
+\end{align*}
+An LSTM has state $s_t = (h_t, c_t)$. Since $c_t$ depends only
 linearly on $c_{t-1}$, no surrogate is needed for $c_t$. $h_t$ has a non-linear
 dependence on $h_{t-1}$, so $h_t$ needs a linear surrogate. Introducing a GILR layer as
 the surrogate, we obtain the GILR-LSTM:
-\begin{align*} f_t, i_t, o_t &= \sigma(U_{f,i,o} \tilde{h}_{t-1} + V_{f,i,o} x_t
-+ b_{f,i,o}) \\ z_t &= \tau(U_z \tilde{h}_{t-1} + V_z x_t + b_z) \\ c_t &= f_t
-\odot c_{t-1} + i_t \odot z_t \\ h_t &= o_t \odot c_t \\ g_t &= \sigma(V_g x_t +
-b_g) \\ \tilde{h}_t &= g_t \odot \tilde{h}_{t-1} + (1-g_t)\odot \tau(Wx_t + b_h)
+\begin{align*}
+  g_t &= \sigma(V_g x_t + b_g) \\
+  j_t &= \tau(V_j x_t + b_j) \\
+  \tilde{h}_t &= g_t \odot \tilde{h}_{t-1} + (1-g_t)\odot j_t \\
+  f_t, i_t, o_t &= \sigma(U_{f,i,o} \tilde{h}_{t-1} + V_{f,i,o} x_t + b_{f,i,o}) \\
+  z_t &= \tau(U_z \tilde{h}_{t-1} + V_z x_t + b_z) \\
+  c_t &= f_t \odot c_{t-1} + i_t \odot z_t \\
+  h_t &= o_t \odot c_t \\
 \end{align*}
 
-For $m$ inputs and hidden size $n$, the GILR-LSTM contains $2n(n+m)$ more
+For $m$ inputs and hidden size $n$, a GILR-LSTM contains $2n(n+m)$ more
 parameters than the equivalently sized LSTM to handle the mapping from $x$ to
 $\tilde{h}$. More generally, a LS-RNN contains all of the same parameters as the
 underlying RNN as well as some additional parameters to compute the linear
@@ -384,14 +385,15 @@ surrogate.
 \section{Experiments}
 We perform several experiments, first confirming that our implementation of the
 parallel linear recurrence algorithm is able to achieve higher throughput than a
-similarly implemented serial version of the algorithm. We show that the plr kernel
-is up to 40 times faster than the serial equivalent for long sequence lengths, and
-that this speedup translates to implementations of LS-RNNs such as the QRNN (where
-we can get a speedup of up to 9 times).
+similarly implemented serial version of the algorithm. We show that the parallel kernel
+is up to 40 times faster than the serial equivalent for long sequence lengths and
+that this speedup translates to implementations of LS-RNNs such as QRNN (where
+we can get a speedup of up to 9x).
 
-In order to illustrate that the linearisation does not necessarily come at the
-cost of expressibility, we show that the GILR-LSTM architecture, trained with
-the PLR algorithm, is able to outperform the optimized CuDNN LSTM implementation
+In order to illustrate that the linearization does not necessarily come at the
+cost of expressibility, we show that the GILR-LSTM architecture, computed with
+the parallel linear recurrence algorithm, is able to outperform the optimized CuDNN LSTM
+implementation
 on a pathological example from the original LSTM paper
 \cite{hochreiter1997long}. Finally we show that our GILR-LSTM is able to
 quickly achieve state of the art results on an existing medical data
@@ -403,18 +405,21 @@ evaluating the linear recurrence. For a minibatch comprised of \(b\) sequences
 of length \(T\), we define the number of events as \(bT\) and the throughput as
 the number of events per second. We implement two CUDA kernels, one which
 evaluates the parallel linear recurrence described in algorithm \ref{alg:plr},
-and one which evaluates the linear recurrence using the straightforward serial
-approach. This comparison is performed directly at the kernel level, avoiding
-any overhead due to calling Tensorflow. We find that at long sequence lengths,
-the PLR kernel has a distinct advantage, as shown in table
-\ref{table:kernel-throughput}, with a speedup factor of 40. At short sequence
-lengths, the parallel kernel does not perform well due to the extra overhead
-involved in marshalling the parallel algorithm. \Chris{Important:
-  What's the batch size here? Is it just one sequence? Need to say that}
+and one which evaluates the linear recurrence using the standard serial
+approach (with parallelization over features but not sequence length).
+This comparison is performed directly at the kernel level, avoiding
+any overhead from TensorFlow. We find that the parallel kernel has
+a distinct advantage at long sequence lengths with a speedup factor of up to 40x,
+as shown in table \ref{table:kernel-throughput}.
+At short sequence lengths, the parallel kernel does not perform well due to the
+overhead of multiple passes over data and communication between processors.
 \begin{table}[]
   \centering
-\caption{Speedup of the PLR kernel compared to the SLR kernel, without any
-  overhead from Tensorflow, for various sequence lengths and input size \(m\).}
+  \caption{
+    Speedup of the parallel kernel compared to the serial kernel at various
+    values of $(\text{minibatch size } \mathbf{x} \text{ features}) = m$.
+    Performance was directly measured without any overhead from TensorFlow.
+  }
 \label{table:kernel-throughput}
 \begin{tabular}{@{}llll@{}}
 Sequence Length & \(m=4\)  & \(m=32\) & \(m=128\) \\ \midrule
@@ -425,8 +430,9 @@ Sequence Length & \(m=4\)  & \(m=32\) & \(m=128\) \\ \midrule
 \end{tabular}
 \end{table}
 
-Many of the RNNs that have been recently introduced can be implemented with a
-parallel linear recurrence. Table \ref{table:rnn-throughput} shows the
+Many recently introduced RNNs can be accelerated with the parallel linear recurrence
+algorithm.
+Table \ref{table:rnn-throughput} shows the
 throughput advantage by using a parallel linear recurrence when compared to a
 serial linear recurrence. Since PLR and SLR are simply different methods for
 computing the recurrence, there is no penalty incurred for this speedup - we

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.4.5)  26 OCT 2017 22:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.4.5)  26 OCT 2017 23:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1174,68 +1174,64 @@ ine 103.
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 201.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 196.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 201.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 196.
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 220.
- [2]
-Underfull \vbox (badness 4752) has occurred while \output is active []
-
- [3]
-[4]
+put line 215.
+ [2] [3] [4]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 414.
+               Default added (so using `tbp') on input line 416.
 
-[5] <cudnn_heatmap.png, id=152, 604.1772pt x 500.8311pt>
+[5] <cudnn_heatmap.png, id=150, 604.1772pt x 500.8311pt>
 File: cudnn_heatmap.png Graphic file (type png)
 
 <use cudnn_heatmap.png>
-Package pdftex.def Info: cudnn_heatmap.png used on input line 493.
+Package pdftex.def Info: cudnn_heatmap.png used on input line 499.
 (pdftex.def)             Requested size: 341.43306pt x 283.03888pt.
  [6pdfTeX warning (ext4): destination with the same identifier (name{table.1}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.620 
+l.626 
       pdfTeX warning (ext4): destination with the same identifier (name{figure.
 1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.620 
-      ] <./1k_synthetic.png, id=164, 579.6054pt x 355.5684pt>
+l.626 
+      ] <./1k_synthetic.png, id=163, 579.6054pt x 355.5684pt>
 File: ./1k_synthetic.png Graphic file (type png)
 
 <use ./1k_synthetic.png>
-Package pdftex.def Info: ./1k_synthetic.png used on input line 653.
+Package pdftex.def Info: ./1k_synthetic.png used on input line 659.
 (pdftex.def)             Requested size: 198.7425pt x 121.9225pt.
- <./8k_synthetic.png, id=165, 578.16pt x 397.485pt>
+ <./8k_synthetic.png, id=164, 578.16pt x 397.485pt>
 File: ./8k_synthetic.png Graphic file (type png)
 
 <use ./8k_synthetic.png>
-Package pdftex.def Info: ./8k_synthetic.png used on input line 656.
+Package pdftex.def Info: ./8k_synthetic.png used on input line 662.
 (pdftex.def)             Requested size: 198.7425pt x 136.63513pt.
- <./1m_synthetic.png, id=166, 578.16pt x 397.485pt>
+ <./1m_synthetic.png, id=165, 578.16pt x 397.485pt>
 File: ./1m_synthetic.png Graphic file (type png)
 
 <use ./1m_synthetic.png>
-Package pdftex.def Info: ./1m_synthetic.png used on input line 659.
+Package pdftex.def Info: ./1m_synthetic.png used on input line 665.
 (pdftex.def)             Requested size: 238.49341pt x 163.96458pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 666.
+               Default added (so using `tbp') on input line 672.
 
 
-Overfull \hbox (43.42284pt too wide) in paragraph at lines 675--689
+Overfull \hbox (43.42284pt too wide) in paragraph at lines 681--695
  [][] 
  []
 
@@ -1247,59 +1243,64 @@ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.708 
+l.714 
        <./cudnn_heatmap.png>] [8pdfTeX warning (ext4): destination with the sam
 e identifier (name{figure.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.708 
+l.714 
       pdfTeX warning (ext4): destination with the same identifier (name{table.3
 }) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.708 
+l.714 
        <./1k_synthetic.png> <./8k_synthetic.png> <./1m_synthetic.png>]
 
 LaTeX Warning: Marginpar on page 9 moved.
 
 [9] [10]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 906.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 906.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 912.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 912.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 906.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 906.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 912.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 912.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: F7F5BD905C3AF5DFAF149B21A68CE527;894.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 906.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 912.
  ) 
 Here is how much of TeX's memory you used:
- 20172 strings out of 494953
- 366593 string characters out of 6180978
- 499019 words of memory out of 5000000
- 22847 multiletter control sequences out of 15000+600000
+ 20136 strings out of 494953
+ 365812 string characters out of 6180978
+ 486846 words of memory out of 5000000
+ 22815 multiletter control sequences out of 15000+600000
  40829 words of font info for 152 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  62i,14n,76p,633b,887s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc} </home/emartin/.t
 exmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
-/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 512002 bytes).
+ist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times
+/utmri8a.pfb>
+Output written on main.pdf (10 pages, 517240 bytes).
 PDF statistics:
- 282 PDF objects out of 1000 (max. 8388607)
- 227 compressed objects within 3 object streams
- 65 named destinations out of 1000 (max. 500000)
+ 284 PDF objects out of 1000 (max. 8388607)
+ 228 compressed objects within 3 object streams
+ 61 named destinations out of 1000 (max. 500000)
  21137 words of extra memory for PDF output out of 24883 (max. 10000000)
 
