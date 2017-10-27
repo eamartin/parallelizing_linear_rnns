@@ -64,8 +64,8 @@ show that it can be applied to immediately speed up training and inference of
 several state of the art RNN architectures by up to 9x.  We abstract recent work
 on linear RNNs into a new framework of linear surrogate RNNs and develop a
 linear surrogate model for the long short-term memory unit, the GILR-LSTM, that
-utilizies parallel linear recurrence.  We extend sequence learning to new
-extremely-long-timestep regimes that were previously out of reach by
+utilizes parallel linear recurrence.  We extend sequence learning to new
+extremely long sequence regimes that were previously out of reach by
 successfully training a GILR-LSTM on a synthetic sequence classification task
 with a one million timestep dependency.
 \end{abstract}
@@ -346,7 +346,7 @@ surrogate.
 
 \section{Experiments}
 We perform several experiments. First we find that our parallel linear recurrence
-kernel is able to able to achieve up to 40x higher throughput than a serial implementation
+kernel is able to achieve up to 40x higher throughput than a serial implementation
 when applied to long sequences. Secondly, we confirm that this kernel speedup
 translates to up to a 9x speedup to LS-RNNs such as QRNNs.
 
@@ -355,9 +355,6 @@ cost of expressibility, we show that the GILR-LSTM architecture computed with
 the parallel linear recurrence algorithm is able to train significantly faster
 than an optimized LSTM implementation on a pathological long-term dependency
 problem from the original LSTM paper \citep{hochreiter1997long}.
-Finally we show that the GILR-LSTM is able to
-quickly achieve state of the art results on an existing medical data
-set. 
 
 \subsection{Throughput benchmarks}
 
@@ -521,7 +518,7 @@ several days' training.
   clear advantage in training speed as the sequence length increases.  We did
   not observe the Cudnn-LSTM converging for the longest task, even after several
   days.}
-\label{my-label}
+\label{table:synth-table}
 \begin{tabular}{@{}lllllll@{}} \toprule Sequence Length &
 \multicolumn{2}{c}{\textbf{1,024}} & \multicolumn{2}{c}{\textbf{8,192}} &
 \multicolumn{2}{c}{\textbf{1,048,576}} \\ \midrule &CuDNN& GILR &
@@ -538,14 +535,16 @@ CuDNN &GILR&CuDNN&GILR\\ \cmidrule(l){2-7} Iterations (1000s) &
 \end{tabular}
 \end{table}
 
-The results illustrate that the GILR-LSTM is able to converge between 6 and 10
+The results as show in table \ref{synth-table} illustrate that the GILR-LSTM is able to converge between 6 and 10
 times faster than the CuDNN-LSTM. This is somewhat surprising
 given the LSTM was specifically constructed for problems of this sort, and the
-CuDNN-LSTM is a highly-optimised implementation of the LSTM (to the extent that
-the monolithic interface it exposes is difficult to understand or extend). The
-GILR-LSTM is written almost entirely in native tensorflow, with only the call to
-the linear recurrence kernel activating an outside hook. This GILR-LSTM
-convergence leads to the conclusion that the non-linearities present in LSTM are
+CuDNN LSTM implementation is highly optimized (to the extent that
+the monolithic interface it exposes is difficult to modify or extend). The
+GILR-LSTM is implemented entirely in standard TensorFlow with the exception of
+the call to new linear recurrence kernel in place of a TensorFlow symbolic
+loop.
+Convergence of the GILR-LSTM models
+leads to the conclusion that the non-linearities present in LSTM are
 not necessary for solving this instance of the long-term dependency problem.
 The time to convergence further leads to the conclusion that inclusion of a
 non-linearity at every step incurs a significant training time slowdown.
@@ -572,7 +571,7 @@ networks to date.
     in a sliding window around each learning curve to illustrate this.}
     \label{fig:synthetic_training}
   \end{figure}
-  
+
 % \subsection{Abnormal heart sound detection - will probably be cut :'(}
 % Medical waveform data consists of long sequences and is a reasonable application area for RNNs.
 % We applied the GILR-LSTM
@@ -612,9 +611,9 @@ networks to date.
 %   this section}
 
 \section{Conclusion}
-A significant portion of the success of deep learning can be attributed to massive
+A significant portion of the success of deep learning can be attributed to access to massive
 amounts of computation. Most of this computation is accessed through two
-building blocks with highly efficient parallel implementations:
+highly efficient and parallelizable building blocks:
 matrix multiplication and convolution. Recent research has demonstrated that
 linear RNNs can achieve similar prediction accuracy to non-linear RNNs on a wide
 variety of tasks in a fraction of the training time. We propose the framework of
