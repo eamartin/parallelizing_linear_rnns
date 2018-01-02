@@ -553,19 +553,18 @@ networks to date.
 \begin{figure}
   \centering
   \begin{minipage}{0.5\textwidth}
-    \includegraphics[width=1.0\textwidth]{./1k_synthetic_new.png}
+    \includegraphics[width=1.0\textwidth]{./between_chain_plots/1k_20_smoothing.png}
   \end{minipage}%
     \begin{minipage}{0.5\textwidth}
-    \includegraphics[width=1.0\textwidth]{./8k_synthetic_new.png}
+    \includegraphics[width=1.0\textwidth]{./between_chain_plots/8k_5_smoothing.png}
   \end{minipage}
   \begin{minipage}{0.5\textwidth}
-    \includegraphics[width=1.0\textwidth]{./1m_synthetic_new.png}
+    \includegraphics[width=1.0\textwidth]{./between_chain_plots/1m_20_smoothing.png}
   \end{minipage}
   \caption{Learning curves for GILR-LSTM and CuDNN LSTM architectures for various
-    sequence lengths. Each plot includes learning curves from multiple independent
-    runs. The shaded area around each learning curve shows the rolling variance
-    of the loss over minibatches within the run.
-}
+    sequence lengths. Each plot shows the moving mean and standard deviation of
+    classification accuracy over five training runs, with the exception of a single
+    run for CuDNN LSTM on 1 million sequence length.}
     \label{fig:synthetic_training}
   \end{figure}
 
