@@ -2,7 +2,7 @@
 \usepackage{iclr2018_conference,times}
 \bibliographystyle{natbib}
 
-%\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -256,6 +256,9 @@ parallelization speedup factor is up to several hundred.  The 32 lanes of each
 warp work on different elements of the recurrence vector in parallel. These
 implementation details mean that peak performance is only obtained on sequences
 of at least several thousand steps on at least a 32 element vector.
+
+The parallel linear recurrence CUDA kernel and TensorFlow bindings are
+available at \url{https://github.com/eamartin/parallelizing_linear_rnns} .
 
 \section{Models}
 Parallel linear recurrence can be used to construct a wide variety of differentiable modules that can be evaluated in parallel. Common applications of linear recurrence include gating schemes and exponential moving averages. Although linear recurrence values can depend only linearly on previous elements, the stacking of linear recurrent layers separated by non-linearities allows for a non-linear dependence on the past. In this sense the non-linear depth of a linear recurrent network is the number of layers and not the sequence length.
@@ -626,9 +629,8 @@ We hope that parallel linear recurrence can be to large scale sequence
 modelling what fast convolution algorithms are to image recognition.
 
 \subsubsection*{Acknowledgments}
-Acknowledgements removed for anonymous submission.
-%We would like to acknowledge Kevin Bowers, Alex Meiburg, JD Co-Reyes, Carson
-%McNeil, Andy Palan, and several others for fruitful conversations and guidance.
+We would like to acknowledge Kevin Bowers, Alex Meiburg, JD Co-Reyes, Carson
+McNeil, Andy Palan, and several others for fruitful conversations and guidance.
 
 \begin{thebibliography}{19}
 \providecommand{\natexlab}[1]{#1}
