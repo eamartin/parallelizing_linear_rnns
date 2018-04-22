@@ -106,9 +106,7 @@ dependency.
 %----------------------------------------------------------------------------------------
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
-
 \begin{block}{Background}
-
 Large minibatches are necessary for computational performance but create large memory
 requirements and may damage model generalization ability.
 
@@ -118,9 +116,17 @@ have achieved state of the art results on many sequential tasks with rapid train
 
 Given $x_t$, $\lambda_t$ can compute $h_t=\lambda_t h_{t-1} + x_t$ for $t=1\ldots T$ on $p$
 processors in $O(T/p + \log(p))$ with the classic parallel scan algorithm.
+\end{block}
 
-This statement requires citation \cite{Smith:2012qr}.
 
+\begin{block}{Gated Impulse Linear Recurrence}
+We designed a recurrent layer that can take maximium advantage of parallel linear recurrence??
+
+\begin{align*}
+g_t &= \sigma(Ux_t + b_g) \\
+i_t &= \tau(Vx_t + b_z) \\
+h_t &= g_t \odot h_{t-1} + (1-g_t)\odot i_t
+\end{align*}
 \end{block}
 
 %------------------------------------------------
@@ -146,25 +152,18 @@ This statement requires citation \cite{Smith:2012qr}.
 %	MATERIALS
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Materials}
+\begin{block}{Linear Surrogate RNNs}
 
-The following materials were required to complete the research:
+RNNs have a transition function $s_t = f(s_{t-1},x_t)$. $s_t$ serves dual roles as a
+summary of the past as well as the output of the unit. Non-linear $f$ in units such
+as vanilla RNN and LSTM prevents parallelization over sequence length.
 
-\begin{itemize}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\item Eu facilisis est tempus quis
-\end{itemize}
+Replacing the summary of the past $s_{t-1}$ with a linear surrogate $\tilde{s}_{t-1}$
+allows the easy adaption of any existing RNN architecture for parallel computation.
 
-The materials were prepared according to the steps outlined below:
-
-\begin{enumerate}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\item Curabitur pellentesque dignissim
-\end{enumerate}
+The state of an LSTM consists of $(c_t, h_t)$. $c_t$ is already computed
+by linear recurrence, so a linear surrogate LSTM must only compute a
+linear $\tilde{h}_t$. We let $h = \text{GILR}(x)$ and call it a GILR-LSTM.
 
 \end{block}
 
@@ -178,7 +177,7 @@ The materials were prepared according to the steps outlined below:
 %	METHODS
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Methods}
+\begin{block}{Scan diagram and complexity??}
 
 Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed laoreet accumsan mattis. Integer sapien tellus, auctor ac blandit eget, sollicitudin vitae lorem. Praesent dictum tempor pulvinar. Suspendisse potenti. Sed tincidunt varius ipsum, et porta nulla suscipit et. Etiam congue bibendum felis, ac dictum augue cursus a. \textbf{Donec} magna eros, iaculis sit amet placerat quis, laoreet id est. In ut orci purus, interdum ornare nibh. Pellentesque pulvinar, nibh ac malesuada accumsan, urna nunc convallis tortor, ac vehicula nulla tellus eget nulla. Nullam lectus tortor, \textit{consequat tempor hendrerit} quis, vestibulum in diam. Maecenas sed diam augue.
 
@@ -194,7 +193,7 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed laoreet ac
 %	IMPORTANT RESULT
 %----------------------------------------------------------------------------------------
 
-\begin{alertblock}{Important Result}
+\begin{alertblock}{Important Result (???)}
 
 Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo molestie porta. Sed ultrices scelerisque sapien ac commodo. Donec ut volutpat elit.
 
