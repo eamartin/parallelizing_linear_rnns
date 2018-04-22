@@ -91,25 +91,33 @@
 %	OBJECTIVES
 %----------------------------------------------------------------------------------------
 
-\begin{alertblock}{Objectives}
-
-Lorem ipsum dolor sit amet, consectetur, nunc tellus pulvinar tortor, commodo eleifend risus arcu sed odio:
-\begin{itemize}
-\item Mollis dignissim, magna augue tincidunt dolor, interdum vestibulum urna
-\item Sed aliquet luctus lectus, eget aliquet leo ullamcorper consequat. Vivamus eros sem, iaculis ut euismod non, sollicitudin vel orci.
-\item Nascetur ridiculus mus.
-\item Euismod non erat. Nam ultricies pellentesque nunc, ultrices volutpat nisl ultrices a.
-\end{itemize}
-
+\begin{alertblock}{Abstract}
+RNN training and inference generally takes time linear in the sequence length because
+of non-linear sequential dependencies.
+We show the training and inference of RNNs with only linear
+sequential dependencies can be parallelized over the sequence length using the
+parallel scan algorithm, leading to rapid training on long sequences even with
+small minibatch size. We use this insight and a parallel linear recurrence CUDA
+kernel to accelerate several state of the art RNN architectures by up to 9x and
+to solve a synthetic sequence classification task with a one million timestep
+dependency.
 \end{alertblock}
 
 %----------------------------------------------------------------------------------------
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Introduction}
+\begin{block}{Background}
 
-Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo molestie porta. Sed ultrices scelerisque sapien ac commodo. Donec ut volutpat elit. Sed laoreet accumsan mattis. Integer sapien tellus, auctor ac blandit eget, sollicitudin vitae lorem. Praesent dictum tempor pulvinar. Suspendisse potenti. Sed tincidunt varius ipsum, et porta nulla suscipit et. Etiam congue bibendum felis, ac dictum augue cursus a. \textbf{Donec} magna eros, iaculis sit amet placerat quis, laoreet id est. In ut orci purus, interdum ornare nibh. Pellentesque pulvinar, nibh ac malesuada accumsan, urna nunc convallis tortor, ac vehicula nulla tellus eget nulla. Nullam lectus tortor, \textit{consequat tempor hendrerit} quis, vestibulum in diam. Maecenas sed diam augue.
+Large minibatches are necessary for computational performance but create large memory
+requirements and may damage model generalization ability.
+
+Linear RNNs and convolutional models such as strongly typed RNNs, Wavenet, Bytenet,
+quasi-RNNs, and simple recurrent units
+have achieved state of the art results on many sequential tasks with rapid training times.
+
+Given $x_t$, $\lambda_t$ can compute $h_t=\lambda_t h_{t-1} + x_t$ for $t=1\ldots T$ on $p$
+processors in $O(T/p + \log(p))$ with the classic parallel scan algorithm.
 
 This statement requires citation \cite{Smith:2012qr}.
 
@@ -118,8 +126,8 @@ This statement requires citation \cite{Smith:2012qr}.
 %------------------------------------------------
 
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{placeholder.jpg}
-\caption{Figure caption}
+\includegraphics[width=1.0\linewidth]{cumsum.png}
+\caption{Parallel cumulative sum example}
 \end{figure}
 
 %----------------------------------------------------------------------------------------
