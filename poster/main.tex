@@ -209,27 +209,20 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo mo
 %	MATHEMATICAL SECTION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Mathematical Section}
+\begin{block}{Beating CuDNN: Synthetic Data}
 
-Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sollicitudin. Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sollicitudin.
-
-\begin{equation}
-E = mc^{2}
-\label{eqn:Einstein}
-\end{equation}
-
-Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sollicitudin. Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sollicitudin.
-
-\begin{equation}
-\cos^3 \theta =\frac{1}{4}\cos\theta+\frac{3}{4}\cos 3\theta
-\label{eq:refname}
-\end{equation}
-
-Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sollicitudin. Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sollicitudin.
-
-\begin{equation}
-\kappa =\frac{\xi}{E_{\mathrm{max}}} %\mathbb{ZNR}
-\end{equation}
+  We tested the GILR-LSTM by comparing to the CuDNN LSTM implementation
+  on a synthetic memorisation task (problem 2b from %\citet{hochreiter1997long}. )
+  We compared the performance on variants with different values of
+  \(n\).  We obtained speedups of over 6x measured in wall clock time to
+  convergence.  Further, the GILR-LSTM attained convergence
+  when the time dependence of the problem had a length of \textbf{one  million time steps}.
+  
+ \vspace{2em}
+\begin{figure}
+\includegraphics[width=1.0\linewidth]{8k_for_poster.png}
+\caption{Accuracy on the memorisation task with 8,192 sequence length}
+\end{figure}
 
 \end{block}
 
@@ -243,30 +236,54 @@ Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sol
 %	RESULTS
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Results}
+\begin{block}{Accelerating existing linear RNNs}
+  We implemented several recent linear RNNs with the parallel linear
+  recurrence kernel, as well as a variant with purely serial evaluation.
+  We were able to obtain significant speedups with parallel evaluation
+  in all the architectures at longer sequence lengths.
 
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{placeholder.jpg}
-\caption{Figure caption}
-\end{figure}
+  Since the parallel kernel computes the exact same result as the
+  serial kernel, we obtain this speedup with no tradeoff in terms of
+  reduced accuracy or precision.
 
-Nunc tempus venenatis facilisis. Curabitur suscipit consequat eros non porttitor. Sed a massa dolor, id ornare enim:
+  [Can be cut if no space]
+  We used two stacked RNN layers with 256 hidden
+  units, keeping the GPU memory usage constant by fixing $bT = 65,536$
+  for minibatch size $b$ and sequence length $T$. QRNN(2) refers to a
+  QRNN with filter size 2. %\citep{bradbury2017quasi}
 
-\begin{table}
-\vspace{2ex}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
+\begin{table}[t]
+  \vspace{2ex}
+  \caption{Parallel kernel speedup for a variety of LS-RNNs.}
+\begin{center}
+\begin{tabular}{lrrrr}
+\label{table:rnn-throughput}
+\small{Seq.\ Len.} & \small{SRU} & \small{QRNN(2)}
+  & \small{QRNN(10)} & \small{GILR-LSTM}\\ \midrule
+16 & 0.28 & 0.38 & 0.78 & 0.61\\
+256 & 0.84 & 0.86 & 0.99 & 0.91\\
+4,096 & 1.38 & 1.18 & 1.05 & 0.98\\
+65,536 & 9.21 & 6.68 & 2.05 & 1.41\\ \bottomrule
 \end{tabular}
-\caption{Table caption}
+\end{center}
 \end{table}
-
 \end{block}
+
+% \begin{table}
+% \vspace{2ex}
+% \begin{tabular}{l l l}
+% \toprule
+% \textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
+% \midrule
+% Treatment 1 & 0.0003262 & 0.562 \\
+% Treatment 2 & 0.0015681 & 0.910 \\
+% Treatment 3 & 0.0009271 & 0.296 \\
+% \bottomrule
+% \end{tabular}
+% \caption{Table caption}
+% \end{table}
+
+% \end{block}
 
 %----------------------------------------------------------------------------------------
 
