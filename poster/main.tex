@@ -166,7 +166,7 @@ as vanilla RNN and LSTM prevents parallelization over sequence length.
 
 Replacing the summary of the past $s_{t-1}$ with a linear surrogate $\tilde{s}_{t-1}$
 allows the easy adaption of any existing RNN architecture for parallel computation.
-Several existing RNNs can be viewed as linear surrogate RNNs.
+Several recent linear RNNs can be viewed as linear surrogate RNNs.
 \vspace{1ex}
 
 The state of an LSTM consists of $(c_t, h_t)$. $c_t$ is already computed
@@ -180,12 +180,7 @@ linear $\tilde{h}_t$. A \textbf{GILR-LSTM} uses $\tilde{h} = \text{GILR}(x)$
 %	MATHEMATICAL SECTION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Accelerating Existing Linear Surrogate RNNs}
-We compare the performance of several recent linear RNNs
-implemented with the parallel linear recurrence kernel against
-a baseline serial linear recurrence kernel.
-
-\vspace{1ex}
+\begin{block}{Training Runtime Results}
 \begin{table}[t]
 \begin{center}
 \begin{tabular}{lrrrr}
@@ -199,7 +194,8 @@ a baseline serial linear recurrence kernel.
 \end{tabular}
 \end{center}
 \vspace{2ex}
-\caption{Parallel kernel speedup for a variety of LS-RNNs.   All models use two stacked RNN layers with 256 hidden
+\caption{Parallel kernel speedup compared to serial linear recurrence for a variety of LS-RNNs
+  All models use two stacked RNN layers with 256 hidden
   units, keeping the GPU memory usage constant by fixing $bT = 65,536$
   for minibatch size $b$ and sequence length $T$. QRNN($k$) refers to a
   QRNN with filter size $k$. %\citep{bradbury2017quasi}
@@ -211,7 +207,9 @@ a baseline serial linear recurrence kernel.
 \vspace{-1ex}
 \begin{figure}
 \includegraphics[width=0.9\linewidth]{cudnn_heatmap_gilr.png}
-\caption{Throughput (thousand steps/s) for same sized LSTM and GILR-LSTM}
+\caption{Throughput (thousand steps/s) for 2 layer 256 unit cuDNN LSTM and GILR-LSTM as
+a function of batch size and sequence length. LSTM throughput is independent of sequence
+length. GILR-LSTM can achieve much greater throughput at small batch sizes.}
 \end{figure}
 
 
@@ -271,20 +269,6 @@ Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non 
 
 \end{block}
 
-%----------------------------------------------------------------------------------------
-%	ADDITIONAL INFORMATION
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Additional Information}
-
-Maecenas ultricies feugiat velit non mattis. Fusce tempus arcu id ligula varius dictum.
-\begin{itemize}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\end{itemize}
-
-\end{block}
 
 %----------------------------------------------------------------------------------------
 %	REFERENCES
@@ -303,12 +287,6 @@ Maecenas ultricies feugiat velit non mattis. Fusce tempus arcu id ligula varius 
 %----------------------------------------------------------------------------------------
 
 \setbeamercolor{block title}{fg=red,bg=white} % Change the block title color
-
-\begin{block}{Acknowledgements}
-
-\small{\rmfamily{Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.}} \\
-
-\end{block}
 
 %----------------------------------------------------------------------------------------
 %	CONTACT INFORMATION
