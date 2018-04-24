@@ -49,8 +49,8 @@
 \setlength{\paperwidth}{48in} % A0 width: 46.8in
 \setlength{\paperheight}{36in} % A0 height: 33.1in
 \setlength{\sepwid}{0.024\paperwidth} % Separation width (white space) between columns
-\setlength{\onecolwid}{0.22\paperwidth} % Width of one column
-\setlength{\twocolwid}{0.464\paperwidth} % Width of two columns
+\setlength{\onecolwid}{0.30\paperwidth} % Width of one column
+\setlength{\twocolwid}{0.624\paperwidth} % Width of two columns
 \setlength{\threecolwid}{0.708\paperwidth} % Width of three columns
 \setlength{\topmargin}{-0.5in} % Reduce the top margin size
 %-----------------------------------------------------------
@@ -111,7 +111,7 @@ Large minibatches are necessary for computational performance but create large m
 requirements and may damage model generalization ability.
 
 Linear RNNs and convolutional models such as strongly typed RNNs, Wavenet, Bytenet,
-quasi-RNNs, and simple recurrent units
+Quasi-RNNs, and simple recurrent units
 have achieved state of the art results on many sequential tasks with rapid training times.
 
 Given $x_t$, $\lambda_t$ can compute $h_t=\lambda_t h_{t-1} + x_t$ for $t=1\ldots T$ on $p$
@@ -143,11 +143,7 @@ h_t &= g_t \odot h_{t-1} + (1-g_t)\odot i_t
 
 \begin{column}{\sepwid}\end{column} % Empty spacer column
 
-\begin{column}{\twocolwid} % Begin a column which is two columns wide (column 2)
-
-\begin{columns}[t,totalwidth=\twocolwid] % Split up the two columns wide column
-
-\begin{column}{\onecolwid}\vspace{-.6in} % The first column within column 2 (column 2.1)
+\begin{column}{\onecolwid} % Begin a column which is two columns wide (column 2)
 
 %----------------------------------------------------------------------------------------
 %	MATERIALS
@@ -170,42 +166,6 @@ linear $\tilde{h}_t$. We let $h = \text{GILR}(x)$ and call it a GILR-LSTM.
 
 %----------------------------------------------------------------------------------------
 
-\end{column} % End of column 2.1
-
-\begin{column}{\onecolwid}\vspace{-.6in} % The second column within column 2 (column 2.2)
-
-%----------------------------------------------------------------------------------------
-%	METHODS
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Scan diagram and complexity??}
-
-Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed laoreet accumsan mattis. Integer sapien tellus, auctor ac blandit eget, sollicitudin vitae lorem. Praesent dictum tempor pulvinar. Suspendisse potenti. Sed tincidunt varius ipsum, et porta nulla suscipit et. Etiam congue bibendum felis, ac dictum augue cursus a. \textbf{Donec} magna eros, iaculis sit amet placerat quis, laoreet id est. In ut orci purus, interdum ornare nibh. Pellentesque pulvinar, nibh ac malesuada accumsan, urna nunc convallis tortor, ac vehicula nulla tellus eget nulla. Nullam lectus tortor, \textit{consequat tempor hendrerit} quis, vestibulum in diam. Maecenas sed diam augue.
-
-\end{block}
-
-%----------------------------------------------------------------------------------------
-
-\end{column} % End of column 2.2
-
-\end{columns} % End of the split of column 2 - any content after this will now take up 2 columns width
-
-%----------------------------------------------------------------------------------------
-%	IMPORTANT RESULT
-%----------------------------------------------------------------------------------------
-
-\begin{alertblock}{Important Result (???)}
-
-Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo molestie porta. Sed ultrices scelerisque sapien ac commodo. Donec ut volutpat elit.
-
-\end{alertblock}
-
-%----------------------------------------------------------------------------------------
-
-\begin{columns}[t,totalwidth=\twocolwid] % Split up the two columns wide column again
-
-\begin{column}{\onecolwid} % The first column within column 2 (column 2.1)
-
 %----------------------------------------------------------------------------------------
 %	MATHEMATICAL SECTION
 %----------------------------------------------------------------------------------------
@@ -227,8 +187,6 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo mo
   QRNN with filter size 2. %\citep{bradbury2017quasi}
 
 \begin{table}[t]
-  \vspace{2ex}
-  \caption{Parallel kernel speedup for a variety of LS-RNNs.}
 \begin{center}
 \begin{tabular}{lrrrr}
 \label{table:rnn-throughput}
@@ -240,14 +198,15 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo mo
 65,536 & 9.21 & 6.68 & 2.05 & 1.41\\ \bottomrule
 \end{tabular}
 \end{center}
+\vspace{2ex}
+\caption{Parallel kernel speedup for a variety of LS-RNNs.}
 \end{table}
 \end{block}
 
 %----------------------------------------------------------------------------------------
 
-\end{column} % End of column 2.1
 
-\begin{column}{\onecolwid} % The second column within column 2 (column 2.2)
+
 
 %----------------------------------------------------------------------------------------
 %	RESULTS
@@ -270,6 +229,7 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo mo
 
 \end{block}
 
+\end{column} % End of column 2.1
 
 % \begin{table}
 % \vspace{2ex}
@@ -288,12 +248,6 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo mo
 % \end{block}
 
 %----------------------------------------------------------------------------------------
-
-\end{column} % End of column 2.2
-
-\end{columns} % End of the split of column 2
-
-\end{column} % End of the second column
 
 \begin{column}{\sepwid}\end{column} % Empty spacer column
 

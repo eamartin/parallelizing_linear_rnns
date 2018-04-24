@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.27)  23 APR 2018 22:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.27)  23 APR 2018 22:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1217,36 +1217,36 @@ LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <17.86> not available
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <12.50194> not available
 (Font)              size <12> substituted on input line 74.
 
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 380.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 334.
 (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Calculating math sizes for size <37.03> on input line 380.
+LaTeX Font Info:    Calculating math sizes for size <37.03> on input line 334.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <37.03> not available
-(Font)              size <24.88> substituted on input line 380.
+(Font)              size <24.88> substituted on input line 334.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <25.92088> not available
-(Font)              size <24.88> substituted on input line 380.
+(Font)              size <24.88> substituted on input line 334.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <18.515> not available
-(Font)              size <17.28> substituted on input line 380.
+(Font)              size <17.28> substituted on input line 334.
 
 <cumsum.png, id=15, 1527.7075pt x 334.24875pt>
 File: cumsum.png Graphic file (type png)
  <use cumsum.png>
-Package pdftex.def Info: cumsum.png used on input line 380.
-(pdftex.def)             Requested size: 763.17543pt x 166.97604pt.
+Package pdftex.def Info: cumsum.png used on input line 334.
+(pdftex.def)             Requested size: 1040.69858pt x 227.70435pt.
 
 <8k_for_poster.png, id=17, 1220.6403pt x 643.9257pt>
 File: 8k_for_poster.png Graphic file (type png)
  <use 8k_for_poster.png>
-Package pdftex.def Info: 8k_for_poster.png used on input line 380.
-(pdftex.def)             Requested size: 763.17543pt x 402.59996pt.
-LaTeX Font Info:    Try loading font information for TS1+lmss on input line 380
+Package pdftex.def Info: 8k_for_poster.png used on input line 334.
+(pdftex.def)             Requested size: 1040.69858pt x 548.99994pt.
+LaTeX Font Info:    Try loading font information for TS1+lmss on input line 334
 .
 
 (/usr/share/texmf/tex/latex/lm/ts1lmss.fd
@@ -1256,16 +1256,14 @@ No file main.bbl.
 <logo.png, id=20, 1401.235pt x 521.95pt>
 File: logo.png Graphic file (type png)
  <use logo.png>
-Package pdftex.def Info: logo.png used on input line 380.
-(pdftex.def)             Requested size: 305.2655pt x 113.70638pt.
+Package pdftex.def Info: logo.png used on input line 334.
+(pdftex.def)             Requested size: 416.27307pt x 155.05705pt.
 File: logo.png Graphic file (type png)
  <use logo.png>
-Package pdftex.def Info: logo.png used on input line 380.
-(pdftex.def)             Requested size: 305.2655pt x 113.70638pt.
+Package pdftex.def Info: logo.png used on input line 334.
+(pdftex.def)             Requested size: 416.27307pt x 155.05705pt.
 
-Overfull \hbox (4.99402pt too wide) detected at line 380
-[][][] [][][][][][][][][] [][][][][][][][][] [][][][][][][][][] [][][][][][][][
-][] [][][][][][][][][] [][][][][][][] 
+Overfull \vbox (517.6413pt too high) detected at line 334
  []
 
 
@@ -1285,11 +1283,11 @@ Overfull \hbox (88.20334pt too wide) has occurred while \output is active
 \tf@snm=\write8
 \openout8 = `main.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 382.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 382.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 336.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 336.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 382.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 382.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 336.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 336.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1297,19 +1295,16 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 12.15pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 382.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 336.
  ) 
 Here is how much of TeX's memory you used:
- 22020 strings out of 494953
- 430107 string characters out of 6180977
- 602390 words of memory out of 5000000
- 24756 multiletter control sequences out of 15000+600000
+ 22018 strings out of 494953
+ 430064 string characters out of 6180977
+ 578448 words of memory out of 5000000
+ 24754 multiletter control sequences out of 15000+600000
  78078 words of font info for 68 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 52i,16n,66p,683b,1435s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 52i,16n,66p,384b,1254s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/d
 vips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/shar
 e/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
@@ -1318,7 +1313,7 @@ onts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.p
 fb></usr/share/texmf/fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/t
 ype1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb>
 </usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on main.pdf (1 page, 285607 bytes).
+Output written on main.pdf (1 page, 282762 bytes).
 PDF statistics:
  72 PDF objects out of 1000 (max. 8388607)
  48 compressed objects within 1 object stream
