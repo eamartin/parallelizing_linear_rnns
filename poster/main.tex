@@ -118,6 +118,14 @@ Given $x_t$, $\lambda_t$ can compute $h_t=\lambda_t h_{t-1} + x_t$ for $t=1\ldot
 processors in $O(T/p + \log(p))$ with the classic parallel scan algorithm.
 \end{block}
 
+%------------------------------------------------
+
+\begin{figure}
+\includegraphics[width=1.0\linewidth]{cumsum.png}
+\caption{Parallel cumulative sum example}
+\end{figure}
+
+%------------------------------------------------
 
 \begin{block}{Gated Impulse Linear Recurrence}
 We designed a recurrent layer that can take maximium advantage of parallel linear recurrence??
@@ -128,13 +136,6 @@ i_t &= \tau(Vx_t + b_z) \\
 h_t &= g_t \odot h_{t-1} + (1-g_t)\odot i_t
 \end{align*}
 \end{block}
-
-%------------------------------------------------
-
-\begin{figure}
-\includegraphics[width=1.0\linewidth]{cumsum.png}
-\caption{Parallel cumulative sum example}
-\end{figure}
 
 %----------------------------------------------------------------------------------------
 
@@ -209,34 +210,7 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo mo
 %	MATHEMATICAL SECTION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Beating CuDNN: Synthetic Data}
-
-  We tested the GILR-LSTM by comparing to the CuDNN LSTM implementation
-  on a synthetic memorisation task (problem 2b from %\citet{hochreiter1997long}. )
-  We compared the performance on variants with different values of
-  \(n\).  We obtained speedups of over 6x measured in wall clock time to
-  convergence.  Further, the GILR-LSTM attained convergence
-  when the time dependence of the problem had a length of \textbf{one  million time steps}.
-  
- \vspace{2em}
-\begin{figure}
-\includegraphics[width=1.0\linewidth]{8k_for_poster.png}
-\caption{Accuracy on the memorisation task with 8,192 sequence length}
-\end{figure}
-
-\end{block}
-
-%----------------------------------------------------------------------------------------
-
-\end{column} % End of column 2.1
-
-\begin{column}{\onecolwid} % The second column within column 2 (column 2.2)
-
-%----------------------------------------------------------------------------------------
-%	RESULTS
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Accelerating existing linear RNNs}
+\begin{block}{Accelerating Existing Models}
   We implemented several recent linear RNNs with the parallel linear
   recurrence kernel, as well as a variant with purely serial evaluation.
   We were able to obtain significant speedups with parallel evaluation
@@ -268,6 +242,34 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo mo
 \end{center}
 \end{table}
 \end{block}
+
+%----------------------------------------------------------------------------------------
+
+\end{column} % End of column 2.1
+
+\begin{column}{\onecolwid} % The second column within column 2 (column 2.2)
+
+%----------------------------------------------------------------------------------------
+%	RESULTS
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Synthetic Long-Term Dependency}
+
+  We tested the GILR-LSTM by comparing to the CuDNN LSTM implementation
+  on a synthetic memorisation task (problem 2b from %\citet{hochreiter1997long}. )
+  We compared the performance on variants with different values of
+  \(n\).  We obtained speedups of over 6x measured in wall clock time to
+  convergence.  Further, the GILR-LSTM attained convergence
+  when the time dependence of the problem had a length of \textbf{one  million time steps}.
+
+ \vspace{2em}
+\begin{figure}
+\includegraphics[width=1.0\linewidth]{8k_for_poster.png}
+\caption{Accuracy on the memorisation task with 8,192 sequence length}
+\end{figure}
+
+\end{block}
+
 
 % \begin{table}
 % \vspace{2ex}
