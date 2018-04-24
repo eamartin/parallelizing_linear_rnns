@@ -67,7 +67,7 @@
 
 \author{Eric Martin and Chris Cundy} % Author(s)
 
-\institute{Fill in institutes} % Institution(s)
+\institute{FILL IN INSTITUTES} % Institution(s)
 
 %----------------------------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ dependency.
 %----------------------------------------------------------------------------------------
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
-\begin{block}{Background}
+\begin{block}{Introduction}
 Large minibatches are necessary for computational performance but create large memory
 requirements and damage model generalization ability.
 
@@ -120,16 +120,15 @@ have achieved state of the art results on many sequential tasks with rapid train
 
 Given $x_t$, $\lambda_t$ can compute $h_t=\lambda_t h_{t-1} + x_t$ for $t=1\ldots T$ on $p$
 processors in $O(T/p + \log(p))$ with the classic parallel scan algorithm. Backpropagation
-of gradient can also be parallelized with the same algorithm.
+of gradient can also be parallelized with the same algorithm. We implemented a parallel linear
+recurrence operation in CUDA and integrated it with TensorFlow.
 \end{block}
-
-\vspace{2ex}
 
 %------------------------------------------------
 
 \begin{figure}
 \includegraphics[width=1.0\linewidth]{cumsum.png}
-\caption{Cumulative sum parallelized over 3 processors}
+\caption{Example of parallelizing cumulative sum over 3 processors}
 \end{figure}
 
 %------------------------------------------------
