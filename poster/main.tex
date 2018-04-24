@@ -99,7 +99,7 @@ sequential dependencies can be parallelized over the sequence length using the
 parallel scan algorithm, leading to rapid training on long sequences even with
 small minibatch size. We use this insight and a parallel linear recurrence CUDA
 kernel to accelerate several state of the art RNN architectures by up to 9x and
-to solve a synthetic sequence classification task with a one million timestep
+to solve a synthetic sequence classification task with a one million time step
 dependency.
 \end{alertblock}
 
@@ -108,27 +108,35 @@ dependency.
 %----------------------------------------------------------------------------------------
 \begin{block}{Background}
 Large minibatches are necessary for computational performance but create large memory
-requirements and may damage model generalization ability.
+requirements and damage model generalization ability.
+
+\vspace{1ex}
 
 Linear RNNs and convolutional models such as strongly typed RNNs, Wavenet, Bytenet,
 Quasi-RNNs, and simple recurrent units
 have achieved state of the art results on many sequential tasks with rapid training times.
 
+\vspace{1ex}
+
 Given $x_t$, $\lambda_t$ can compute $h_t=\lambda_t h_{t-1} + x_t$ for $t=1\ldots T$ on $p$
-processors in $O(T/p + \log(p))$ with the classic parallel scan algorithm.
+processors in $O(T/p + \log(p))$ with the classic parallel scan algorithm. Backpropagation
+of gradient can also be parallelized with the same algorithm.
 \end{block}
+
+\vspace{2ex}
 
 %------------------------------------------------
 
 \begin{figure}
 \includegraphics[width=1.0\linewidth]{cumsum.png}
-\caption{Parallel cumulative sum example}
+\caption{Cumulative sum parallelized over 3 processors}
 \end{figure}
 
 %------------------------------------------------
 
 \begin{block}{Gated Impulse Linear Recurrence}
-We designed a recurrent layer that can take maximium advantage of parallel linear recurrence??
+Given a fast algorithm for evaluating linear recurrences, we introduce a new
+linear recurrent layer called \textbf{gated impulse linear recurrence (GILR)}
 
 \begin{align*}
 g_t &= \sigma(Ux_t + b_g) \\
@@ -154,14 +162,16 @@ h_t &= g_t \odot h_{t-1} + (1-g_t)\odot i_t
 RNNs have a transition function $s_t = f(s_{t-1},x_t)$. $s_t$ serves dual roles as a
 summary of the past as well as the output of the unit. Non-linear $f$ in units such
 as vanilla RNN and LSTM prevents parallelization over sequence length.
+\vspace{1ex}
 
 Replacing the summary of the past $s_{t-1}$ with a linear surrogate $\tilde{s}_{t-1}$
 allows the easy adaption of any existing RNN architecture for parallel computation.
+Several existing RNNs can be viewed as linear surrogate RNNs.
+\vspace{1ex}
 
 The state of an LSTM consists of $(c_t, h_t)$. $c_t$ is already computed
 by linear recurrence, so a linear surrogate LSTM must only compute a
-linear $\tilde{h}_t$. We let $h = \text{GILR}(x)$ and call it a GILR-LSTM.
-
+linear $\tilde{h}_t$. A \textbf{GILR-LSTM} uses $\tilde{h} = \text{GILR}(x)$
 \end{block}
 
 %----------------------------------------------------------------------------------------
@@ -170,22 +180,12 @@ linear $\tilde{h}_t$. We let $h = \text{GILR}(x)$ and call it a GILR-LSTM.
 %	MATHEMATICAL SECTION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Accelerating Existing Models}
-  We implemented several recent linear RNNs with the parallel linear
-  recurrence kernel, as well as a variant with purely serial evaluation.
-  We were able to obtain significant speedups with parallel evaluation
-  in all the architectures at longer sequence lengths.
+\begin{block}{Accelerating Existing Linear Surrogate RNNs}
+We compare the performance of several recent linear RNNs
+implemented with the parallel linear recurrence kernel against
+a baseline serial linear recurrence kernel.
 
-  Since the parallel kernel computes the exact same result as the
-  serial kernel, we obtain this speedup with no tradeoff in terms of
-  reduced accuracy or precision.
-
-  [Can be cut if no space]
-  We used two stacked RNN layers with 256 hidden
-  units, keeping the GPU memory usage constant by fixing $bT = 65,536$
-  for minibatch size $b$ and sequence length $T$. QRNN(2) refers to a
-  QRNN with filter size 2. %\citep{bradbury2017quasi}
-
+\vspace{1ex}
 \begin{table}[t]
 \begin{center}
 \begin{tabular}{lrrrr}
@@ -199,37 +199,27 @@ linear $\tilde{h}_t$. We let $h = \text{GILR}(x)$ and call it a GILR-LSTM.
 \end{tabular}
 \end{center}
 \vspace{2ex}
-\caption{Parallel kernel speedup for a variety of LS-RNNs.}
+\caption{Parallel kernel speedup for a variety of LS-RNNs.   All models use two stacked RNN layers with 256 hidden
+  units, keeping the GPU memory usage constant by fixing $bT = 65,536$
+  for minibatch size $b$ and sequence length $T$. QRNN($k$) refers to a
+  QRNN with filter size $k$. %\citep{bradbury2017quasi}
+}
 \end{table}
 \end{block}
 
 %----------------------------------------------------------------------------------------
-
-
-
-
-%----------------------------------------------------------------------------------------
-%	RESULTS
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Synthetic Long-Term Dependency}
-
-  We tested the GILR-LSTM by comparing to the CuDNN LSTM implementation
-  on a synthetic memorisation task (problem 2b from %\citet{hochreiter1997long}. )
-  We compared the performance on variants with different values of
-  \(n\).  We obtained speedups of over 6x measured in wall clock time to
-  convergence.  Further, the GILR-LSTM attained convergence
-  when the time dependence of the problem had a length of \textbf{one  million time steps}.
-
- \vspace{2em}
+\vspace{-1ex}
 \begin{figure}
-\includegraphics[width=1.0\linewidth]{8k_for_poster.png}
-\caption{Accuracy on the memorisation task with 8,192 sequence length}
+\includegraphics[width=0.9\linewidth]{cudnn_heatmap_gilr.png}
+\caption{Throughput (thousand steps/s) for same sized LSTM and GILR-LSTM}
 \end{figure}
 
-\end{block}
 
 \end{column} % End of column 2.1
+
+
+
+
 
 % \begin{table}
 % \vspace{2ex}
@@ -252,6 +242,24 @@ linear $\tilde{h}_t$. We let $h = \text{GILR}(x)$ and call it a GILR-LSTM.
 \begin{column}{\sepwid}\end{column} % Empty spacer column
 
 \begin{column}{\onecolwid} % The third column
+
+\begin{block}{Synthetic Long-Term Dependency}
+
+  We tested the GILR-LSTM by comparing to the CuDNN LSTM implementation
+  on a synthetic memorisation task (problem 2b from %\citet{hochreiter1997long}. )
+  We compared the performance on variants with different values of
+  \(n\).  We obtained speedups of over 6x measured in wall clock time to
+  convergence.  Further, the GILR-LSTM attained convergence
+  when the time dependence of the problem had a length of \textbf{one  million time steps}.
+
+ \vspace{2em}
+\begin{figure}
+\includegraphics[width=1.0\linewidth]{8k_for_poster.png}
+\caption{Accuracy on the memorisation task with 8,192 sequence length}
+\end{figure}
+
+\end{block}
+
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSION
