@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.27)  28 APR 2018 19:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.27)  28 APR 2018 19:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1217,65 +1217,55 @@ LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <17.86> not available
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <12.50194> not available
 (Font)              size <12> substituted on input line 74.
 
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 328.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 321.
 (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Calculating math sizes for size <37.03> on input line 328.
+LaTeX Font Info:    Calculating math sizes for size <37.03> on input line 321.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <37.03> not available
-(Font)              size <24.88> substituted on input line 328.
+(Font)              size <24.88> substituted on input line 321.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <25.92088> not available
-(Font)              size <24.88> substituted on input line 328.
+(Font)              size <24.88> substituted on input line 321.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <18.515> not available
-(Font)              size <17.28> substituted on input line 328.
+(Font)              size <17.28> substituted on input line 321.
 
 <cumsum.png, id=15, 1527.7075pt x 334.24875pt>
 File: cumsum.png Graphic file (type png)
  <use cumsum.png>
-Package pdftex.def Info: cumsum.png used on input line 328.
+Package pdftex.def Info: cumsum.png used on input line 321.
 (pdftex.def)             Requested size: 1040.69858pt x 227.70435pt.
-LaTeX Font Info:    Calculating math sizes for size <30.85> on input line 328.
+LaTeX Font Info:    Calculating math sizes for size <30.85> on input line 321.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <30.85> not available
-(Font)              size <24.88> substituted on input line 328.
+(Font)              size <24.88> substituted on input line 321.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <21.59491> not available
-(Font)              size <20.74> substituted on input line 328.
+(Font)              size <20.74> substituted on input line 321.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <15.425> not available
-(Font)              size <14.4> substituted on input line 328.
+(Font)              size <14.4> substituted on input line 321.
 
 <cudnn_heatmap_gilr.png, id=17, 813.0375pt x 558.085pt>
 File: cudnn_heatmap_gilr.png Graphic file (type png)
 
 <use cudnn_heatmap_gilr.png>
-Package pdftex.def Info: cudnn_heatmap_gilr.png used on input line 328.
+Package pdftex.def Info: cudnn_heatmap_gilr.png used on input line 321.
 (pdftex.def)             Requested size: 936.62236pt x 642.9424pt.
 
 <8k_for_poster.png, id=18, 1220.6403pt x 643.9257pt>
 File: 8k_for_poster.png Graphic file (type png)
  <use 8k_for_poster.png>
-Package pdftex.def Info: 8k_for_poster.png used on input line 328.
+Package pdftex.def Info: 8k_for_poster.png used on input line 321.
 (pdftex.def)             Requested size: 1040.69858pt x 548.99994pt.
-
-No file main.bbl.
-LaTeX Font Info:    Try loading font information for TS1+lmss on input line 328
-.
-(/usr/share/texmf/tex/latex/lm/ts1lmss.fd
-File: ts1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-Overfull \vbox (61.14438pt too high) detected at line 328
- []
-
 
 Overfull \hbox (88.20334pt too wide) has occurred while \output is active
 []
@@ -1293,11 +1283,11 @@ Overfull \hbox (88.20334pt too wide) has occurred while \output is active
 \tf@snm=\write8
 \openout8 = `main.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 330.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 330.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 323.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 323.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 330.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 330.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 323.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 323.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1305,28 +1295,27 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 12.15pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 330.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 323.
  ) 
 Here is how much of TeX's memory you used:
- 22034 strings out of 494953
- 430395 string characters out of 6180977
- 572265 words of memory out of 5000000
- 24770 multiletter control sequences out of 15000+600000
- 86360 words of font info for 84 fonts, out of 8000000 for 9000
+ 21977 strings out of 494953
+ 428976 string characters out of 6180977
+ 568853 words of memory out of 5000000
+ 24718 multiletter control sequences out of 15000+600000
+ 85973 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 52i,16n,66p,384b,1309s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/d
-vips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/shar
-e/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
-m-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/f
-onts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.p
-fb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/t
-ype1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-
-Output written on main.pdf (1 page, 292404 bytes).
+ 52i,16n,66p,384b,1176s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/en
+c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
+hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm
+/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texm
+f/fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmss1
+7.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fo
+nts/type1/public/lm/lmsy10.pfb>
+Output written on main.pdf (1 page, 292745 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
- 45 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 40 compressed objects within 1 object stream
  4 named destinations out of 1000 (max. 500000)
  64 words of extra memory for PDF output out of 10000 (max. 10000000)
 
