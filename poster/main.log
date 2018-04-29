@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.27)  28 APR 2018 19:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.27)  28 APR 2018 19:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1305,15 +1305,12 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 12.15pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 330.
  ) 
 Here is how much of TeX's memory you used:
  22034 strings out of 494953
  430395 string characters out of 6180977
- 572375 words of memory out of 5000000
+ 572265 words of memory out of 5000000
  24770 multiletter control sequences out of 15000+600000
  86360 words of font info for 84 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -1326,7 +1323,7 @@ onts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.p
 fb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/t
 ype1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
 
-Output written on main.pdf (1 page, 292409 bytes).
+Output written on main.pdf (1 page, 292404 bytes).
 PDF statistics:
  68 PDF objects out of 1000 (max. 8388607)
  45 compressed objects within 1 object stream
