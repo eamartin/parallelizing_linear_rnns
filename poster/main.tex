@@ -139,7 +139,7 @@ linear recurrent layer called \textbf{gated impulse linear recurrence (GILR)}
 
 \begin{align*}
 g_t &= \sigma(Ux_t + b_g) \\
-i_t &= \tau(Vx_t + b_z) \\
+i_t &= \tau(Vx_t + b_i) \\
 h_t &= g_t \odot h_{t-1} + (1-g_t)\odot i_t
 \end{align*}
 \end{block}
